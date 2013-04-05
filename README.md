@@ -1,4 +1,4 @@
-backend
-=======
+Narra Backend Application
+=========================
 
-Cas Open Narrative backend application.
+Open Narrative backend application developed @ [CAS](http://cas.famu.cz).
