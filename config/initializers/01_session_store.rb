@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>
+# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
 NarraCore::Application.config.session_store :cookie_store, key: '_narra_core_session'
