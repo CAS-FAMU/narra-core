@@ -23,6 +23,7 @@ ActiveSupport::Inflector.inflections do |inflect|
 
   # cache singularity
   inflect.irregular("cache", "cache")
-  inflect.irregular("metadata", "metadata")
+  inflect.irregular("meta_src", "meta_src")
+  inflect.irregular("meta_gen", "meta_gen")
 
 end

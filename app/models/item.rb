@@ -23,6 +23,8 @@ class Item
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  has_one :Metadata
+  has_one :meta_src, autosave: true, dependent: :destroy
+  has_many :meta_gen, autosave: true, dependent: :destroy
 
+  validate :meta_src, presence: true
 end
