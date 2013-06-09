@@ -56,5 +56,4 @@ class Meta
   validates :title, presence: true
   validates :type, presence: true
 
-
 end

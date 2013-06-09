@@ -20,5 +20,12 @@
 #
 
 class Project
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  has_and_belongs_to_many :user, autosave: true, dependent: :destroy
+  has_many :collection, autosave: true, dependent: :destroy
+
+  field :name, type: String
 
 end

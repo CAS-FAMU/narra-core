@@ -25,5 +25,8 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular("cache", "cache")
   inflect.irregular("meta_src", "meta_src")
   inflect.irregular("meta_gen", "meta_gen")
+  inflect.irregular("project", "project")
+  inflect.irregular("user", "user")
+  inflect.irregular("collection", "collection")
 
 end

@@ -19,6 +19,13 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class MetaGen
+class Collection
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
+  has_and_belongs_to_many :user, autosave: true, dependent: :destroy
+  has_many :item, autosave: true, dependent: :destroy
+  belongs_to :project, autosave: true, dependent: :destroy
+
+  field :name, type: String
 end
