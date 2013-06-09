@@ -19,10 +19,10 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-ActiveSupport::Inflector.inflections do |inflect|
+class Item
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  # cache singularity
-  inflect.irregular("cache", "cache")
-  inflect.irregular("metadata", "metadata")
+  has_one :Metadata
 
 end

@@ -23,6 +23,8 @@ class Metadata
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  belongs_to :Item
+
   field :contributor, type: String
   field :coverage, type: String
   field :creator, type: String
@@ -39,7 +41,19 @@ class Metadata
   field :title, type: String
   field :type, type: String
 
-  field :data, type: Hash, default: Hash.new
-
-  validates :title, presence: true
+  validates :title, presence => true
+  validates :coverage, presence => true
+  validates :creator, presence => true
+  validates :date, presence => true
+  validates :description, presence => true
+  validates :format, presence => true
+  validates :identifier, presence => true
+  validates :language, presence => true
+  validates :publisher, presence => true
+  validates :relation, presence => true
+  validates :rights, presence => true
+  validates :source, presence => true
+  validates :subject, presence => true
+  validates :title, presence => true
+  validates :type, presence => true
 end
