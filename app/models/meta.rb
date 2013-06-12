@@ -23,6 +23,10 @@ class Meta
   include Mongoid::Document
   include Mongoid::Timestamps
 
+
+  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_src
+  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_gen
+
   field :contributor, type: String
   field :coverage, type: String
   field :creator, type: String

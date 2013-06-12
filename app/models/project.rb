@@ -23,8 +23,13 @@ class Project
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  has_and_belongs_to_many :user, autosave: true, dependent: :destroy
-  has_many :collection, autosave: true, dependent: :destroy
+  #User Relations
+  belongs_to :owner, class_name: "User", autosave: true, inverse_of: :projects
+  has_and_belongs_to_many :authors, class_name: "User", autosave: true, inverse_of: :contributions
+
+  #Project Relations
+  has_and_belongs_to_many :collections, class_name: "Collection", autosave: true, inverse_of: :projects
+
 
   field :name, type: String
 
