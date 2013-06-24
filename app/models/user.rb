@@ -23,14 +23,23 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  # Fields
+  field :name, type: String
+  field :email, type: String
 
-  #Project Relations
+  # Project Relations
   has_many :projects, class_name: "Project", autosave: true, dependent: :destroy, inverse_of: :owner
   has_and_belongs_to_many :contributions, class_name: "Project", autosave: true, inverse_of: :authors
 
-  #Collection Relations
+  # Collection Relations
   has_many :collections, class_name: "Collection", autosave: true, inverse_of: :owner
 
-  field :name, type: String
-  field :email, type: String
+  # Create a new user from the omniauth hash
+  def self.create_from_hash!(hash)
+    # create new user
+    user = User.new(name: hash['info']['name'], email: hash['info']['email'])
+
+    # save
+    return (user.save) ? user : nil
+  end
 end

@@ -26,15 +26,19 @@ module API
       version 'v1', :using => :path
       format :json
 
+      helpers API::Helpers::User
+
       resource :settings do
 
         desc "Return settings."
         get do
+          authenticate!
           Tools::Settings.all
         end
 
         desc "Return a specific setting."
         get ':name' do
+          authenticate!
           if params[:name] == "defaults"
             Tools::Settings.defaults
           else
@@ -47,6 +51,7 @@ module API
           requires :value, :type => String, :desc => "Setting value."
         end
         post ':name/update' do
+          authenticate!
           Tools::Settings.set(params[:name], params[:value])
         end
       end
