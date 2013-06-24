@@ -21,16 +21,33 @@
 
 module API
   module Modules
-    class SystemV1 < Grape::API
+    class SettingsV1 < Grape::API
 
       version 'v1', :using => :path
       format :json
 
-      resource :system do
+      resource :settings do
 
-        desc "Return system version."
-        get '/version' do
-          {version: Tools::Version::VERSION, revision: Tools::Version::REVISION}
+        desc "Return settings."
+        get do
+          Tools::Settings.all
+        end
+
+        desc "Return a specific setting."
+        get ':name' do
+          if params[:name] == "defaults"
+            Tools::Settings.defaults
+          else
+            { name: params[:name],  value: Tools::Settings.get(params[:name]) }
+          end
+        end
+
+        desc "Update a specific setting."
+        params do
+          requires :value, :type => String, :desc => "Setting value."
+        end
+        post ':name/update' do
+          Tools::Settings.set(params[:name], params[:value])
         end
       end
     end
