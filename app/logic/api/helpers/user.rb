@@ -23,7 +23,7 @@ module API
   module Helpers
     module User
       def authenticate!
-        present API::Wrappers::Error.error_access_denied, with: API::Entities::Error unless current_user
+        error!('Unauthenticated. Invalid or expired token.', 401) unless current_user
       end
 
       def current_user

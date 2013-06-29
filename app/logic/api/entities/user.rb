@@ -20,25 +20,12 @@
 #
 
 module API
-  module Wrappers
-    class Error
+  module Entities
+    class User < Grape::Entity
 
-      # Attributes
-      attr_accessor :status
-      attr_accessor :message
-
-      def initialize(status, message)
-        @status = status
-        @message = message
-      end
-
-      def self.error_access_denied
-        Error.new(API::Enums::Status::ERROR, "Access Denied")
-      end
-
-      def self.error_not_found
-        Error.new(API::Enums::Status::ERROR, "Not Found")
-      end
+      expose :status
+      expose :user, :if => lambda{ |object, options| !object.user.nil? }, using: API::Entities::UserSingle
+      expose :users, :if => lambda{ |object, options| !object.users.nil? }, using: API::Entities::UserMultiple
     end
   end
 end

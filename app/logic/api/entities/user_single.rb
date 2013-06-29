@@ -20,24 +20,13 @@
 #
 
 module API
-  module Wrappers
-    class Error
+  module Entities
+    class UserSingle < API::Entities::UserMultiple
 
-      # Attributes
-      attr_accessor :status
-      attr_accessor :message
+      expose :identities, format_with: :identities
 
-      def initialize(status, message)
-        @status = status
-        @message = message
-      end
-
-      def self.error_access_denied
-        Error.new(API::Enums::Status::ERROR, "Access Denied")
-      end
-
-      def self.error_not_found
-        Error.new(API::Enums::Status::ERROR, "Not Found")
+      format_with :identities do |identities|
+        identities.collect { |identity| identity.provider }
       end
     end
   end

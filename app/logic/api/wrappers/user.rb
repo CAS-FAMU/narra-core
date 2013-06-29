@@ -21,23 +21,25 @@
 
 module API
   module Wrappers
-    class Error
+    class User
 
       # Attributes
       attr_accessor :status
-      attr_accessor :message
+      attr_accessor :user
+      attr_accessor :users
 
-      def initialize(status, message)
+      def initialize(status, user = nil, users = nil)
         @status = status
-        @message = message
+        @user = user
+        @users = users
       end
 
-      def self.error_access_denied
-        Error.new(API::Enums::Status::ERROR, "Access Denied")
+      def self.user(user)
+        User.new(API::Enums::Status::OK, user, nil)
       end
 
-      def self.error_not_found
-        Error.new(API::Enums::Status::ERROR, "Not Found")
+      def self.users(users)
+        User.new(API::Enums::Status::OK, nil, users)
       end
     end
   end
