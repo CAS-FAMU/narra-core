@@ -32,5 +32,8 @@ class Project
 
 
   field :name, type: String
+  field :title, type: String
+
+  validate :title, presence: true, uniqueness: true
 
 end

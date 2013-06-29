@@ -26,6 +26,7 @@ module API
       expose :status
       expose :user, :if => lambda{ |object, options| !object.user.nil? }, using: API::Entities::UserSingle
       expose :users, :if => lambda{ |object, options| !object.users.nil? }, using: API::Entities::UserMultiple
+
     end
   end
 end

@@ -21,14 +21,11 @@
 
 module API
   module Entities
-    class ProjectSingle < API::Entities::ProjectMultiple
+    class Collection < Grape::Entity
 
-      expose :names, format_with: :names
-
-      format_with :names do |titles|
-        titles.collect { |proj| proj.name }
-      end
-
+      expose :status
+      expose :collection, :if => lambda{ |object, options| !object.project.nil? }, using: API::Entities::Collection
+      expose :collections, :if => lambda{ |object, options| !object.projects.nil? }, using: API::Entities::Collections
     end
   end
 end

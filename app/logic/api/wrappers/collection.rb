@@ -20,15 +20,27 @@
 #
 
 module API
-  module Entities
-    class ProjectSingle < API::Entities::ProjectMultiple
+  module Wrappers
+    class Collection
 
-      expose :names, format_with: :names
+      # Attributes
+      attr_accessor :status
+      attr_accessor :collection
+      attr_accessor :collectionss
 
-      format_with :names do |titles|
-        titles.collect { |proj| proj.name }
+      def initialize(status, collection = nil, collections = nil)
+        @status = status
+        @collection = collection
+        @collections = collections
       end
 
+      def self.collection(collection)
+        Collection.new(API::Enums::Status::OK, collection, nil)
+      end
+
+      def self.collections(collections)
+        Collection.new(API::Enums::Status::OK, nil, collections)
+      end
     end
   end
 end

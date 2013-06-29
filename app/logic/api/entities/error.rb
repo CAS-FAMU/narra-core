@@ -25,6 +25,7 @@ module API
 
       expose :status
       expose :message
+
     end
   end
 end

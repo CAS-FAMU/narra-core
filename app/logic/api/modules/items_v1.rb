@@ -21,44 +21,44 @@
 
 module API
   module Modules
-    class ProjectsV1 < Grape::API
+    class ItemsV1 < Grape::API
 
       version 'v1', :using => :path
       format :json
 
       helpers API::Helpers::User
 
-      resource :projects do
+      resource :items do
 
-        desc "Return all projects."
+        desc "Return all items."
         get do
           authenticate!
-          present API::Wrappers::Project.projects(Project.all), with: API::Entities::Project
+          present API::Wrappers::Item.items(Item.all), with: API::Entities::Item
         end
 
-        desc "Return a specific project."
-        get ':name' do
+        desc "Return a specific item."
+        get ':_id' do
           authenticate!
           # get user
-          project = Project.find_by(name: params[:name])
+          item = Item.find_by(_id: params[:_id])
           # present or not found
-          if (project.nil?)
+          if (item.nil?)
             present API::Wrappers::Error.error_not_found, with: API::Entities::Error
           else
-            present API::Wrappers::Project.project(project), with: API::Entities::Project
+            present API::Wrappers::Item.item(item), with: API::Entities::Item
           end
         end
 
-        desc "Delete a specific project."
-        get ':name/delete' do
+        desc "Delete a specific item."
+        get ':_id/delete' do
           authenticate!
           # get user
-          project = User.find_by(name: params[:name])
+          item = Item.find_by(_id: params[:_id])
           # present or not found
-          if (project.nil?)
+          if (item.nil?)
             present API::Wrappers::Error.error_not_found, with: API::Entities::Error
           else
-            project.destroy && { status: API::Enums::Status::OK }
+            item.destroy && { status: API::Enums::Status::OK }
           end
         end
 
