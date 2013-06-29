@@ -36,7 +36,6 @@ module API
           present API::Wrappers::Project.projects(Project.all), with: API::Entities::Project
         end
 
-
       end
     end
   end

@@ -21,11 +21,11 @@
 
 module API
   module Entities
-    class User < Grape::Entity
+    class Project < Grape::Entity
 
       expose :status
-      expose :project, :if => lambda{ |object, options| !object.user.nil? }, using: API::Entities::ProjectSingle
-      expose :projects, :if => lambda{ |object, options| !object.users.nil? }, using: API::Entities::ProjectMultiple
+      expose :project, :if => lambda{ |object, options| !object.project.nil? }, using: API::Entities::ProjectSingle
+      expose :projects, :if => lambda{ |object, options| !object.projects.nil? }, using: API::Entities::ProjectMultiple
     end
   end
 end
