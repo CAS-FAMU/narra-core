@@ -25,7 +25,12 @@ module API
 
       expose :_id, as: 'id'
       expose :name
-      expose :owner
+      expose :owner, format_with: :owner, as: 'owner_id'
+
+      format_with :owner do |owner|
+        owner._id
+      end
+
     end
   end
 end
