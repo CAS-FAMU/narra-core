@@ -48,11 +48,11 @@ module API
           end
 
           # return token in json when request is not from browser
-          { _narra_core_token: @token }
+          { status: API::Enums::Status::OK, _narra_core_token: @token }
         end
 
         get '/providers/active' do
-          { name: Tools::Settings.auth_providers_active }
+          { status: API::Enums::Status::OK, provider: { name: Tools::Settings.auth_providers_active }}
         end
       end
     end

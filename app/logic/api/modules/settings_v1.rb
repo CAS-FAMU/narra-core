@@ -33,16 +33,24 @@ module API
         desc "Return settings."
         get do
           authenticate!
-          Tools::Settings.all
+          { status: API::Enums::Status::OK, settings: Tools::Settings.all }
+        end
+
+        desc "Return defaults."
+        get 'defaults' do
+          authenticate!
+          { status: API::Enums::Status::OK, defaults: Tools::Settings.defaults }
         end
 
         desc "Return a specific setting."
         get ':name' do
           authenticate!
-          if params[:name] == "defaults"
-            Tools::Settings.defaults
+          # get settings
+          setting = Tools::Settings.get(params[:name])
+          if (setting.nil?)
+            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
           else
-            { name: params[:name],  value: Tools::Settings.get(params[:name]) }
+            { status: API::Enums::Status::OK, setting: {name: params[:name],  value: setting} }
           end
         end
 
@@ -50,9 +58,9 @@ module API
         params do
           requires :value, :type => String, :desc => "Setting value."
         end
-        post ':name/update' do
+        get ':name/update' do
           authenticate!
-          Tools::Settings.set(params[:name], params[:value])
+          Tools::Settings.set(params[:name], params[:value]) && { status: API::Enums::Status::OK }
         end
       end
     end

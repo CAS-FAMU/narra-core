@@ -19,5 +19,5 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-# === TEST ===
-Tools::Settings.defaults[:test_timer_interval] = 30.seconds
+# === AUTHENTICATION ===
+Tools::Settings.defaults[:auth_providers_active] = 'google'

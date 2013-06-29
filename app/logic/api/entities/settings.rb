@@ -19,13 +19,13 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'rubygems'
-require 'rufus/scheduler'
+module API
+  module Entities
+    class Settings < Grape::Entity
 
-# start new scheduler thread
-scheduler = Rufus::Scheduler.start_new
-
-# test timer
-#scheduler.every Tools::Settings.test_timer_interval do
-  #puts "Test Timer Fired"
-#end
+      expose :status
+      expose :setting, :if => lambda{ |object, options| !object.setting.nil? }
+      expose :settings
+    end
+  end
+end

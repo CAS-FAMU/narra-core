@@ -60,6 +60,19 @@ module API
             present API::Wrappers::User.user(user), with: API::Entities::User
           end
         end
+
+        desc "Delete a specific user."
+        get ':id/delete' do
+          authenticate!
+          # get user
+          user = User.find(params[:id])
+          # present or not found
+          if (user.nil?)
+            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+          else
+            user.destroy && { status: API::Enums::Status::OK }
+          end
+        end
       end
     end
   end
