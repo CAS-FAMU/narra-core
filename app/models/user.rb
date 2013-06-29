@@ -34,6 +34,9 @@ class User
   # Collection Relations
   has_many :collections, class_name: "Collection", autosave: true, inverse_of: :owner
 
+  # Identity Relations
+  has_many :identities, dependent: :destroy
+
   # Create a new user from the omniauth hash
   def self.create_from_hash!(hash)
     # create new user
