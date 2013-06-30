@@ -33,4 +33,5 @@ class Collection
   has_many :items, class_name: "Item", autosave: true, inverse_of: :collection
 
   field :name, type: String
+  field :owner_id, type: String
 end

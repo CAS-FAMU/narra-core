@@ -36,6 +36,7 @@ module API
           present API::Wrappers::Item.items(Item.all), with: API::Entities::Item
         end
 
+
         desc "Return a specific item."
         get ':_id' do
           authenticate!

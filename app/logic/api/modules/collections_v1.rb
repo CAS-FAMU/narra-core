@@ -37,6 +37,30 @@ module API
         end
 
 
+
+        desc "Create new collection."
+        params do
+          requires :name, type: String, desc: "Name of new collection."
+          #requires :owner_id, type: String, desc: "Id of owner."
+
+        end
+
+        get 'new' do
+          authenticate!
+          # get user
+          collection = Collection.find_by(name: params[:name])
+          # present or not found
+          if (collection.nil?)
+            tmp = Collection.new(name: params[:name], owner_id: current_user._id)
+            tmp.save
+            present API::Wrappers::Collection.collection(tmp), with: API::Entities::Collection
+
+          else
+            present API::Wrappers::Error.error_already_exists, with: API::Entities::Error
+          end
+        end
+
+
         desc "Return a specific item."
         get ':_id' do
           authenticate!
@@ -46,7 +70,7 @@ module API
           if (collection.nil?)
             present API::Wrappers::Error.error_not_found, with: API::Entities::Error
           else
-            present API::Wrappers::Collection.collection(collection), with: API::Entities::Item
+            present API::Wrappers::Collection.collection(collection), with: API::Entities::Collection
           end
         end
 

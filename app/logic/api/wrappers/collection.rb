@@ -26,7 +26,7 @@ module API
       # Attributes
       attr_accessor :status
       attr_accessor :collection
-      attr_accessor :collectionss
+      attr_accessor :collections
 
       def initialize(status, collection = nil, collections = nil)
         @status = status

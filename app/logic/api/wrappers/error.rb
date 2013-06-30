@@ -39,6 +39,11 @@ module API
       def self.error_not_found
         Error.new(API::Enums::Status::ERROR, "Not Found")
       end
+
+
+      def self.error_already_exists
+        Error.new(API::Enums::Status::ERROR, "Object already exist")
+      end
     end
   end
 end

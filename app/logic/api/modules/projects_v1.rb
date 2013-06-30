@@ -36,6 +36,29 @@ module API
           present API::Wrappers::Project.projects(Project.all), with: API::Entities::Project
         end
 
+
+
+        desc "Create new project."
+        params do
+          requires :name, type: String, desc: "Name of new project."
+          requires :title, type: String, desc: "Title of new project."
+        end
+
+        get 'new' do
+          authenticate!
+          # get user
+          project = Project.find_by(name: params[:name])
+          # present or not found
+          if (project.nil?)
+            tmp = Project.new(name: params[:name], title: params[:title], owner_id: current_user._id)
+            tmp.save
+            present API::Wrappers::Project.project(tmp), with: API::Entities::Project
+          else
+            present API::Wrappers::Error.error_already_exists, with: API::Entities::Error
+          end
+        end
+
+
         desc "Return a specific project."
         get ':name' do
           authenticate!

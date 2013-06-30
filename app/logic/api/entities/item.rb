@@ -24,8 +24,8 @@ module API
     class Item < Grape::Entity
 
       expose :status
-      expose :item, :if => lambda{ |object, options| !object.project.nil? }, using: API::Entities::Item
-      expose :items, :if => lambda{ |object, options| !object.projects.nil? }, using: API::Entities::Item
+      expose :item, :if => lambda{ |object, options| !object.item.nil? }, using: API::Entities::Item
+      expose :items, :if => lambda{ |object, options| !object.items.nil? }, using: API::Entities::Item
     end
   end
 end

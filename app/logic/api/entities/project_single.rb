@@ -23,11 +23,6 @@ module API
   module Entities
     class ProjectSingle < API::Entities::ProjectMultiple
 
-      expose :names, format_with: :names
-
-      format_with :names do |titles|
-        titles.collect { |proj| proj.name }
-      end
 
     end
   end
