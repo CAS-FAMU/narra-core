@@ -24,8 +24,8 @@ module API
     class Collection < Grape::Entity
 
       expose :status
-      expose :collection, :if => lambda{ |object, options| !object.collection.nil? }, using: API::Entities::Collection
-      expose :collections, :if => lambda{ |object, options| !object.collections.nil? }, using: API::Entities::Collections
+      expose :collection, :if => lambda{ |object, options| !object.collection.nil? }
+      expose :collections, :if => lambda{ |object, options| !object.collections.nil? }
     end
   end
 end
