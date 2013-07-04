@@ -28,23 +28,29 @@ module API
 
       def current_user
         # check for token presence
-        return nil if cookies[:_narra_core_token].nil?
+        return nil if params[:token].nil?
 
-        # get identity for token
-        identity = Identity.where(uid: Base64.urlsafe_decode64(cookies[:_narra_core_token])).first
+        begin
+          # get uid
+          token = params[:token]
+          uid = Base64::urlsafe_decode64(token)
 
-        # signout in case non existing identity
-        return nil && signout if identity.nil?
+          # get identity for token
+          identity = Identity.where(uid: uid).first
 
-        # get user from token
-        @current_user ||= identity.user
+          # signout in case non existing identity
+          return nil && signout if identity.nil?
+
+          # get user from token
+          @current_user ||= identity.user
+        rescue
+          return nil
+        end
       end
 
       def signout
         # clean current user
         @current_user = nil
-        # delete token
-        cookies.delete :_narra_core_token, :path => '/'
       end
     end
   end

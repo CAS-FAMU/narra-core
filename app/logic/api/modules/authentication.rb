@@ -37,18 +37,16 @@ module API
             @auth = Identity.create_from_hash(auth, User.where(email: auth.info.email).first)
           end
 
-          cookies[:_narra_core_token] = {
-              :value => @token ||= Base64.urlsafe_encode64(auth.uid),
-              :path => '/'
-          }
+          # get token
+          @token = CGI::escape(Base64.urlsafe_encode64(auth.uid))
 
           # get back to origin path or return token
           if request.env['omniauth.origin']
-            redirect request.env['omniauth.origin'], :permanent => true
+            redirect request.env['omniauth.origin'] + '?token=' + @token, :permanent => true
           end
 
           # return token in json when request is not from browser
-          { status: API::Enums::Status::OK, _narra_core_token: @token }
+          { status: API::Enums::Status::OK, token: @token }
         end
 
         get '/providers/active' do
