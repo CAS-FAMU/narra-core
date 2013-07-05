@@ -23,7 +23,8 @@ module API
   module Helpers
     module User
       def authenticate!
-        error!('Unauthenticated. Invalid or expired token.', 401) unless current_user
+        error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ACCESS_DENIED[:message] },
+               API::Enums::Error::ACCESS_DENIED[:status]) unless current_user
       end
 
       def current_user

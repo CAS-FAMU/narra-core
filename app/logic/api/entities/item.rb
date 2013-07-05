@@ -23,9 +23,7 @@ module API
   module Entities
     class Item < Grape::Entity
 
-      expose :status
-      expose :item, :if => lambda{ |object, options| !object.item.nil? }
-      expose :items, :if => lambda{ |object, options| !object.items.nil? }
+      expose :_id, as: 'id'
     end
   end
 end

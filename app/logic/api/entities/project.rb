@@ -23,9 +23,13 @@ module API
   module Entities
     class Project < Grape::Entity
 
-      expose :status
-      expose :project, :if => lambda{ |object, options| !object.project.nil? }, using: API::Entities::ProjectSingle
-      expose :projects, :if => lambda{ |object, options| !object.projects.nil? }, using: API::Entities::ProjectMultiple
+      expose :_id, as: 'id'
+      expose :name
+      expose :owner, format_with: :owner
+
+      format_with :owner do |owner|
+        owner._id
+      end
     end
   end
 end

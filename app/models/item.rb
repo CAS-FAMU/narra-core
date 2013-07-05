@@ -23,8 +23,10 @@ class Item
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  # Relations
   has_one :meta_src, class_name: "Meta", autosave: true, dependent: :destroy
   has_many :meta_gen, class_name: "Meta", autosave: true, dependent: :destroy
 
+  # Validations
   validate :meta_src, presence: true
 end

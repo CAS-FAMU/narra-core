@@ -23,17 +23,17 @@ class Project
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  #User Relations
-  belongs_to :owner, class_name: "User", autosave: true, inverse_of: :projects
-  has_and_belongs_to_many :authors, class_name: "User", autosave: true, inverse_of: :contributions
-
-  #Project Relations
-  has_and_belongs_to_many :collections, class_name: "Collection", autosave: true, inverse_of: :projects
-
-
+  # Fields
   field :name, type: String
   field :title, type: String
 
-  validate :title, presence: true, uniqueness: true
+  # User Relations
+  belongs_to :owner, class_name: "User", autosave: true, inverse_of: :projects
+  has_and_belongs_to_many :authors, class_name: "User", autosave: true, inverse_of: :contributions
 
+  # Project Relations
+  has_and_belongs_to_many :collections, class_name: "Collection", autosave: true, inverse_of: :projects
+
+  # Validations
+  validate :title, presence: true, uniqueness: true
 end

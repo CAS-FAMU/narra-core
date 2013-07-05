@@ -30,7 +30,7 @@ module API
 
         desc "Return system version."
         get '/version' do
-          { status: API::Enums::Status::OK, version: { branch: Tools::Version::VERSION, revision: Tools::Version::REVISION }}
+          present({ status: API::Enums::Status::OK, version: { branch: Tools::Version::VERSION, revision: Tools::Version::REVISION }})
         end
       end
     end

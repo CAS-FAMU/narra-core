@@ -46,11 +46,11 @@ module API
           end
 
           # return token in json when request is not from browser
-          { status: API::Enums::Status::OK, token: @token }
+          present({ status: API::Enums::Status::OK, token: @token })
         end
 
         get '/providers/active' do
-          { status: API::Enums::Status::OK, provider: { name: Tools::Settings.auth_providers_active }}
+          present({ status: API::Enums::Status::OK, provider: { name: Tools::Settings.auth_providers_active }})
         end
       end
     end

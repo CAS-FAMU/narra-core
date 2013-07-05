@@ -20,27 +20,11 @@
 #
 
 module API
-  module Wrappers
-    class Collection
-
-      # Attributes
-      attr_accessor :status
-      attr_accessor :collection
-      attr_accessor :collections
-
-      def initialize(status, collection = nil, collections = nil)
-        @status = status
-        @collection = collection
-        @collections = collections
-      end
-
-      def self.collection(collection)
-        Collection.new(API::Enums::Status::OK, collection, nil)
-      end
-
-      def self.collections(collections)
-        Collection.new(API::Enums::Status::OK, nil, collections)
-      end
+  module Enums
+    module Error
+      ACCESS_DENIED = { message: 'Access Denied', status: 401 }
+      NOT_FOUND = { message: 'Not Found', status: 404 }
+      ALREADY_EXISTS = { message: 'Already Exists', status: 404 }
     end
   end
 end

@@ -33,36 +33,36 @@ module API
         desc "Return all items."
         get do
           authenticate!
-          present API::Wrappers::Item.items(Item.all), with: API::Entities::Item
+          present({ status: API::Enums::Status::OK, items: present(Item.all, with: API::Entities::Item)})
         end
 
-
         desc "Return a specific item."
-        get ':_id' do
+        get ':id' do
           authenticate!
-          # get user
-          item = Item.find_by(_id: params[:_id])
+          # get item
+          item = Item.find(params[:id])
           # present or not found
           if (item.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
-            present API::Wrappers::Item.item(item), with: API::Entities::Item
+            present({ status: API::Enums::Status::OK, item: present(item, with: API::Entities::Item)})
           end
         end
 
         desc "Delete a specific item."
-        get ':_id/delete' do
+        get ':id/delete' do
           authenticate!
-          # get user
-          item = Item.find_by(_id: params[:_id])
+          # get item
+          item = Item.find(params[:id])
           # present or not found
           if (item.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
-            item.destroy && { status: API::Enums::Status::OK }
+            item.destroy && presnet({ status: API::Enums::Status::OK })
           end
         end
-
       end
     end
   end

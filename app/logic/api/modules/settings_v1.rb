@@ -33,13 +33,13 @@ module API
         desc "Return settings."
         get do
           authenticate!
-          { status: API::Enums::Status::OK, settings: Tools::Settings.all }
+          present({ status: API::Enums::Status::OK, settings: Tools::Settings.all })
         end
 
         desc "Return defaults."
         get 'defaults' do
           authenticate!
-          { status: API::Enums::Status::OK, defaults: Tools::Settings.defaults }
+          present({ status: API::Enums::Status::OK, defaults: Tools::Settings.defaults })
         end
 
         desc "Return a specific setting."
@@ -47,10 +47,12 @@ module API
           authenticate!
           # get settings
           setting = Tools::Settings.get(params[:name])
+          # present
           if (setting.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
-            { status: API::Enums::Status::OK, setting: {name: params[:name],  value: setting} }
+            present({ status: API::Enums::Status::OK, setting: {name: params[:name],  value: setting} })
           end
         end
 
@@ -60,7 +62,7 @@ module API
         end
         get ':name/update' do
           authenticate!
-          Tools::Settings.set(params[:name], params[:value]) && { status: API::Enums::Status::OK }
+          Tools::Settings.set(params[:name], params[:value]) && present({ status: API::Enums::Status::OK })
         end
       end
     end

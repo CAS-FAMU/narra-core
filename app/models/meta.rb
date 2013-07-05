@@ -23,10 +23,7 @@ class Meta
   include Mongoid::Document
   include Mongoid::Timestamps
 
-
-  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_src
-  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_gen
-
+  # Fields
   field :contributor, type: String
   field :coverage, type: String
   field :creator, type: String
@@ -43,7 +40,11 @@ class Meta
   field :title, type: String
   field :type, type: String
 
+  # Relations
+  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_src
+  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_gen
 
+  # Validations
   validates :title, presence: true
   validates :coverage, presence: true
   validates :creator, presence: true
@@ -59,5 +60,4 @@ class Meta
   validates :subject, presence: true
   validates :title, presence: true
   validates :type, presence: true
-
 end

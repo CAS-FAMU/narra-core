@@ -23,8 +23,10 @@ class Cache
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  # Fields
   field :name, type: String
   field :data, type: Hash, default: Hash.new
 
+  # Validations
   validates :name, presence: true
 end

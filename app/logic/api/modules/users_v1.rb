@@ -33,13 +33,13 @@ module API
         desc "Return users."
         get do
           authenticate!
-          present API::Wrappers::User.users(User.all), with: API::Entities::User
+          present({ status: API::Enums::Status::OK, users: present(User.all, with: API::Entities::User)})
         end
 
         desc "Return logged user in the current session."
         get 'me' do
           authenticate!
-          present API::Wrappers::User.user(current_user), with: API::Entities::User
+          present({ status: API::Enums::Status::OK, user: present(current_user, with: API::Entities::User)})
         end
 
         desc "Signout logged user in the current session."
@@ -55,9 +55,10 @@ module API
           user = User.find(params[:id])
           # present or not found
           if (user.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
-            present API::Wrappers::User.user(user), with: API::Entities::User
+            present({ status: API::Enums::Status::OK, user: present(user, with: API::Entities::User)})
           end
         end
 
@@ -68,7 +69,8 @@ module API
           user = User.find(params[:id])
           # present or not found
           if (user.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
             user.destroy && { status: API::Enums::Status::OK }
           end

@@ -33,10 +33,8 @@ module API
         desc "Return all projects."
         get do
           authenticate!
-          present API::Wrappers::Project.projects(Project.all), with: API::Entities::Project
+          present({ status: API::Enums::Status::OK, projects: present(Project.all, with: API::Entities::Project)})
         end
-
-
 
         desc "Create new project."
         params do
@@ -46,29 +44,29 @@ module API
 
         get 'new' do
           authenticate!
-          # get user
+          # get project
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            tmp = Project.new(name: params[:name], title: params[:title], owner_id: current_user._id)
-            tmp.save
-            present API::Wrappers::Project.project(tmp), with: API::Entities::Project
+            present({ status: API::Enums::Status::OK, project: present(Project.create(name: params[:name], title: params[:title], owner_id: current_user._id),
+                                                                       with: API::Entities::Project)})
           else
-            present API::Wrappers::Error.error_already_exists, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ALREADY_EXISTS[:message] },
+                   API::Enums::Error::ALREADY_EXISTS[:status])
           end
         end
-
 
         desc "Return a specific project."
         get ':name' do
           authenticate!
-          # get user
+          # get project
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
-            present API::Wrappers::Project.project(project), with: API::Entities::Project
+            present({ status: API::Enums::Status::OK, project: present(project, with: API::Entities::Project)})
           end
         end
 
@@ -79,12 +77,12 @@ module API
           project = User.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
             project.destroy && { status: API::Enums::Status::OK }
           end
         end
-
       end
     end
   end

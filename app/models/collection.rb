@@ -23,15 +23,15 @@ class Collection
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  #User Relations
+  # Fields
+  field :name, type: String
+
+  # User Relations
   belongs_to :owner, class_name: "User", autosave: true, inverse_of: :collections
 
-  #Project Relations
+  # Project Relations
   has_and_belongs_to_many :projects, class_name: "Project", autosave: true, inverse_of: :collections
 
-  #Item Relations
+  # Item Relations
   has_many :items, class_name: "Item", autosave: true, inverse_of: :collection
-
-  field :name, type: String
-  field :owner_id, type: String
 end

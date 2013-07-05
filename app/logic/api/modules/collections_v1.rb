@@ -33,61 +33,54 @@ module API
         desc "Return all collections."
         get do
           authenticate!
-          present API::Wrappers::Collection.collections(Collection.all), with: API::Entities::Collection
+          present({ status: API::Enums::Status::OK, collections: present(Collection.all, with: API::Entities::Collection)})
         end
-
-
 
         desc "Create new collection."
         params do
           requires :name, type: String, desc: "Name of new collection."
-          #requires :owner_id, type: String, desc: "Id of owner."
-
         end
-
         get 'new' do
           authenticate!
-          # get user
+          # get collection
           collection = Collection.find_by(name: params[:name])
           # present or not found
           if (collection.nil?)
-            tmp = Collection.new(name: params[:name], owner_id: current_user._id)
-            tmp.save
-            present API::Wrappers::Collection.collection(tmp), with: API::Entities::Collection
-
+            present({ status: API::Enums::Status::OK, collection: present(Collection.create(name: params[:name], owner: current_user),
+                                                                          with: API::Entities::Collection)})
           else
-            present API::Wrappers::Error.error_already_exists, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ALREADY_EXISTS[:message] },
+                   API::Enums::Error::ALREADY_EXISTS[:status])
           end
         end
 
-
-        desc "Return a specific item."
-        get ':_id' do
+        desc "Return a specific collection."
+        get ':id' do
           authenticate!
           # get user
           collection = Collection.find_by(_id: params[:_id])
           # present or not found
           if (collection.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
-            present API::Wrappers::Collection.collection(collection), with: API::Entities::Collection
+            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection)})
           end
         end
 
         desc "Delete a specific collection."
-        get ':_id/delete' do
+        get ':id/delete' do
           authenticate!
-          # get user
+          # get collection
           collection = Collection.find_by(_id: params[:_id])
           # present or not found
           if (collection.nil?)
-            present API::Wrappers::Error.error_not_found, with: API::Entities::Error
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
           else
-            collection.destroy && { status: API::Enums::Status::OK }
+            collection.destroy && present({ status: API::Enums::Status::OK })
           end
         end
-
-
       end
     end
   end

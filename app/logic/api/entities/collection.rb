@@ -23,9 +23,9 @@ module API
   module Entities
     class Collection < Grape::Entity
 
-      expose :status
-      expose :collection, :if => lambda{ |object, options| !object.collection.nil? }
-      expose :collections, :if => lambda{ |object, options| !object.collections.nil? }
+      expose :_id, as: 'id'
+      expose :name
+      expose(:owner){|model,options| model._id}
     end
   end
 end

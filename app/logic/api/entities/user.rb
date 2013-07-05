@@ -23,10 +23,14 @@ module API
   module Entities
     class User < Grape::Entity
 
-      expose :status
-      expose :user, :if => lambda{ |object, options| !object.user.nil? }, using: API::Entities::UserSingle
-      expose :users, :if => lambda{ |object, options| !object.users.nil? }, using: API::Entities::UserMultiple
+      expose :_id, as: 'id'
+      expose :name
+      expose :email
+      expose :identities, format_with: :identities
 
+      format_with :identities do |identities|
+        identities.collect { |identity| identity.provider }
+      end
     end
   end
 end
