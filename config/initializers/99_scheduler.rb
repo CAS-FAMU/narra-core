@@ -24,8 +24,3 @@ require 'rufus/scheduler'
 
 # start new scheduler thread
 scheduler = Rufus::Scheduler.start_new
-
-# test timer
-#scheduler.every Tools::Settings.test_timer_interval do
-  #puts "Test Timer Fired"
-#end

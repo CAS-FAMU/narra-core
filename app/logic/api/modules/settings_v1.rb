@@ -60,7 +60,7 @@ module API
         params do
           requires :value, :type => String, :desc => "Setting value."
         end
-        get ':name/update' do
+        post ':name/update' do
           authenticate!
           Tools::Settings.set(params[:name], params[:value]) && present({ status: API::Enums::Status::OK })
         end

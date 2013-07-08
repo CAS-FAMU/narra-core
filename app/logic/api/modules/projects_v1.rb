@@ -41,8 +41,7 @@ module API
           requires :name, type: String, desc: "Name of new project."
           requires :title, type: String, desc: "Title of new project."
         end
-
-        get 'new' do
+        post 'new' do
           authenticate!
           # get project
           project = Project.find_by(name: params[:name])
@@ -70,11 +69,32 @@ module API
           end
         end
 
+        desc "Update a specific project."
+        params do
+          requires :name, type: String, desc: "Name of the project."
+          requires :title, type: String, desc: "Title of the project to be saved."
+        end
+        post ':name/update' do
+          authenticate!
+          # get project
+          project = Project.find_by(name: params[:name])
+          # present or not found
+          if (project.nil?)
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
+          else
+            # update project
+            project.update_attributes(title: params[:title])
+            # present
+            present({ status: API::Enums::Status::OK, project: present(project, with: API::Entities::Project)})
+          end
+        end
+
         desc "Delete a specific project."
         get ':name/delete' do
           authenticate!
           # get user
-          project = User.find_by(name: params[:name])
+          project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },

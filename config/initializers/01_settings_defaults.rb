@@ -18,6 +18,3 @@
 #
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
-
-# === AUTHENTICATION ===
-Tools::Settings.defaults[:auth_providers_active] = 'google'

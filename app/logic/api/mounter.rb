@@ -22,6 +22,7 @@
 module API
   class Mounter < Grape::API
 
+    # Mount all the API modules
     API::Modules.constants.collect { |c| API::Modules.const_get(c) }.
         select { |c| c.is_a?(Class) && c.ancestors.include?(Grape::API) }.each do |api|
       mount(api)

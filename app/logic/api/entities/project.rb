@@ -25,10 +25,11 @@ module API
 
       expose :_id, as: 'id'
       expose :name
+      expose :title
       expose :owner, format_with: :owner
 
       format_with :owner do |owner|
-        owner._id
+        { id: owner._id, name: owner.name }
       end
     end
   end

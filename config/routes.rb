@@ -21,5 +21,6 @@
 
 NarraCore::Application.routes.draw do
 
+  # Mount the API root mounter
   mount API::Mounter => "/"
 end
