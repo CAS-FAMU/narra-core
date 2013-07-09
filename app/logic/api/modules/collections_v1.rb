@@ -39,15 +39,21 @@ module API
         desc "Create new collection."
         params do
           requires :name, type: String, desc: "Name of new collection."
+          requires :title, type: String, desc: "Title of new collection."
+          optional :project, type: String, desc: "Unique name of the project."
         end
-        get 'new' do
+        post 'new' do
           authenticate!
           # get collection
           collection = Collection.find_by(name: params[:name])
           # present or not found
           if (collection.nil?)
-            present({ status: API::Enums::Status::OK, collection: present(Collection.create(name: params[:name], owner: current_user),
-                                                                          with: API::Entities::Collection)})
+            # create new collection
+            collection = Collection.create(name: params[:name], title: params[:title], owner: current_user)
+            # add into project
+            collection.projects << Project.find_by(name: params[:project]) unless params[:project].nil?
+            # present
+            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection)})
           else
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ALREADY_EXISTS[:message] },
                    API::Enums::Error::ALREADY_EXISTS[:status])
@@ -55,24 +61,45 @@ module API
         end
 
         desc "Return a specific collection."
-        get ':id' do
+        get ':name' do
           authenticate!
           # get user
-          collection = Collection.find_by(_id: params[:_id])
+          collection = Collection.find_by(name: params[:name])
           # present or not found
           if (collection.nil?)
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
-            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection)})
+            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection, type: :detail)})
+          end
+        end
+
+        desc "Update a specific collection."
+        params do
+          requires :name, type: String, desc: "Name of the collection."
+          requires :title, type: String, desc: "Title of the collection to be saved."
+        end
+        post ':name/update' do
+          authenticate!
+          # get project
+          collection = Collection.find_by(name: params[:name])
+          # present or not found
+          if (collection.nil?)
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
+          else
+            # update project
+            collection.update_attributes(title: params[:title])
+            # present
+            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection, type: :detail)})
           end
         end
 
         desc "Delete a specific collection."
-        get ':id/delete' do
+        get ':name/delete' do
           authenticate!
           # get collection
-          collection = Collection.find_by(_id: params[:_id])
+          collection = Collection.find_by(name: params[:name])
           # present or not found
           if (collection.nil?)
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },

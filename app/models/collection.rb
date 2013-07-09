@@ -25,6 +25,7 @@ class Collection
 
   # Fields
   field :name, type: String
+  field :title, type: String
 
   # User Relations
   belongs_to :owner, class_name: "User", autosave: true, inverse_of: :collections

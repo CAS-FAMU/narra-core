@@ -25,7 +25,13 @@ module API
 
       expose :_id, as: 'id'
       expose :name
-      expose(:owner){|model,options| model._id}
+      expose :title
+      expose(:owner) { |model,options| { id:model.owner._id, name: model.owner.name }}
+      expose :projects, format_with: :projects , :if => { :type => :detail }
+
+      format_with :projects do |projects|
+        projects.collect { |project| { id: project._id, name: project.name, title: project.title, owner: { id: project.owner._id, name: project.owner.name }}}
+      end
     end
   end
 end

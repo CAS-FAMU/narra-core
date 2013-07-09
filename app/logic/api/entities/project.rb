@@ -26,10 +26,11 @@ module API
       expose :_id, as: 'id'
       expose :name
       expose :title
-      expose :owner, format_with: :owner
+      expose(:owner) { |model, options| { id:model.owner._id, name: model.owner.name }}
+      expose :collections, format_with: :collections , :if => { :type => :detail }
 
-      format_with :owner do |owner|
-        { id: owner._id, name: owner.name }
+      format_with :collections do |collections|
+        collections.collect { |collection| { id: collection._id, name: collection.name, title: collection.title, owner: { id: collection.owner._id, name: collection.owner.name }}}
       end
     end
   end
