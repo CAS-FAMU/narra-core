@@ -19,29 +19,20 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Identity
-  include Mongoid::Document
-  include Mongoid::Timestamps
 
-  # Fields
-  field :provider, type: String
-  field :uid, type: String
+require 'spec_helper'
 
-  # User relations
-  belongs_to :user
+describe API::Modules::SystemV1 do
+  describe "GET /v1/system/version" do
+    it "returns system version" do
+      # send request
+      get "/v1/system/version"
 
-  # Validations
-  validates_presence_of :user_id, :uid, :provider
-  validates_uniqueness_of :uid, :scope => :provider
+      # check response status
+      response.status.should == 200
 
-  # Find identity from the omniauth hash
-  def self.find_from_hash(hash)
-    where(provider: hash.provider, uid: hash.uid).first
-  end
-
-  # Create a new identity from the omniauth hash
-  def self.create_from_hash(hash, user = nil)
-    user ||= User.create_from_hash!(hash)
-    Identity.create(:user => user, :uid => hash['uid'], :provider => hash['provider'])
+      # check received data
+      JSON.parse(response.body).should == { 'status' => 'OK', 'version' => { 'branch' => Tools::Version::VERSION, 'revision' => Tools::Version::REVISION }}
+    end
   end
 end

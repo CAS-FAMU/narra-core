@@ -19,29 +19,9 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Identity
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  # Fields
-  field :provider, type: String
-  field :uid, type: String
-
-  # User relations
-  belongs_to :user
-
-  # Validations
-  validates_presence_of :user_id, :uid, :provider
-  validates_uniqueness_of :uid, :scope => :provider
-
-  # Find identity from the omniauth hash
-  def self.find_from_hash(hash)
-    where(provider: hash.provider, uid: hash.uid).first
-  end
-
-  # Create a new identity from the omniauth hash
-  def self.create_from_hash(hash, user = nil)
-    user ||= User.create_from_hash!(hash)
-    Identity.create(:user => user, :uid => hash['uid'], :provider => hash['provider'])
+FactoryGirl.define do
+  factory :collection do
+    name "test_collection"
+    title "Test Collection"
   end
 end

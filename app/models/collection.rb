@@ -35,4 +35,8 @@ class Collection
 
   # Item Relations
   has_many :items, class_name: "Item", autosave: true, inverse_of: :collection
+
+  # Validations
+  validate :name, presence: true, uniqueness: true
+  validate :title, presence: true
 end

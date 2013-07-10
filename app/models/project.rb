@@ -35,5 +35,6 @@ class Project
   has_and_belongs_to_many :collections, class_name: "Collection", autosave: true, inverse_of: :projects
 
   # Validations
-  validate :title, presence: true, uniqueness: true
+  validate :name, presence: true, uniqueness: true
+  validate :title, presence: true
 end

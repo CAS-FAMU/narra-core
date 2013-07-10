@@ -31,6 +31,10 @@ gem 'grape-entity'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rufus-scheduler'
 gem 'eventmachine'
-gem 'rspec'
 gem 'omniauth'
 gem 'omniauth-openid'
+
+gem 'rspec-rails', :group => [:test, :development]
+gem 'database_cleaner', :group => :test
+gem 'mongoid-rspec', :group => :test
+gem 'factory_girl_rails', :group => :test

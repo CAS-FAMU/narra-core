@@ -19,29 +19,25 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Identity
-  include Mongoid::Document
-  include Mongoid::Timestamps
+require 'spec_helper'
 
-  # Fields
-  field :provider, type: String
-  field :uid, type: String
-
-  # User relations
-  belongs_to :user
-
-  # Validations
-  validates_presence_of :user_id, :uid, :provider
-  validates_uniqueness_of :uid, :scope => :provider
-
-  # Find identity from the omniauth hash
-  def self.find_from_hash(hash)
-    where(provider: hash.provider, uid: hash.uid).first
+describe User do
+  it "can be instantiated" do
+    FactoryGirl.build(:user).should be_an_instance_of(User)
   end
 
-  # Create a new identity from the omniauth hash
-  def self.create_from_hash(hash, user = nil)
-    user ||= User.create_from_hash!(hash)
-    Identity.create(:user => user, :uid => hash['uid'], :provider => hash['provider'])
+  it "can be saved successfully" do
+    FactoryGirl.create(:user).should be_persisted
+  end
+
+  it "creates from hash" do
+    # testing hash
+    hash = ActiveSupport::JSON.decode('{"provider":"test","uid":"tester@narra.eu","info":{"name":"Tester","email":"tester@narra.eu"},"credentials":{},"extra":{}}')
+
+    # call method
+    user = User.create_from_hash!(hash)
+
+    # expect
+    expect(User.first).to eq(user)
   end
 end

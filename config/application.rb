@@ -24,7 +24,6 @@ require File.expand_path('../boot', __FILE__)
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "active_resource/railtie"
-require "rails/test_unit/railtie"
 require "sprockets/railtie"
 
 if defined?(Bundler)
@@ -86,5 +85,11 @@ module NarraCore
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Suppress Spec Tests for Views and Helpers
+    config.generators do |g|
+      g.view_specs false
+      g.helper_specs false
+    end
   end
 end
