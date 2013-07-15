@@ -45,7 +45,10 @@ module API
         desc "Signout logged user in the current session."
         get 'me/signout' do
           authenticate!
-          signout && { status: API::Enums::Status::OK }
+          # signout
+          signout
+          # return
+          { status: API::Enums::Status::OK }
         end
 
         desc "Return a specific user."

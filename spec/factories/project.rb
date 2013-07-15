@@ -21,7 +21,7 @@
 
 FactoryGirl.define do
   factory :project do
-    name "test_project"
-    title "Test Project"
+    sequence(:name) {|n| "test_project_#{n}" }
+    sequence(:title) {|n| "Test Project #{n}" }
   end
 end

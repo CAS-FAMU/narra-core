@@ -34,11 +34,11 @@ module API
           unless @auth = Identity.find_from_hash(auth)
             # Create a new user or add an auth to existing user, depending on
             # whether there is already a user signed in.
-            @auth = Identity.create_from_hash(auth, User.where(email: auth.info.email).first)
+            @auth = Identity.create_from_hash(auth, User.where(email: auth['info']['email']).first)
           end
 
           # get token
-          @token = CGI::escape(Base64.urlsafe_encode64(auth.uid))
+          @token = CGI::escape(Base64.urlsafe_encode64(auth['uid']))
 
           # get back to origin path or return token
           if request.env['omniauth.origin']
