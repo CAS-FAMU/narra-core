@@ -32,7 +32,6 @@ module API
 
         desc "Return all projects."
         get do
-          authenticate!
           present({ status: API::Enums::Status::OK, projects: present(Project.all, with: API::Entities::Project)})
         end
 
@@ -43,6 +42,7 @@ module API
         end
         post 'new' do
           authenticate!
+          authorize!([:admin, :author])
           # get project
           project = Project.find_by(name: params[:name])
           # present or not found
@@ -58,6 +58,7 @@ module API
         desc "Return a specific project."
         get ':name' do
           authenticate!
+          authorize!([:admin, :author])
           # get project
           project = Project.find_by(name: params[:name])
           # present or not found
@@ -65,6 +66,9 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
+            # authorize the owner
+            authorize!([:author], project)
+            # present
             present({ status: API::Enums::Status::OK, project: present(project, with: API::Entities::Project, type: :detail)})
           end
         end
@@ -76,6 +80,7 @@ module API
         end
         post ':name/update' do
           authenticate!
+          authorize!([:admin, :author])
           # get project
           project = Project.find_by(name: params[:name])
           # present or not found
@@ -83,6 +88,8 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
+            # authorize the owner
+            authorize!([:author], project)
             # update project
             project.update_attributes(title: params[:title])
             # present
@@ -97,13 +104,16 @@ module API
         end
         post ':name/add' do
           authenticate!
+          authorize!([:admin, :author])
           # get project
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message]},
                    API::Enums::Error::NOT_FOUND[:status])
           else
+            # authorize the owner
+            authorize!([:author], project)
             # update project
             params[:collections].each do |collection|
               project.collections << Collection.find_by(name: collection)
@@ -120,6 +130,7 @@ module API
         end
         post ':name/remove' do
           authenticate!
+          authorize!([:admin, :author])
           # get project
           project = Project.find_by(name: params[:name])
           # present or not found
@@ -127,6 +138,8 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
+            # authorize the owner
+            authorize!([:author], project)
             # update project
             params[:collections].each do |collection|
               project.collections.delete(Collection.find_by(name: collection))
@@ -139,6 +152,7 @@ module API
         desc "Delete a specific project."
         get ':name/delete' do
           authenticate!
+          authorize!([:admin, :author])
           # get user
           project = Project.find_by(name: params[:name])
           # present or not found
@@ -146,6 +160,8 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
+            authorize!([:author], project)
+            # delete and present
             project.destroy && { status: API::Enums::Status::OK }
           end
         end

@@ -23,8 +23,20 @@ module API
   module Helpers
     module User
       def authenticate!
-        error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ACCESS_DENIED[:message] },
-               API::Enums::Error::ACCESS_DENIED[:status]) unless current_user
+        error!({status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_AUTHENTICATED[:message]},
+               API::Enums::Error::NOT_AUTHENTICATED[:status]) unless current_user
+      end
+
+      def authorize!(roles, object = nil)
+        if object.nil?
+          error!({status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_AUTHORIZED[:message]},
+                 API::Enums::Error::NOT_AUTHORIZED[:status]) unless current_user.is?(roles)
+        else
+          if object.has_attribute?('owner_id') && !current_user.is?([:admin]) && current_user.is?(roles)
+            error!({status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_AUTHORIZED[:message]},
+                   API::Enums::Error::NOT_AUTHORIZED[:status]) unless object.owner._id == current_user._id
+          end
+        end
       end
 
       def current_user

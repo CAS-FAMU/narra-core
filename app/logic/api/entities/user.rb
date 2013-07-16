@@ -26,6 +26,7 @@ module API
       expose :_id, as: 'id'
       expose :name
       expose :email
+      expose :roles
       expose :identities, format_with: :identities
 
       format_with :identities do |identities|

@@ -33,6 +33,7 @@ module API
         desc "Return all collections."
         get do
           authenticate!
+          authorize!([:admin, :author])
           present({ status: API::Enums::Status::OK, collections: present(Collection.all, with: API::Entities::Collection)})
         end
 
@@ -44,6 +45,13 @@ module API
         end
         post 'new' do
           authenticate!
+          authorize!([:admin, :author])
+          # get project
+          project = Project.find_by(name: params[:project]) unless params[:project].nil?
+          # authorize the owner
+          if !project.nil?
+            authorize!([:author], project)
+          end
           # get collection
           collection = Collection.find_by(name: params[:name])
           # present or not found
@@ -51,7 +59,7 @@ module API
             # create new collection
             collection = Collection.create(name: params[:name], title: params[:title], owner: current_user)
             # add into project
-            collection.projects << Project.find_by(name: params[:project]) unless params[:project].nil?
+            collection.projects << project unless params[:project].nil?
             # present
             present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection)})
           else
@@ -63,6 +71,7 @@ module API
         desc "Return a specific collection."
         get ':name' do
           authenticate!
+          authorize!([:admin, :author])
           # get user
           collection = Collection.find_by(name: params[:name])
           # present or not found
@@ -81,6 +90,7 @@ module API
         end
         post ':name/update' do
           authenticate!
+          authorize!([:admin, :author])
           # get project
           collection = Collection.find_by(name: params[:name])
           # present or not found
@@ -88,6 +98,8 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
+            # authorize the owner
+            authorize!([:author], collection)
             # update project
             collection.update_attributes(title: params[:title])
             # present
@@ -98,6 +110,7 @@ module API
         desc "Delete a specific collection."
         get ':name/delete' do
           authenticate!
+          authorize!([:admin, :author])
           # get collection
           collection = Collection.find_by(name: params[:name])
           # present or not found
@@ -105,6 +118,9 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
+            # authorize the owner
+            authorize!([:author], collection)
+            # destroy
             collection.destroy && present({ status: API::Enums::Status::OK })
           end
         end

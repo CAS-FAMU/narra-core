@@ -31,13 +31,7 @@ describe Identity do
   end
 
   it "creates from hash" do
-    # testing hash
-    hash = ActiveSupport::JSON.decode('{"provider":"test","uid":"tester@narra.eu","info":{"name":"Tester","email":"tester@narra.eu"},"credentials":{},"extra":{}}')
-
-    # call method
-    identity = Identity.create_from_hash(hash)
-
-    # expect
-    expect(Identity.first).to eq(identity)
+    # expect 3 users as far as we are using create_from_hash in the spec_helper
+    User.all.count.should == 3
   end
 end

@@ -26,6 +26,7 @@ class User
   # Fields
   field :name, type: String
   field :email, type: String
+  field :roles, type: Array, default: []
 
   # Project Relations
   has_many :projects, class_name: "Project", autosave: true, dependent: :destroy, inverse_of: :owner
@@ -37,10 +38,23 @@ class User
   # Identity Relations
   has_many :identities, dependent: :destroy
 
+  # Check if the user has certain role
+  def is?(roles_check = [])
+    !(roles & roles_check).empty?
+  end
+
+  # Get all roles registered in the system
+  def self.all_roles
+    User.only(:roles).map(&:roles).reduce(:+).uniq
+  end
+
   # Create a new user from the omniauth hash
   def self.create_from_hash!(hash)
     # create new user
     user = User.new(name: hash['info']['name'], email: hash['info']['email'])
+
+    # assign default roles
+    user.roles = (User.empty?) ? [:admin] : [:author]
 
     # save
     return (user.save) ? user : nil

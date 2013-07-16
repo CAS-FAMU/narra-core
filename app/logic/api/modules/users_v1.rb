@@ -33,6 +33,7 @@ module API
         desc "Return users."
         get do
           authenticate!
+          authorize!([:admin])
           present({ status: API::Enums::Status::OK, users: present(User.all, with: API::Entities::User)})
         end
 
@@ -51,9 +52,17 @@ module API
           { status: API::Enums::Status::OK }
         end
 
+        desc "Return roles."
+        get 'roles' do
+          authenticate!
+          authorize!([:admin])
+          { status: API::Enums::Status::OK, roles: User.all_roles }
+        end
+
         desc "Return a specific user."
         get ':id' do
           authenticate!
+          authorize!([:admin])
           # get user
           user = User.find(params[:id])
           # present or not found
@@ -68,6 +77,7 @@ module API
         desc "Delete a specific user."
         get ':id/delete' do
           authenticate!
+          authorize!([:admin])
           # get user
           user = User.find(params[:id])
           # present or not found
@@ -76,6 +86,30 @@ module API
                    API::Enums::Error::NOT_FOUND[:status])
           else
             user.destroy && { status: API::Enums::Status::OK }
+          end
+        end
+
+        desc "Update a user."
+        params do
+          requires :roles, :type => Array, :desc => "User roles."
+        end
+        post ':id/update' do
+          # auth
+          authenticate!
+          authorize!([:admin])
+          # get user
+          user = User.find(params[:id])
+          # present or not found
+          if (user.nil?)
+            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
+                   API::Enums::Error::NOT_FOUND[:status])
+          else
+            # update
+            user.roles = params[:roles].collect {|role| role.to_sym}
+            # save
+            user.save
+            # present
+            { status: API::Enums::Status::OK, user: present(user, with: API::Entities::User) }
           end
         end
       end

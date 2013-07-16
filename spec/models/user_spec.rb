@@ -31,13 +31,7 @@ describe User do
   end
 
   it "creates from hash" do
-    # testing hash
-    hash = ActiveSupport::JSON.decode('{"provider":"test","uid":"tester@narra.eu","info":{"name":"Tester","email":"tester@narra.eu"},"credentials":{},"extra":{}}')
-
-    # call method
-    user = User.create_from_hash!(hash)
-
-    # expect
-    expect(User.first).to eq(user)
+    # expect 3 users as far as we are using create_from_hash in the spec_helper
+    User.all.count.should == 3
   end
 end

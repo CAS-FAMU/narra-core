@@ -22,7 +22,8 @@
 module API
   module Enums
     module Error
-      ACCESS_DENIED = { message: 'Access Denied', status: 401 }
+      NOT_AUTHENTICATED = { message: 'Not Authenticated', status: 401 }
+      NOT_AUTHORIZED = { message: 'Not Authorized', status: 403 }
       NOT_FOUND = { message: 'Not Found', status: 404 }
       ALREADY_EXISTS = { message: 'Already Exists', status: 404 }
     end

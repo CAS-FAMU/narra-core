@@ -19,24 +19,9 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-
 require 'spec_helper'
 
 describe API::Modules::UsersV1 do
-  before(:each) do
-    # testing hash
-    hash = ActiveSupport::JSON.decode('{"provider":"test","uid":"tester@narra.eu","info":{"name":"Tester","email":"tester@narra.eu"},"credentials":{},"extra":{}}')
-    # create user and its identity
-    Identity.create_from_hash(hash)
-    # get token and user
-    @token = CGI::escape(Base64.urlsafe_encode64(hash['uid']))
-    @user = User.first
-
-    # create other users for testing purpose
-    FactoryGirl.create(:user)
-    FactoryGirl.create(:user)
-  end
-
   context 'not authenticated' do
     describe 'GET /v1/users' do
       it 'returns users' do
@@ -50,7 +35,7 @@ describe API::Modules::UsersV1 do
 
         # check received data
         data['status'].should == 'ERROR'
-        data['message'].should == 'Access Denied'
+        data['message'].should == 'Not Authenticated'
       end
     end
 
@@ -66,7 +51,7 @@ describe API::Modules::UsersV1 do
 
         # check received data
         data['status'].should == 'ERROR'
-        data['message'].should == 'Access Denied'
+        data['message'].should == 'Not Authenticated'
       end
     end
 
@@ -82,13 +67,29 @@ describe API::Modules::UsersV1 do
 
         # check received data
         data['status'].should == 'ERROR'
-        data['message'].should == 'Access Denied'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
+
+    describe 'GET /v1/users/roles' do
+      it 'returns all roles' do
+        get '/v1/users/roles'
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
       end
     end
 
     describe 'GET /v1/users/[:id]' do
       it 'returns a specific user' do
-        get '/v1/users/' + @user._id
+        get '/v1/users/' + @unroled_user._id
 
         # check response status
         response.status.should == 401
@@ -98,13 +99,13 @@ describe API::Modules::UsersV1 do
 
         # check received data
         data['status'].should == 'ERROR'
-        data['message'].should == 'Access Denied'
+        data['message'].should == 'Not Authenticated'
       end
     end
 
     describe 'GET /v1/users/[:id]/delete' do
       it 'deletes a specific user' do
-        get '/v1/users/' + @user._id + '/delete'
+        get '/v1/users/' + @unroled_user._id + '/delete'
 
         # check response status
         response.status.should == 401
@@ -114,16 +115,114 @@ describe API::Modules::UsersV1 do
 
         # check received data
         data['status'].should == 'ERROR'
-        data['message'].should == 'Access Denied'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
+
+    describe 'POST /v1/users/[:id]/update' do
+      it 'updates a specific user' do
+        post '/v1/users/' + @unroled_user._id + '/update', { roles: ['author']}
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
       end
     end
   end
 
-  context 'authenticated' do
+  context 'not authorized' do
+    describe 'GET /v1/users' do
+      it 'returns users' do
+        get '/v1/users' + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/users/roles' do
+      it 'returns all roles' do
+        get '/v1/users/roles' + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/users/[:id]' do
+      it 'returns a specific user' do
+        get '/v1/users/' + @unroled_user._id + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/users/[:id]/delete' do
+      it 'deletes a specific user' do
+        get '/v1/users/' + @unroled_user._id + '/delete' + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'POST /v1/users/[:id]/update' do
+      it 'updates a specific user' do
+        post '/v1/users/' + @unroled_user._id + '/update' + '?token=' + @author_token, { roles: ['author']}
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+  end
+
+  context 'authenticated & authorized' do
     describe 'GET /v1/users' do
       it 'returns users' do
         # send request
-        get '/v1/users' + '?token=' + @token
+        get '/v1/users' + '?token=' + @admin_token
 
         # check response status
         response.status.should == 200
@@ -144,7 +243,7 @@ describe API::Modules::UsersV1 do
     describe 'GET /v1/users/me' do
       it 'returns logged user in the current session' do
         # send request
-        get '/v1/users/me' + '?token=' + @token
+        get '/v1/users/me' + '?token=' + @unroled_token
 
         # check response status
         response.status.should == 200
@@ -158,15 +257,15 @@ describe API::Modules::UsersV1 do
 
         # check received data
         data['status'].should == 'OK'
-        data['user']['name'].should == @user.name
-        data['user']['email'].should == @user.email
+        data['user']['name'].should == @unroled_user.name
+        data['user']['email'].should == @unroled_user.email
       end
     end
 
     describe 'GET /v1/users/me/signout' do
       it 'signouts logged user in the current session' do
         # send request
-        get '/v1/users/me/signout' + '?token=' + @token
+        get '/v1/users/me/signout' + '?token=' + @unroled_token
 
         # check response status
         response.status.should == 200
@@ -185,7 +284,7 @@ describe API::Modules::UsersV1 do
     describe 'GET /v1/users/[:id]' do
       it 'returns a specific user' do
         # send request
-        get '/v1/users/' + @user._id + '?token=' + @token
+        get '/v1/users/' + @admin_user._id + '?token=' + @admin_token
 
         # check response status
         response.status.should == 200
@@ -199,15 +298,16 @@ describe API::Modules::UsersV1 do
 
         # check received data
         data['status'].should == 'OK'
-        data['user']['name'].should == @user.name
-        data['user']['email'].should == @user.email
+        data['user']['name'].should == @admin_user.name
+        data['user']['email'].should == @admin_user.email
+        data['user']['roles'].collect {|role| role.to_sym}.should == @admin_user.roles
       end
     end
 
     describe 'GET /v1/users/[:id]/delete' do
       it 'deletes a specific user' do
         # send request
-        get '/v1/users/' + @user._id + '/delete' + '?token=' + @token
+        get '/v1/users/' + @unroled_user._id + '/delete' + '?token=' + @admin_token
 
         # check response status
         response.status.should == 200
@@ -222,7 +322,7 @@ describe API::Modules::UsersV1 do
         data['status'].should == 'OK'
 
         # check if the user is deleted
-        User.find(@user._id).should == nil
+        User.find(@unroled_user._id).should == nil
       end
     end
   end
