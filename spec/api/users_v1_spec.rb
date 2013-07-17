@@ -325,5 +325,29 @@ describe API::Modules::UsersV1 do
         User.find(@unroled_user._id).should == nil
       end
     end
+
+    describe 'POST /v1/users/[:id]/update' do
+      it 'updates a specific user' do
+        # send request
+        post '/v1/users/' + @unroled_user._id + '/update' + '?token=' + @admin_token, {roles: ['author']}
+
+        # check response status
+        response.status.should == 201
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+
+        # check received data
+        data['status'].should == 'OK'
+
+        # check received data
+        data['user']['name'].should == @unroled_user.name
+        data['user']['email'].should == @unroled_user.email
+        data['user']['roles'].collect {|role| role.to_sym}.should == @author_user.roles
+      end
+    end
   end
 end

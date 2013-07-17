@@ -62,7 +62,10 @@ module API
         end
         post ':name/update' do
           authenticate!
-          Tools::Settings.set(params[:name], params[:value]) && present({ status: API::Enums::Status::OK })
+          # update
+          Tools::Settings.set(params[:name], params[:value])
+          # present
+          present({ status: API::Enums::Status::OK })
         end
       end
     end

@@ -60,7 +60,10 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
-            item.destroy && presnet({ status: API::Enums::Status::OK })
+            # delete
+            item.destroy
+            # present
+            present({ status: API::Enums::Status::OK })
           end
         end
       end

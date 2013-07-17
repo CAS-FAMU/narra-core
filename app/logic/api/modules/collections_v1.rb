@@ -121,7 +121,9 @@ module API
             # authorize the owner
             authorize!([:author], collection)
             # destroy
-            collection.destroy && present({ status: API::Enums::Status::OK })
+            collection.destroy
+            # present
+            present({ status: API::Enums::Status::OK })
           end
         end
       end

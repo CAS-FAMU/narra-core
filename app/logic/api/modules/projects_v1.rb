@@ -161,8 +161,10 @@ module API
                    API::Enums::Error::NOT_FOUND[:status])
           else
             authorize!([:author], project)
-            # delete and present
-            project.destroy && { status: API::Enums::Status::OK }
+            # delete
+            project.destroy
+            # present
+            present({ status: API::Enums::Status::OK })
           end
         end
       end

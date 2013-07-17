@@ -49,14 +49,14 @@ module API
           # signout
           signout
           # return
-          { status: API::Enums::Status::OK }
+          present({ status: API::Enums::Status::OK })
         end
 
         desc "Return roles."
         get 'roles' do
           authenticate!
           authorize!([:admin])
-          { status: API::Enums::Status::OK, roles: User.all_roles }
+          present({ status: API::Enums::Status::OK, roles: User.all_roles })
         end
 
         desc "Return a specific user."
@@ -85,7 +85,10 @@ module API
             error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
                    API::Enums::Error::NOT_FOUND[:status])
           else
-            user.destroy && { status: API::Enums::Status::OK }
+            # destroy
+            user.destroy
+            # present
+            present({ status: API::Enums::Status::OK })
           end
         end
 
@@ -109,7 +112,7 @@ module API
             # save
             user.save
             # present
-            { status: API::Enums::Status::OK, user: present(user, with: API::Entities::User) }
+            present({ status: API::Enums::Status::OK, user: present(user, with: API::Entities::User) })
           end
         end
       end
