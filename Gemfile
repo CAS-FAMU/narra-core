@@ -33,6 +33,7 @@ gem 'rufus-scheduler'
 gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
+gem 'coveralls', require: false
 
 gem 'rspec-rails', :group => [:test, :development]
 gem 'database_cleaner', :group => :test
