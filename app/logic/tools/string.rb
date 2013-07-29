@@ -19,9 +19,11 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-ActiveSupport::Inflector.inflections do |inflect|
+module Tools
+  module String
 
-  # cache singularity
-  inflect.irregular("cache", "cache")
-  inflect.irregular("meta", "meta")
+    def self.class_name_to_s(class_object)
+      class_object.name.split('::').last.downcase
+    end
+  end
 end

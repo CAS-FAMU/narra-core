@@ -32,7 +32,7 @@ class Identity
 
   # Validations
   validates_presence_of :user_id, :uid, :provider
-  validates_uniqueness_of :uid, :scope => :provider
+  validates_uniqueness_of :uid, scope: :provider
 
   # Find identity from the omniauth hash
   def self.find_from_hash(hash)

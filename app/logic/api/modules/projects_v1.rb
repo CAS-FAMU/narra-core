@@ -29,12 +29,13 @@ module API
       helpers API::Helpers::User
       helpers API::Helpers::Error
       helpers API::Helpers::Present
+      helpers API::Helpers::Generic
 
       resource :projects do
 
         desc "Return all projects."
         get do
-          present_ok(:projects, present(Project.all, with: API::Entities::Project))
+          return_many(Project, API::Entities::Project, [], false)
         end
 
         desc "Create new project."
@@ -43,33 +44,12 @@ module API
           requires :title, type: String, desc: "Title of new project."
         end
         post 'new' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          project = Project.find_by(name: params[:name])
-          # present or not found
-          if (project.nil?)
-            present_ok(:project, present(Project.create(name: params[:name], title: params[:title], owner: current_user), with: API::Entities::Project))
-          else
-            error_already_exists
-          end
+          new_one(Project, API::Entities::Project, :name, {name: params[:name], title: params[:title], owner: current_user}, [:admin, :author])
         end
 
         desc "Return a specific project."
         get ':name' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          project = Project.find_by(name: params[:name])
-          # present or not found
-          if (project.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], project)
-            # present
-            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
-          end
+          return_one(Project, API::Entities::Project, :name, [:admin, :author])
         end
 
         desc "Update a specific project."
@@ -78,21 +58,9 @@ module API
           requires :title, type: String, desc: "Title of the project to be saved."
         end
         post ':name/update' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          project = Project.find_by(name: params[:name])
-          # present or not found
-          if (project.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], project)
-            # update project
+          update_one(Project, API::Entities::Project, :name, [:admin, :author]) { |project|
             project.update_attributes(title: params[:title])
-            # present
-            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
-          end
+          }
         end
 
         desc "Add specific collections."
@@ -101,23 +69,11 @@ module API
           requires :collections, type: Array, desc: "Array of the collections names."
         end
         post ':name/add' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          project = Project.find_by(name: params[:name])
-          # present or not found
-          if (project.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], project)
-            # update project
+          update_one(Project, API::Entities::Project, :name, [:admin, :author]) { |project|
             params[:collections].each do |collection|
               project.collections << Collection.find_by(name: collection)
             end
-            # present
-            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
-          end
+          }
         end
 
         desc "Remove specific collections."
@@ -126,41 +82,16 @@ module API
           requires :collections, type: Array, desc: "Array of the collections names."
         end
         post ':name/remove' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          project = Project.find_by(name: params[:name])
-          # present or not found
-          if (project.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], project)
-            # update project
+          update_one(Project, API::Entities::Project, :name, [:admin, :author]) { |project|
             params[:collections].each do |collection|
               project.collections.delete(Collection.find_by(name: collection))
             end
-            # present
-            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
-          end
+          }
         end
 
         desc "Delete a specific project."
         get ':name/delete' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get user
-          project = Project.find_by(name: params[:name])
-          # present or not found
-          if (project.nil?)
-            API::Enums::Error.error_not_found
-          else
-            authorize!([:author], project)
-            # delete
-            project.destroy
-            # present
-            present_ok
-          end
+          delete_one(Project, :name, [:admin, :author])
         end
       end
     end

@@ -32,6 +32,6 @@ class Meta
   belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta
 
   # Validations
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
   validates :content, presence: true
 end

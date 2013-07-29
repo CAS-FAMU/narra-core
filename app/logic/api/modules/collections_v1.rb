@@ -29,14 +29,13 @@ module API
       helpers API::Helpers::User
       helpers API::Helpers::Error
       helpers API::Helpers::Present
+      helpers API::Helpers::Generic
 
       resource :collections do
 
         desc "Return all collections."
         get do
-          authenticate!
-          authorize!([:admin, :author])
-          present_ok(:collections, present(Collection.all, with: API::Entities::Collection))
+          return_many(Collection, API::Entities::Collection, [:admin, :author])
         end
 
         desc "Create new collection."
@@ -46,41 +45,21 @@ module API
           optional :project, type: String, desc: "Unique name of the project."
         end
         post 'new' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          project = Project.find_by(name: params[:project]) unless params[:project].nil?
-          # authorize the owner
-          if !project.nil?
-            authorize!([:author], project)
-          end
-          # get collection
-          collection = Collection.find_by(name: params[:name])
-          # present or not found
-          if (collection.nil?)
-            # create new collection
-            collection = Collection.create(name: params[:name], title: params[:title], owner: current_user)
-            # add into project
-            collection.projects << project unless params[:project].nil?
-            # present
-            present_ok(:collection, present(collection, with: API::Entities::Collection))
-          else
-            error_already_exists
-          end
+          new_one(Collection, API::Entities::Collection, :name, {name: params[:name], title: params[:title], owner: current_user}, [:admin, :author]) { |collection|
+            # check for the project if any
+            project = Project.find_by(name: params[:project]) unless params[:project].nil?
+            # authorize the owner
+            if !project.nil?
+              authorize!([:author], project)
+              # update projects if authorized
+              collection.projects << project
+            end
+          }
         end
 
         desc "Return a specific collection."
         get ':name' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get user
-          collection = Collection.find_by(name: params[:name])
-          # present or not found
-          if (collection.nil?)
-            error_not_found
-          else
-            present_ok(:collection, present(collection, with: API::Entities::Collection, type: :detail))
-          end
+          return_one(Collection, API::Entities::Collection, :name, [:admin, :author])
         end
 
         desc "Return a specific collection's items."
@@ -103,40 +82,14 @@ module API
           requires :title, type: String, desc: "Title of the collection to be saved."
         end
         post ':name/update' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          collection = Collection.find_by(name: params[:name])
-          # present or not found
-          if (collection.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], collection)
-            # update project
+          update_one(Collection, API::Entities::Collection, :name, [:admin, :author]) { |collection|
             collection.update_attributes(title: params[:title])
-            # present
-            present_ok(:collection, present(collection, with: API::Entities::Collection, type: :detail))
-          end
+          }
         end
 
         desc "Delete a specific collection."
         get ':name/delete' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get collection
-          collection = Collection.find_by(name: params[:name])
-          # present or not found
-          if (collection.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], collection)
-            # destroy
-            collection.destroy
-            # present
-            present_ok
-          end
+          delete_one(Collection, :name, [:admin, :author])
         end
       end
     end

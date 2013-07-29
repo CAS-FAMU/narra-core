@@ -29,14 +29,13 @@ module API
       helpers API::Helpers::User
       helpers API::Helpers::Error
       helpers API::Helpers::Present
+      helpers API::Helpers::Generic
 
       resource :items do
 
         desc "Return all items."
         get do
-          authenticate!
-          authorize!([:admin, :author])
-          present_ok(:items, present(Item.all, with: API::Entities::Item))
+          return_many(Item, API::Entities::Item, [:admin, :author])
         end
 
         desc "Create new item."
@@ -47,22 +46,15 @@ module API
           optional :metadata, type: Hash, desc: "Metadata fields."
         end
         post 'new' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          collection = Collection.find_by(name: params[:collection]) unless params[:collection].nil?
-          # authorize the owner
-          if !collection.nil?
-            authorize!([:author], collection)
-          end
-          # get collection
-          item = Item.find_by(name: params[:name])
-          # present or not found
-          if item.nil?
-            # create new collection
-            item = Item.create(name: params[:name], url: params[:url], owner: current_user)
-            # add into project
-            item.collections << collection unless params[:collection].nil?
+          new_one(Item, API::Entities::Item, :name, {name: params[:name], url: params[:url], owner: current_user}, [:admin, :author]) { |item|
+            # check for the collection if any
+            collection = Collection.find_by(name: params[:collection]) unless params[:collection].nil?
+            # authorize the owner
+            if !collection.nil?
+              authorize!([:author], collection)
+              # add into collection if authorized
+              item.collections << collection unless params[:collection].nil?
+            end
             # parse metadata if exists
             if !params[:metadata].nil? && !params[:metadata].empty?
               # iterate through hash
@@ -71,49 +63,17 @@ module API
                 item.meta << Meta.new(name: key, content: value, provider: :source)
               end
             end
-            # persist
-            item.save
-            # present
-            present_ok(:item, present(item, with: API::Entities::Item, type: :detail))
-          else
-            error_already_exists
-          end
+          }
         end
 
         desc "Return a specific item."
         get ':name' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get project
-          item = Item.find_by(name: params[:name])
-          # present or not found
-          if (item.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], item)
-            # present
-            present_ok(:item, present(item, with: API::Entities::Item, type: :detail))
-          end
+          return_one(Item, API::Entities::Item, :name, [:admin, :author])
         end
 
         desc "Delete a specific item."
         get ':name/delete' do
-          authenticate!
-          authorize!([:admin, :author])
-          # get collection
-          item = Item.find_by(name: params[:name])
-          # present or not found
-          if (item.nil?)
-            error_not_found
-          else
-            # authorize the owner
-            authorize!([:author], item)
-            # destroy
-            item.destroy
-            # present
-            present_ok
-          end
+          delete_one(Item, :name, [:admin, :author])
         end
       end
     end

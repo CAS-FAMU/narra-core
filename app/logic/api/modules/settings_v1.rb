@@ -29,13 +29,13 @@ module API
       helpers API::Helpers::User
       helpers API::Helpers::Error
       helpers API::Helpers::Present
+      helpers API::Helpers::Generic
 
       resource :settings do
 
         desc "Return settings."
         get do
-          authenticate!
-          present_ok(:settings, Tools::Settings.all)
+          return_many(Tools::Settings)
         end
 
         desc "Return defaults."

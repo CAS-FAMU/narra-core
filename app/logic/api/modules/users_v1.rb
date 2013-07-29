@@ -29,14 +29,13 @@ module API
       helpers API::Helpers::User
       helpers API::Helpers::Error
       helpers API::Helpers::Present
+      helpers API::Helpers::Generic
 
       resource :users do
 
         desc "Return users."
         get do
-          authenticate!
-          authorize!([:admin])
-          present_ok(:users, present(User.all, with: API::Entities::User))
+          return_many(User, API::Entities::User, [:admin])
         end
 
         desc "Return logged user in the current session."
@@ -63,33 +62,12 @@ module API
 
         desc "Return a specific user."
         get ':id' do
-          authenticate!
-          authorize!([:admin])
-          # get user
-          user = User.find(params[:id])
-          # present or not found
-          if (user.nil?)
-            error_not_found
-          else
-            present_ok(:user, present(user, with: API::Entities::User))
-          end
+          return_one(User, API::Entities::User, :id, [:admin])
         end
 
         desc "Delete a specific user."
         get ':id/delete' do
-          authenticate!
-          authorize!([:admin])
-          # get user
-          user = User.find(params[:id])
-          # present or not found
-          if (user.nil?)
-            error_not_found
-          else
-            # destroy
-            user.destroy
-            # present
-            present_ok
-          end
+          delete_one(User, :id, [:admin])
         end
 
         desc "Update a user."
@@ -97,22 +75,9 @@ module API
           requires :roles, :type => Array, :desc => "User roles."
         end
         post ':id/update' do
-          # auth
-          authenticate!
-          authorize!([:admin])
-          # get user
-          user = User.find(params[:id])
-          # present or not found
-          if (user.nil?)
-            error_not_found
-          else
-            # update
+          update_one(User, API::Entities::User, :id, [:admin]) { |user|
             user.roles = params[:roles].collect {|role| role.to_sym}
-            # save
-            user.save
-            # present
-            present_ok(:user, present(user, with: API::Entities::User))
-          end
+          }
         end
       end
     end

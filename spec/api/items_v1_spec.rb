@@ -22,7 +22,7 @@
 
 require 'spec_helper'
 
-describe API::Modules::CollectionsV1 do
+describe API::Modules::ItemsV1 do
   before(:each) do
     # create collection
     @collection_01 = FactoryGirl.create(:collection, owner: @author_user)
