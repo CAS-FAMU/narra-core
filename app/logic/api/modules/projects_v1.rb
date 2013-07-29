@@ -58,40 +58,31 @@ module API
           requires :title, type: String, desc: "Title of the project to be saved."
         end
         post ':name/update' do
-          update_one(Project, API::Entities::Project, :name, [:admin, :author]) { |project|
+          update_one(Project, API::Entities::Project, :name, [:admin, :author]) do |project|
             project.update_attributes(title: params[:title])
-          }
-        end
-
-        desc "Add specific collections."
-        params do
-          requires :name, type: String, desc: "Name of the project."
-          requires :collections, type: Array, desc: "Array of the collections names."
-        end
-        post ':name/add' do
-          update_one(Project, API::Entities::Project, :name, [:admin, :author]) { |project|
-            params[:collections].each do |collection|
-              project.collections << Collection.find_by(name: collection)
-            end
-          }
-        end
-
-        desc "Remove specific collections."
-        params do
-          requires :name, type: String, desc: "Name of the project."
-          requires :collections, type: Array, desc: "Array of the collections names."
-        end
-        post ':name/remove' do
-          update_one(Project, API::Entities::Project, :name, [:admin, :author]) { |project|
-            params[:collections].each do |collection|
-              project.collections.delete(Collection.find_by(name: collection))
-            end
-          }
+          end
         end
 
         desc "Delete a specific project."
         get ':name/delete' do
           delete_one(Project, :name, [:admin, :author])
+        end
+
+        desc "Add or remove specific collections."
+        params do
+          requires :name, type: String, desc: "Name of the project."
+          requires :collections, type: Array, desc: "Array of the collections names."
+        end
+        post ':name/:action' do
+          update_one(Project, API::Entities::Project, :name, [:admin, :author]) do |project|
+            params[:collections].each do |collection|
+              if params[:action] == 'add'
+                project.collections << Collection.find_by(name: collection)
+              elsif params[:action] == 'remove'
+                project.collections.delete(Collection.find_by(name: collection))
+              end
+            end
+          end
         end
       end
     end

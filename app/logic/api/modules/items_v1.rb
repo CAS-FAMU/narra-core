@@ -46,7 +46,7 @@ module API
           optional :metadata, type: Hash, desc: "Metadata fields."
         end
         post 'new' do
-          new_one(Item, API::Entities::Item, :name, {name: params[:name], url: params[:url], owner: current_user}, [:admin, :author]) { |item|
+          new_one(Item, API::Entities::Item, :name, {name: params[:name], url: params[:url], owner: current_user}, [:admin, :author]) do |item|
             # check for the collection if any
             collection = Collection.find_by(name: params[:collection]) unless params[:collection].nil?
             # authorize the owner
@@ -63,7 +63,7 @@ module API
                 item.meta << Meta.new(name: key, content: value, provider: :source)
               end
             end
-          }
+          end
         end
 
         desc "Return a specific item."

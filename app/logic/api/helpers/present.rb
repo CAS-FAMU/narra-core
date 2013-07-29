@@ -25,9 +25,9 @@ module API
 
       def present_ok(key = nil, object = nil)
         if key.nil? || object.nil?
-          present({ :status => API::Enums::Status::OK })
+          present({ :status => 'OK' })
         else
-          present({ :status => API::Enums::Status::OK, key => object })
+          present({ :status => 'OK', key => object })
         end
       end
     end

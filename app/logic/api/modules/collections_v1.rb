@@ -45,7 +45,7 @@ module API
           optional :project, type: String, desc: "Unique name of the project."
         end
         post 'new' do
-          new_one(Collection, API::Entities::Collection, :name, {name: params[:name], title: params[:title], owner: current_user}, [:admin, :author]) { |collection|
+          new_one(Collection, API::Entities::Collection, :name, {name: params[:name], title: params[:title], owner: current_user}, [:admin, :author]) do |collection|
             # check for the project if any
             project = Project.find_by(name: params[:project]) unless params[:project].nil?
             # authorize the owner
@@ -54,7 +54,7 @@ module API
               # update projects if authorized
               collection.projects << project
             end
-          }
+          end
         end
 
         desc "Return a specific collection."
@@ -82,9 +82,9 @@ module API
           requires :title, type: String, desc: "Title of the collection to be saved."
         end
         post ':name/update' do
-          update_one(Collection, API::Entities::Collection, :name, [:admin, :author]) { |collection|
+          update_one(Collection, API::Entities::Collection, :name, [:admin, :author]) do |collection|
             collection.update_attributes(title: params[:title])
-          }
+          end
         end
 
         desc "Delete a specific collection."

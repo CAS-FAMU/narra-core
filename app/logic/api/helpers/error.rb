@@ -23,23 +23,23 @@ module API
   module Helpers
     module Error
       def error_not_authenticated
-        error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_AUTHENTICATED[:message] },
-               API::Enums::Error::NOT_AUTHENTICATED[:status])
+        error_generic('Not Authenticated', 401)
       end
 
       def error_not_authorized
-        error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_AUTHORIZED[:message] },
-               API::Enums::Error::NOT_AUTHORIZED[:status])
+        error_generic('Not Authorized', 403)
       end
 
       def error_not_found
-        error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-               API::Enums::Error::NOT_FOUND[:status])
+        error_generic('Not Found', 404)
       end
 
       def error_already_exists
-        error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ALREADY_EXISTS[:message] },
-               API::Enums::Error::ALREADY_EXISTS[:status])
+        error_generic('Already Exists', 404)
+      end
+
+      def error_generic(message, status)
+        error!({ status: 'ERROR', message: message }, status)
       end
     end
   end

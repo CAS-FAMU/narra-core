@@ -75,9 +75,9 @@ module API
           requires :roles, :type => Array, :desc => "User roles."
         end
         post ':id/update' do
-          update_one(User, API::Entities::User, :id, [:admin]) { |user|
+          update_one(User, API::Entities::User, :id, [:admin]) do |user|
             user.roles = params[:roles].collect {|role| role.to_sym}
-          }
+          end
         end
       end
     end
