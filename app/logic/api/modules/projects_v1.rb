@@ -27,12 +27,14 @@ module API
       format :json
 
       helpers API::Helpers::User
+      helpers API::Helpers::Error
+      helpers API::Helpers::Present
 
       resource :projects do
 
         desc "Return all projects."
         get do
-          present({ status: API::Enums::Status::OK, projects: present(Project.all, with: API::Entities::Project)})
+          present_ok(:projects, present(Project.all, with: API::Entities::Project))
         end
 
         desc "Create new project."
@@ -47,11 +49,9 @@ module API
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            present({ status: API::Enums::Status::OK, project: present(Project.create(name: params[:name], title: params[:title], owner: current_user),
-                                                                       with: API::Entities::Project)})
+            present_ok(:project, present(Project.create(name: params[:name], title: params[:title], owner: current_user), with: API::Entities::Project))
           else
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ALREADY_EXISTS[:message] },
-                   API::Enums::Error::ALREADY_EXISTS[:status])
+            error_already_exists
           end
         end
 
@@ -63,13 +63,12 @@ module API
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # authorize the owner
             authorize!([:author], project)
             # present
-            present({ status: API::Enums::Status::OK, project: present(project, with: API::Entities::Project, type: :detail)})
+            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
           end
         end
 
@@ -85,15 +84,14 @@ module API
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # authorize the owner
             authorize!([:author], project)
             # update project
             project.update_attributes(title: params[:title])
             # present
-            present({ status: API::Enums::Status::OK, project: present(project, with: API::Entities::Project, type: :detail)})
+            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
           end
         end
 
@@ -109,8 +107,7 @@ module API
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message]},
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # authorize the owner
             authorize!([:author], project)
@@ -119,7 +116,7 @@ module API
               project.collections << Collection.find_by(name: collection)
             end
             # present
-            present({ status: API::Enums::Status::OK, project: present(project, with: API::Entities::Project, type: :detail)})
+            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
           end
         end
 
@@ -135,8 +132,7 @@ module API
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # authorize the owner
             authorize!([:author], project)
@@ -145,7 +141,7 @@ module API
               project.collections.delete(Collection.find_by(name: collection))
             end
             # present
-            present({ status: API::Enums::Status::OK, project: present(project, with: API::Entities::Project, type: :detail)})
+            present_ok(:project, present(project, with: API::Entities::Project, type: :detail))
           end
         end
 
@@ -157,14 +153,13 @@ module API
           project = Project.find_by(name: params[:name])
           # present or not found
           if (project.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            API::Enums::Error.error_not_found
           else
             authorize!([:author], project)
             # delete
             project.destroy
             # present
-            present({ status: API::Enums::Status::OK })
+            present_ok
           end
         end
       end

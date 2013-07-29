@@ -27,19 +27,21 @@ module API
       format :json
 
       helpers API::Helpers::User
+      helpers API::Helpers::Error
+      helpers API::Helpers::Present
 
       resource :settings do
 
         desc "Return settings."
         get do
           authenticate!
-          present({ status: API::Enums::Status::OK, settings: Tools::Settings.all })
+          present_ok(:settings, Tools::Settings.all)
         end
 
         desc "Return defaults."
         get 'defaults' do
           authenticate!
-          present({ status: API::Enums::Status::OK, defaults: Tools::Settings.defaults })
+          present_ok(:defaults, Tools::Settings.defaults)
         end
 
         desc "Return a specific setting."
@@ -49,10 +51,9 @@ module API
           setting = Tools::Settings.get(params[:name])
           # present
           if (setting.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
-            present({ status: API::Enums::Status::OK, setting: {name: params[:name],  value: setting} })
+            present_ok(:setting, present({ name: params[:name],  value: setting }))
           end
         end
 
@@ -65,7 +66,7 @@ module API
           # update
           Tools::Settings.set(params[:name], params[:value])
           # present
-          present({ status: API::Enums::Status::OK })
+          present_ok
         end
       end
     end

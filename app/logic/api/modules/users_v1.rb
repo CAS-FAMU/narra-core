@@ -27,6 +27,8 @@ module API
       format :json
 
       helpers API::Helpers::User
+      helpers API::Helpers::Error
+      helpers API::Helpers::Present
 
       resource :users do
 
@@ -34,13 +36,13 @@ module API
         get do
           authenticate!
           authorize!([:admin])
-          present({ status: API::Enums::Status::OK, users: present(User.all, with: API::Entities::User)})
+          present_ok(:users, present(User.all, with: API::Entities::User))
         end
 
         desc "Return logged user in the current session."
         get 'me' do
           authenticate!
-          present({ status: API::Enums::Status::OK, user: present(current_user, with: API::Entities::User)})
+          present_ok(:user, present(current_user, with: API::Entities::User))
         end
 
         desc "Signout logged user in the current session."
@@ -49,14 +51,14 @@ module API
           # signout
           signout
           # return
-          present({ status: API::Enums::Status::OK })
+          present_ok
         end
 
         desc "Return roles."
         get 'roles' do
           authenticate!
           authorize!([:admin])
-          present({ status: API::Enums::Status::OK, roles: User.all_roles })
+          present_ok(:roles, present(User.all_roles))
         end
 
         desc "Return a specific user."
@@ -67,10 +69,9 @@ module API
           user = User.find(params[:id])
           # present or not found
           if (user.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
-            present({ status: API::Enums::Status::OK, user: present(user, with: API::Entities::User)})
+            present_ok(:user, present(user, with: API::Entities::User))
           end
         end
 
@@ -82,13 +83,12 @@ module API
           user = User.find(params[:id])
           # present or not found
           if (user.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # destroy
             user.destroy
             # present
-            present({ status: API::Enums::Status::OK })
+            present_ok
           end
         end
 
@@ -104,15 +104,14 @@ module API
           user = User.find(params[:id])
           # present or not found
           if (user.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # update
             user.roles = params[:roles].collect {|role| role.to_sym}
             # save
             user.save
             # present
-            present({ status: API::Enums::Status::OK, user: present(user, with: API::Entities::User) })
+            present_ok(:user, present(user, with: API::Entities::User))
           end
         end
       end

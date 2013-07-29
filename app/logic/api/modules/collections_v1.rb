@@ -27,6 +27,8 @@ module API
       format :json
 
       helpers API::Helpers::User
+      helpers API::Helpers::Error
+      helpers API::Helpers::Present
 
       resource :collections do
 
@@ -34,7 +36,7 @@ module API
         get do
           authenticate!
           authorize!([:admin, :author])
-          present({ status: API::Enums::Status::OK, collections: present(Collection.all, with: API::Entities::Collection)})
+          present_ok(:collections, present(Collection.all, with: API::Entities::Collection))
         end
 
         desc "Create new collection."
@@ -61,10 +63,9 @@ module API
             # add into project
             collection.projects << project unless params[:project].nil?
             # present
-            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection)})
+            present_ok(:collection, present(collection, with: API::Entities::Collection))
           else
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::ALREADY_EXISTS[:message] },
-                   API::Enums::Error::ALREADY_EXISTS[:status])
+            error_already_exists
           end
         end
 
@@ -76,10 +77,9 @@ module API
           collection = Collection.find_by(name: params[:name])
           # present or not found
           if (collection.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
-            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection, type: :detail)})
+            present_ok(:collection, present(collection, with: API::Entities::Collection, type: :detail))
           end
         end
 
@@ -95,15 +95,14 @@ module API
           collection = Collection.find_by(name: params[:name])
           # present or not found
           if (collection.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # authorize the owner
             authorize!([:author], collection)
             # update project
             collection.update_attributes(title: params[:title])
             # present
-            present({ status: API::Enums::Status::OK, collection: present(collection, with: API::Entities::Collection, type: :detail)})
+            present_ok(:collection, present(collection, with: API::Entities::Collection, type: :detail))
           end
         end
 
@@ -115,15 +114,14 @@ module API
           collection = Collection.find_by(name: params[:name])
           # present or not found
           if (collection.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
             # authorize the owner
             authorize!([:author], collection)
             # destroy
             collection.destroy
             # present
-            present({ status: API::Enums::Status::OK })
+            present_ok
           end
         end
       end

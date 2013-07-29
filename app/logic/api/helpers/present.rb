@@ -20,19 +20,14 @@
 #
 
 module API
-  module Modules
-    class SystemV1 < Grape::API
+  module Helpers
+    module Present
 
-      version 'v1', :using => :path
-      format :json
-
-      helpers API::Helpers::Present
-
-      resource :system do
-
-        desc "Return system version."
-        get '/version' do
-          present_ok(:version, present({ branch: Tools::Version::VERSION, revision: Tools::Version::REVISION }))
+      def present_ok(key = nil, object = nil)
+        if key.nil? || object.nil?
+          present({ :status => API::Enums::Status::OK })
+        else
+          present({ :status => API::Enums::Status::OK, key => object })
         end
       end
     end
