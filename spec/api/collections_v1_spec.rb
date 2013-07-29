@@ -24,9 +24,14 @@ require 'spec_helper'
 
 describe API::Modules::CollectionsV1 do
   before(:each) do
+    # create items
+    @item_01 = FactoryGirl.create(:item, owner: @author_user)
+    @item_02 = FactoryGirl.create(:item, owner: @author_user)
+
     # create collection
     @collection = FactoryGirl.create(:collection, owner: @author_user)
     @collection_admin = FactoryGirl.create(:collection, owner: @admin_user)
+    @collection_items = FactoryGirl.create(:collection, owner: @admin_user, items: [@item_01, @item_02])
   end
 
   context 'not authenticated' do
@@ -49,6 +54,22 @@ describe API::Modules::CollectionsV1 do
     describe 'GET /v1/collections/[:name]' do
       it 'returns a specific collection' do
         get '/v1/collections/' + @collection.name
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
+
+    describe 'GET /v1/collections/[:name]/items' do
+      it 'returns a specific collection items' do
+        get '/v1/collections/' + @collection.name + '/items'
 
         # check response status
         response.status.should == 401
@@ -144,54 +165,70 @@ describe API::Modules::CollectionsV1 do
       end
     end
 
+    describe 'GET /v1/collections/[:name]/items' do
+      it 'returns a specific collection items' do
+        get '/v1/collections/' + @collection.name + '/items?token=' + @unroled_token
 
-      describe 'GET /v1/collections/[:name]/delete' do
-        it 'deletes a specific collection' do
-          get '/v1/collections/' + @collection_admin.name + '/delete' + '?token=' + @author_token
+        # check response status
+        response.status.should == 403
 
-          # check response status
-          response.status.should == 403
+        # parse response
+        data = JSON.parse(response.body)
 
-          # parse response
-          data = JSON.parse(response.body)
-
-          # check received data
-          data['status'].should == 'ERROR'
-          data['message'].should == 'Not Authorized'
-        end
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
       end
+    end
 
-      describe 'POST /v1/collections/new' do
-        it 'creates new collection' do
-          post '/v1/collections/new' + '?token=' + @unroled_token, {name: '', title: ''}
 
-          # check response status
-          response.status.should == 403
+    describe 'GET /v1/collections/[:name]/delete' do
+      it 'deletes a specific collection' do
+        get '/v1/collections/' + @collection_admin.name + '/delete' + '?token=' + @author_token
 
-          # parse response
-          data = JSON.parse(response.body)
+        # check response status
+        response.status.should == 403
 
-          # check received data
-          data['status'].should == 'ERROR'
-          data['message'].should == 'Not Authorized'
-        end
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
       end
+    end
 
-      describe 'POST /v1/collections/[:name]/update' do
-        it 'updates specific collection' do
-          post '/v1/collections/' + @collection_admin.name + '/update' + '?token=' + @author_token, {title: ''}
+    describe 'POST /v1/collections/new' do
+      it 'creates new collection' do
+        post '/v1/collections/new' + '?token=' + @unroled_token, {name: '', title: ''}
 
-          # check response status
-          response.status.should == 403
+        # check response status
+        response.status.should == 403
 
-          # parse response
-          data = JSON.parse(response.body)
+        # parse response
+        data = JSON.parse(response.body)
 
-          # check received data
-          data['status'].should == 'ERROR'
-          data['message'].should == 'Not Authorized'
-        end
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
       end
+    end
+
+    describe 'POST /v1/collections/[:name]/update' do
+      it 'updates specific collection' do
+        post '/v1/collections/' + @collection_admin.name + '/update' + '?token=' + @author_token, {title: ''}
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
   end
 
   context 'authenticated & authorized' do
@@ -212,7 +249,7 @@ describe API::Modules::CollectionsV1 do
 
         # check received data
         data['status'].should == 'OK'
-        data['collections'].count.should == 2
+        data['collections'].count.should == 3
       end
     end
 
@@ -235,6 +272,27 @@ describe API::Modules::CollectionsV1 do
         data['status'].should == 'OK'
         data['collection']['name'].should == @collection.name
         data['collection']['title'].should == @collection.title
+      end
+    end
+
+    describe 'GET /v1/collections/[:name]/items' do
+      it 'returns a specific collection items' do
+        # send request
+        get '/v1/collections/' + @collection_items.name + '/items?token=' + @author_token
+
+        # check response status
+        response.status.should == 200
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('items')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['items'].count.should == 2
       end
     end
 

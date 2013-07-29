@@ -27,43 +27,92 @@ module API
       format :json
 
       helpers API::Helpers::User
+      helpers API::Helpers::Error
+      helpers API::Helpers::Present
 
       resource :items do
 
         desc "Return all items."
         get do
           authenticate!
-          present({ status: API::Enums::Status::OK, items: present(Item.all, with: API::Entities::Item)})
+          authorize!([:admin, :author])
+          present_ok(:items, present(Item.all, with: API::Entities::Item))
+        end
+
+        desc "Create new item."
+        params do
+          requires :name, type: String, desc: "Unique name of a new item."
+          requires :url, type: String, desc: "URL of the item's stream."
+          requires :collection, type: String, desc: "Unique name of the collection."
+          optional :metadata, type: Hash, desc: "Metadata fields."
+        end
+        post 'new' do
+          authenticate!
+          authorize!([:admin, :author])
+          # get project
+          collection = Collection.find_by(name: params[:collection]) unless params[:collection].nil?
+          # authorize the owner
+          if !collection.nil?
+            authorize!([:author], collection)
+          end
+          # get collection
+          item = Item.find_by(name: params[:name])
+          # present or not found
+          if item.nil?
+            # create new collection
+            item = Item.create(name: params[:name], url: params[:url], owner: current_user)
+            # add into project
+            item.collections << collection unless params[:collection].nil?
+            # parse metadata if exists
+            if !params[:metadata].nil? && !params[:metadata].empty?
+              # iterate through hash
+              params[:metadata].each do |key, value|
+                # store new source metadata
+                item.meta << Meta.new(name: key, content: value, provider: :source)
+              end
+            end
+            # persist
+            item.save
+            # present
+            present_ok(:item, present(item, with: API::Entities::Item, type: :detail))
+          else
+            error_already_exists
+          end
         end
 
         desc "Return a specific item."
-        get ':id' do
+        get ':name' do
           authenticate!
-          # get item
-          item = Item.find(params[:id])
+          authorize!([:admin, :author])
+          # get project
+          item = Item.find_by(name: params[:name])
           # present or not found
           if (item.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
-            present({ status: API::Enums::Status::OK, item: present(item, with: API::Entities::Item)})
+            # authorize the owner
+            authorize!([:author], item)
+            # present
+            present_ok(:item, present(item, with: API::Entities::Item, type: :detail))
           end
         end
 
         desc "Delete a specific item."
-        get ':id/delete' do
+        get ':name/delete' do
           authenticate!
-          # get item
-          item = Item.find(params[:id])
+          authorize!([:admin, :author])
+          # get collection
+          item = Item.find_by(name: params[:name])
           # present or not found
           if (item.nil?)
-            error!({ status: API::Enums::Status::ERROR, message: API::Enums::Error::NOT_FOUND[:message] },
-                   API::Enums::Error::NOT_FOUND[:status])
+            error_not_found
           else
-            # delete
+            # authorize the owner
+            authorize!([:author], item)
+            # destroy
             item.destroy
             # present
-            present({ status: API::Enums::Status::OK })
+            present_ok
           end
         end
       end

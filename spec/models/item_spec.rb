@@ -19,24 +19,14 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Collection
-  include Mongoid::Document
-  include Mongoid::Timestamps
+require 'spec_helper'
 
-  # Fields
-  field :name, type: String
-  field :title, type: String
+describe Item do
+  it "can be instantiated" do
+    FactoryGirl.build(:item).should be_an_instance_of(Item)
+  end
 
-  # User Relations
-  belongs_to :owner, class_name: "User", autosave: true, inverse_of: :collections
-
-  # Project Relations
-  has_and_belongs_to_many :projects, class_name: "Project", autosave: true, inverse_of: :collections
-
-  # Item Relations
-  has_and_belongs_to_many :items, class_name: "Item", autosave: true, inverse_of: :collections
-
-  # Validations
-  validate :name, presence: true, uniqueness: true
-  validate :title, presence: true
+  it "can be saved successfully" do
+    FactoryGirl.create(:item).should be_persisted
+  end
 end

@@ -24,40 +24,14 @@ class Meta
   include Mongoid::Timestamps
 
   # Fields
-  field :contributor, type: String
-  field :coverage, type: String
-  field :creator, type: String
-  field :date, type: String
-  field :description, type: String
-  field :format, type: String
-  field :identifier, type: String
-  field :language, type: String
-  field :publisher, type: String
-  field :relation, type: String
-  field :rights, type: String
-  field :source, type: String
-  field :subject, type: String
-  field :title, type: String
-  field :type, type: String
+  field :name, type: String
+  field :content, type: String
+  field :provider, type: String
 
   # Relations
-  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_src
-  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta_gen
+  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta
 
   # Validations
-  validates :title, presence: true
-  validates :coverage, presence: true
-  validates :creator, presence: true
-  validates :date, presence: true
-  validates :description, presence: true
-  validates :format, presence: true
-  validates :identifier, presence: true
-  validates :language, presence: true
-  validates :publisher, presence: true
-  validates :relation, presence: true
-  validates :rights, presence: true
-  validates :source, presence: true
-  validates :subject, presence: true
-  validates :title, presence: true
-  validates :type, presence: true
+  validates :name, presence: true, uniqueness: true
+  validates :content, presence: true
 end

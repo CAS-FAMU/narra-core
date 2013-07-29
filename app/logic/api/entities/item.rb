@@ -24,6 +24,19 @@ module API
     class Item < Grape::Entity
 
       expose :_id, as: 'id'
+      expose :name
+      expose :url
+      expose(:owner) { |model,options| { id: model.owner._id, name: model.owner.name }}
+      expose :collections, format_with: :collections , :if => { :type => :detail }
+      expose :meta, as: 'metadata', format_with: :metadata , :if => { :type => :detail }
+
+      format_with :collections do |collections|
+        collections.collect { |collection| { id: collection._id, name: collection.name, title: collection.title, owner: { id: collection.owner._id, name: collection.owner.name }}}
+      end
+
+      format_with :metadata do |metadata|
+        metadata.collect {|meta| { name: meta.name, content: meta.content}}
+      end
     end
   end
 end

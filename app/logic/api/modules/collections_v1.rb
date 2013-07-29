@@ -83,6 +83,20 @@ module API
           end
         end
 
+        desc "Return a specific collection's items."
+        get ':name/items' do
+          authenticate!
+          authorize!([:admin, :author])
+          # get user
+          collection = Collection.find_by(name: params[:name])
+          # present or not found
+          if (collection.nil?)
+            error_not_found
+          else
+            present_ok(:items, present(collection.items, with: API::Entities::Item))
+          end
+        end
+
         desc "Update a specific collection."
         params do
           requires :name, type: String, desc: "Name of the collection."

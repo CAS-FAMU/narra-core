@@ -35,6 +35,9 @@ class User
   # Collection Relations
   has_many :collections, class_name: "Collection", autosave: true, inverse_of: :owner
 
+  # Collection Items
+  has_many :items, class_name: "Item", autosave: true, inverse_of: :owner
+
   # Identity Relations
   has_many :identities, dependent: :destroy
 

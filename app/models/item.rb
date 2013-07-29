@@ -23,10 +23,20 @@ class Item
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  # Relations
-  has_one :meta_src, class_name: "Meta", autosave: true, dependent: :destroy
-  has_many :meta_gen, class_name: "Meta", autosave: true, dependent: :destroy
+  # Fields
+  field :name, type: String
+  field :url, type: String
+
+  # User Relations
+  belongs_to :owner, class_name: "User", autosave: true, inverse_of: :items
+
+  # Collection Relations
+  has_and_belongs_to_many :collections, class_name: "Collection", autosave: true, inverse_of: :items
+
+  # Meta Relations
+  has_many :meta, class_name: "Meta", autosave: true, dependent: :destroy, inverse_of: :item
 
   # Validations
-  validate :meta_src, presence: true
+  validate :name, presence: true, uniqueness: true
+  validate :url, presence: true
 end
