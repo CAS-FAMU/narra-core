@@ -28,7 +28,7 @@ module API
         authenticate! if authentication
         authorize!(authorization) unless authorization.empty?
         # present
-        present_ok(Tools::String.class_name_to_s(model).pluralize.to_sym, present(model.all, with: entity))
+        present_ok(Tools::Class.class_name_to_s(model).pluralize.to_sym, present(model.all, with: entity))
       end
 
       # Generic method for returning of the specific object based on the owner
@@ -44,7 +44,7 @@ module API
           # authorize the owner
           authorize!([:author], object) unless authorization.empty?
           # present
-          present_ok(Tools::String.class_name_to_s(model).to_sym, present(object, with: entity, type: :detail))
+          present_ok(Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
         end
       end
 
@@ -62,7 +62,7 @@ module API
           # save
           object.save
           # present
-          present_ok(Tools::String.class_name_to_s(model).to_sym, present(object, with: entity, type: :detail))
+          present_ok(Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
         else
           error_already_exists
         end
@@ -84,7 +84,7 @@ module API
           # save
           object.save
           # present
-          present_ok(Tools::String.class_name_to_s(model).to_sym, present(object, with: entity, type: :detail))
+          present_ok(Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
         end
       end
 

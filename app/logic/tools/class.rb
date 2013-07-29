@@ -20,10 +20,14 @@
 #
 
 module Tools
-  module String
+  module Class
 
     def self.class_name_to_s(class_object)
       class_object.name.split('::').last.downcase
+    end
+
+    def self.class_name_to_sym(class_object)
+      class_name_to_s(class_object).to_sym
     end
   end
 end
