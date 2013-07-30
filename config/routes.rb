@@ -19,11 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'sidekiq/web'
-
 NarraCore::Application.routes.draw do
 
   # Mount the API root mounter
   mount API::Mounter => '/'
-  mount Sidekiq::Web => '/sidekiq'
 end
