@@ -34,4 +34,6 @@ class Meta
   # Validations
   validates :name, presence: true
   validates :content, presence: true
+  validates :provider, presence: true
+  validates_uniqueness_of :name, :scope => [:provider, :item_id]
 end

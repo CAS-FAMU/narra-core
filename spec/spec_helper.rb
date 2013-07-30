@@ -19,16 +19,20 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-# Coveralls
-require 'coveralls'
-Coveralls.wear!
-
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'database_cleaner'
+
+# Coveralls
+require 'coveralls'
+Coveralls.wear!
+
+# Sidekiq
+require 'sidekiq'
+require 'sidekiq/testing/inline'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -92,5 +96,21 @@ RSpec.configure do |config|
     @unroled_user = User.find_by(name: 'Unroled')
     @unroled_user.roles = []
     @unroled_user.save
+
+    # testing generator
+    module Generators
+      module Modules
+        class Testing < Generators::Modules::Generic
+          # Set title and description fields
+          @identifier = :testing
+          @title = 'Testing'
+          @description = 'Testing Metadata Generator'
+
+          def generate
+            add_meta(name: 'test', content: 'test')
+          end
+        end
+      end
+    end
   end
 end

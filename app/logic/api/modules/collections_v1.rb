@@ -91,6 +91,24 @@ module API
         get ':name/delete' do
           delete_one(Collection, :name, [:admin, :author])
         end
+
+        desc "Run generator over specified collection"
+        params do
+          requires :generators, type: Array, desc: "List of generators to be applied."
+        end
+        post ':name/generate' do
+          return_one_custom(Collection, nil, :name, [:admin, :author]) do |collection|
+            # Multi event list
+            events = []
+            # Process items in collection
+            collection.items.each do |item|
+              # Process item
+              events << Generators.process(item, params[:generators])
+            end
+            # Present event
+            present_ok(:events, events)
+          end
+        end
       end
     end
   end

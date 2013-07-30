@@ -32,7 +32,7 @@ describe API::Modules::ItemsV1 do
     @meta_src_01 = FactoryGirl.create(:meta, :source)
     @meta_src_02 = FactoryGirl.create(:meta, :source)
 
-    # create collection
+    # create items
     @item = FactoryGirl.create(:item, collections: [@collection_01], owner: @author_user)
     @item_admin = FactoryGirl.create(:item, collections: [@collection_02], owner: @admin_user)
     @item_meta = FactoryGirl.create(:item, collections: [@collection_02], meta: [@meta_src_01, @meta_src_02], owner: @author_user)
@@ -102,6 +102,22 @@ describe API::Modules::ItemsV1 do
         data['message'].should == 'Not Authenticated'
       end
     end
+
+    describe 'POST /v1/items/[:name]/generate' do
+      it 'runs generators over specified item' do
+        post '/v1/items/' + @item.name + '/generate', {generators: [:testing]}
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
   end
 
   context 'not authorized' do
@@ -156,6 +172,22 @@ describe API::Modules::ItemsV1 do
     describe 'POST /v1/items/new' do
       it 'creates new item' do
         post '/v1/items/new' + '?token=' + @unroled_token, {name: '', url: '', collection: ''}
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'POST /v1/items/[:name]/generate' do
+      it 'runs generators over specified item' do
+        post '/v1/items/' + @item_admin.name + '/generate?token=' + @author_token, {generators: [:testing]}
 
         # check response status
         response.status.should == 403
@@ -256,7 +288,29 @@ describe API::Modules::ItemsV1 do
         data['status'].should == 'OK'
         data['item']['name'].should == 'test_item'
         data['item']['url'].should == 'url://test_item'
-        data['item']['metadata'].count.should == 2
+        data['item']['metadata'].count.should == 6
+      end
+    end
+
+    describe 'POST /v1/items/[:name]/generate' do
+      it 'runs generators over specified item' do
+        post '/v1/items/' + @item.name + '/generate?token=' + @author_token, {generators: [:testing]}
+
+        # check response status
+        response.status.should == 201
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('event')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['event']['item']['id'].should == @item._id.to_s
+        data['event']['generators'].count.should == 1
+        @item.meta.count.should == 1
       end
     end
   end

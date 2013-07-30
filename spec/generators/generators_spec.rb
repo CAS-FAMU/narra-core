@@ -19,24 +19,26 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-module API
-  module Entities
-    class Item < Grape::Entity
+require 'spec_helper'
 
-      expose :_id, as: 'id'
-      expose :name
-      expose :url
-      expose(:owner) { |model,options| { id: model.owner._id, name: model.owner.name }}
-      expose :collections, format_with: :collections , :if => { :type => :detail }
-      expose :meta, as: 'metadata', format_with: :metadata , :if => { :type => :detail }
+describe Generators do
+  before(:each) do
+    # create item
+    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
+  end
 
-      format_with :collections do |collections|
-        collections.collect { |collection| { id: collection._id, name: collection.name, title: collection.title, owner: { id: collection.owner._id, name: collection.owner.name }}}
-      end
+  it 'should return all active generators' do
+    Generators.all.count.should == 2
+  end
 
-      format_with :metadata do |metadata|
-        metadata.collect {|meta| { name: meta.name, content: meta.content, provider: meta.provider}}
-      end
-    end
+  it 'should return all active generators identifiers' do
+    Generators.all_identifiers.count.should == 2
+  end
+
+  it 'should process item to generate new metadata' do
+    # generate through main process
+    Generators.process(@item, [:testing])
+    # validation
+    @item.meta.count.should == 1
   end
 end

@@ -19,6 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-Dir[Rails.root + 'app/logic/api/modules/**/*.rb'].each do |file|
-  require file
+module Generators
+  class Worker
+    include Sidekiq::Worker
+    sidekiq_options :queue => :generators
+
+    def perform(item_id, generator_name)
+      # get generator
+      generator = Generators.all.detect {|g| g.identifier == generator_name.to_sym}
+      # perform generate if generator is available
+      generator.new(Item.find(item_id)).generate
+    end
+  end
 end

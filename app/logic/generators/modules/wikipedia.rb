@@ -19,37 +19,30 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'wikipedia'
+
 module Generators
   module Modules
-    # Generic template for generators
-    class Generic
-      # Attributes for human readable format
-      # These have to be imlemented in descendants
-      class << self
-        attr_accessor :identifier, :title, :description
-      end
+    # Wikipedia Generator module
+    class Wikipedia < Generators::Modules::Generic
 
-      # Default values
-      @identifier = :generic
-      @title = 'Generic'
-      @description = 'Generic Generator'
+      # Set title and description fields
+      @identifier = :wikipedia
+      @title = 'Wikipedia'
+      @description = 'Wikipedia Metadata Generator based on opensearch algorithm via item name'
 
-      # Generic constructor to store an item to be processed
-      def initialize(item)
-        @item = item
-      end
-
-      def add_meta(options)
-        # push new meta entry
-        @item.meta << Meta.new({provider: self.class.identifier}.merge(options))
-        # save item
-        @item.save
-      end
-
-      # Generic generate method
       def generate
-        # Nothing to do
-        # This has to be overridden in descendants
+        # prepare wikipedia client
+        client = ::Wikipedia.client
+
+        # get item's source meta name field
+        data = @item.meta.select {|meta| meta.provider == 'source' && meta.name == 'name' }
+
+        # perform opensearch on wiki
+        results = JSON.parse(client.request(action: 'opensearch', search: data.first.content)) unless data.empty?
+
+        # process results if not empy
+        add_meta(name: 'opensearch', content: results[1]) unless results[1].empty?
       end
     end
   end

@@ -23,18 +23,29 @@ module API
   module Helpers
     module Generic
 
-      # Generic method for returning of the specific object based on the owner
-      def return_many(model, entity = nil, authorization = [], authentication = true)
+      # Generic auth process
+      def auth(authorization = [], authentication = true)
         authenticate! if authentication
         authorize!(authorization) unless authorization.empty?
+      end
+
+      # Generic method for returning of the specific object based on the owner
+      def return_many(model, entity = nil, authorization = [], authentication = true)
+        auth(authorization, authentication)
         # present
         present_ok(Tools::Class.class_name_to_s(model).pluralize.to_sym, present(model.all, with: entity))
       end
 
       # Generic method for returning of the specific object based on the owner
       def return_one(model, entity, key, authorization = [], authentication = true)
-        authenticate! if authentication
-        authorize!(authorization) unless authorization.empty?
+        return_one_custom(model, entity, key, authorization, authentication) do |object|
+          # present
+          present_ok(Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
+        end
+      end
+
+      def return_one_custom(model, entity, key, authorization = [], authentication = true)
+        auth(authorization, authentication)
         # get project
         object = model.find_by(key => params[key])
         # present or not found
@@ -43,14 +54,13 @@ module API
         else
           # authorize the owner
           authorize!([:author], object) unless authorization.empty?
-          # present
-          present_ok(Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
+          # custom action
+          yield object if block_given?
         end
       end
 
       def new_one(model, entity, key, parameters, authorization = [], authentication = true)
-        authenticate! if authentication
-        authorize!(authorization) unless authorization.empty?
+        auth(authorization, authentication)
         # get object
         object = model.find_by(key => params[key])
         # present or not found
@@ -60,7 +70,7 @@ module API
           # object specified code
           yield object if block_given?
           # save
-          object.save
+          object.save!
           # present
           present_ok(Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
         else
@@ -69,8 +79,7 @@ module API
       end
 
       def update_one(model, entity, key, authorization = [], authentication = true)
-        authenticate! if authentication
-        authorize!(authorization) unless authorization.empty?
+        auth(authorization, authentication)
         # get object
         object = model.find_by(key => params[key])
         # present or not found
@@ -82,7 +91,7 @@ module API
           # update custom code
           yield object if block_given?
           # save
-          object.save
+          object.save!
           # present
           present_ok(Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
         end
@@ -90,8 +99,7 @@ module API
 
       # Generic method for deleting of the specific object based on the owner
       def delete_one(model, key, authorization = [], authentication = true)
-        authenticate! if authentication
-        authorize!(authorization) unless authorization.empty?
+        auth(authorization, authentication)
         # get object
         object = model.find_by(key => params[key])
         # present or not found

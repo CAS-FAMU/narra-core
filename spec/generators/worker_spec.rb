@@ -19,15 +19,18 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-module Generators
-  class Processor
-    # Main generator process invoker
-    def self.process(item, generator = nil)
-      # create
-    end
+require 'spec_helper'
 
-    def self.all
-      Generators::Modules::Generic.descendants.collect {|generator| Tools::Class.class_name_to_sym(generator)}
-    end
+describe Generators::Worker do
+  before(:each) do
+    # create item
+    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
+  end
+
+  it 'should process item to generate new metadata' do
+    # generate through main process
+    Generators::Worker.perform_async(@item._id.to_s, :testing)
+    # validation
+    @item.meta.count.should == 1
   end
 end

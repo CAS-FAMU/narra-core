@@ -31,7 +31,7 @@ describe API::Modules::CollectionsV1 do
     # create collection
     @collection = FactoryGirl.create(:collection, owner: @author_user)
     @collection_admin = FactoryGirl.create(:collection, owner: @admin_user)
-    @collection_items = FactoryGirl.create(:collection, owner: @admin_user, items: [@item_01, @item_02])
+    @collection_items = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01, @item_02])
   end
 
   context 'not authenticated' do
@@ -118,6 +118,22 @@ describe API::Modules::CollectionsV1 do
     describe 'POST /v1/collections/[:name]/update' do
       it 'updates specific collection' do
         post '/v1/collections/' + @collection.name + '/update', {title: ''}
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
+
+    describe 'POST /v1/collections/[:name]/generate' do
+      it 'runs generators over specified collection' do
+        post '/v1/collections/' + @collection_items.name + '/generate', {generators: [:testing]}
 
         # check response status
         response.status.should == 401
@@ -217,6 +233,22 @@ describe API::Modules::CollectionsV1 do
     describe 'POST /v1/collections/[:name]/update' do
       it 'updates specific collection' do
         post '/v1/collections/' + @collection_admin.name + '/update' + '?token=' + @author_token, {title: ''}
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'POST /v1/collections/[:name]/generate' do
+      it 'runs generators over specified collection' do
+        post '/v1/collections/' + @collection_admin.name + '/generate?token=' + @author_token, {generators: [:testing]}
 
         # check response status
         response.status.should == 403
@@ -361,6 +393,28 @@ describe API::Modules::CollectionsV1 do
         data['collection']['name'].should == @collection.name
         data['collection']['title'].should == 'Test Collection Updated'
         data['collection']['owner']['name'].should == @author_user.name
+      end
+    end
+
+    describe 'POST /v1/collections/[:name]/generate' do
+      it 'runs generators over specified collection' do
+        post '/v1/collections/' + @collection_items.name + '/generate?token=' + @author_token, {generators: [:testing]}
+
+        # check response status
+        response.status.should == 201
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('events')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['events'].count.should == 2
+        @item_01.meta.count.should == 1
+        @item_02.meta.count.should == 1
       end
     end
   end

@@ -30,10 +30,16 @@ gem 'grape'
 gem 'grape-entity'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rufus-scheduler'
+gem 'sidekiq'
+gem 'slim', '>= 1.1.0'
+gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
 gem 'coveralls', require: false
+
+# Wikipedia Generator Module dependencies
+gem 'wikipedia-client'
 
 gem 'rspec-rails', :group => [:test, :development]
 gem 'database_cleaner', :group => :test

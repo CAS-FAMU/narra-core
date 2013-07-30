@@ -55,6 +55,11 @@ module API
               # add into collection if authorized
               item.collections << collection unless params[:collection].nil?
             end
+            # create source metadata from essential fields
+            item.meta << Meta.new(name: 'name', content: params[:name], provider: :source)
+            item.meta << Meta.new(name: 'url', content: params[:url], provider: :source)
+            item.meta << Meta.new(name: 'collection', content: params[:collection], provider: :source)
+            item.meta << Meta.new(name: 'owner', content: current_user.name, provider: :source)
             # parse metadata if exists
             if !params[:metadata].nil? && !params[:metadata].empty?
               # iterate through hash
@@ -74,6 +79,19 @@ module API
         desc "Delete a specific item."
         get ':name/delete' do
           delete_one(Item, :name, [:admin, :author])
+        end
+
+        desc "Run generator over specified item"
+        params do
+          requires :generators, type: Array, desc: "List of generators to be applied."
+        end
+        post ':name/generate' do
+          return_one_custom(Item, nil, :name, [:admin, :author]) do |item|
+            # Process item
+            event = Generators.process(item, params[:generators])
+            # Present event
+            present_ok(:event, event)
+          end
         end
       end
     end

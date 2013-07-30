@@ -21,33 +21,21 @@
 
 module API
   module Modules
-    class Authentication < Grape::API
+    class GeneratorsV1 < Grape::API
 
+      version 'v1', :using => :path
       format :json
 
       helpers API::Helpers::User
+      helpers API::Helpers::Error
       helpers API::Helpers::Present
+      helpers API::Helpers::Generic
 
-      resource :auth do
-        post '/:provider/callback' do
-          auth = request.env['omniauth.auth']
+      resource :generators do
 
-          unless @auth = Identity.find_from_hash(auth)
-            # Create a new user or add an auth to existing user, depending on
-            # whether there is already a user signed in.
-            @auth = Identity.create_from_hash(auth, User.where(email: auth['info']['email']).first)
-          end
-
-          # get token
-          @token = CGI::escape(Base64.urlsafe_encode64(auth['uid']))
-
-          # get back to origin path or return token
-          if request.env['omniauth.origin']
-            redirect request.env['omniauth.origin'] + '?token=' + @token, :permanent => true
-          end
-
-          # return token in json when request is not from browser
-          present_ok(:token, @token)
+        desc "Return all active generators."
+        get do
+          return_many(Generators, nil, [:admin, :author])
         end
       end
     end
