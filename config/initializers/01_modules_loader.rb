@@ -19,6 +19,14 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-Dir[Rails.root + 'app/logic/**/*.rb'].each do |file|
+Dir[Rails.root + 'app/logic/api/modules/**/*.rb'].each do |file|
+  require file
+end
+
+Dir[Rails.root + 'app/logic/generators/modules/**/*.rb'].each do |file|
+  require file
+end
+
+Dir[Rails.root + 'app/logic/*.rb'].each do |file|
   require file
 end
