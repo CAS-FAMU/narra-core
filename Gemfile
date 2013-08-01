@@ -21,7 +21,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.14'
 gem 'jquery-rails'
 gem 'thin'
 gem 'mongoid'
@@ -31,17 +31,18 @@ gem 'grape-entity'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rufus-scheduler'
 gem 'sidekiq'
-gem 'slim', '>= 1.1.0'
-gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'slim'
+gem 'sinatra', :require => false
 gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
-gem 'coveralls', require: false
+gem 'coveralls', :require => false
 
 # Wikipedia Generator Module dependencies
 gem 'wikipedia-client'
 
 gem 'rspec-rails', :group => [:test, :development]
+gem 'rspec-mocks', :group => [:test, :development]
 gem 'database_cleaner', :group => :test
 gem 'mongoid-rspec', :group => :test
 gem 'factory_girl_rails', :group => :test
