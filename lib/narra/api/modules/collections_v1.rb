@@ -89,7 +89,7 @@ module Narra
           desc "Run generator over specified collection"
           post ':name/generate' do
             required_attributes! [:generators]
-            return_one_custom(Collection, nil, :name, [:admin, :author]) do |collection|
+            return_one_custom(Collection, :name, [:admin, :author]) do |collection|
               # Multi event list
               events = []
               # Process items in collection

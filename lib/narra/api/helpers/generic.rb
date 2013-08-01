@@ -39,13 +39,13 @@ module Narra
 
         # Generic method for returning of the specific object based on the owner
         def return_one(model, entity, key, authorization = [], authentication = true)
-          return_one_custom(model, entity, key, authorization, authentication) do |object|
+          return_one_custom(model, key, authorization, authentication) do |object|
             # present
             present_ok(Narra::Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
           end
         end
 
-        def return_one_custom(model, entity, key, authorization = [], authentication = true)
+        def return_one_custom(model, key, authorization = [], authentication = true)
           auth!(authorization, authentication)
           # get project
           object = model.find_by(key => params[key])

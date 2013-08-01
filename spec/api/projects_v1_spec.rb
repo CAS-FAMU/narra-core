@@ -24,11 +24,14 @@ require 'spec_helper'
 
 describe Narra::API::Modules::ProjectsV1 do
   before(:each) do
+    # create item
+    @item_01 = FactoryGirl.create(:item, owner: @author_user)
+
     # create collection
-    @collection_01 = FactoryGirl.create(:collection, owner: @author_user)
-    @collection_02 = FactoryGirl.create(:collection, owner: @author_user)
-    @collection_03 = FactoryGirl.create(:collection, owner: @author_user)
-    @collection_04 = FactoryGirl.create(:collection, owner: @author_user)
+    @collection_01 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
+    @collection_02 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
+    @collection_03 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
+    @collection_04 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
 
     # create projects for testing purpose
     @project = FactoryGirl.create(:project, owner: @author_user, collections: [@collection_01, @collection_02])
@@ -120,9 +123,9 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/add' do
+    describe 'POST /v1/projects/[:name]/collections/add' do
       it 'adds specific collections' do
-        post '/v1/projects/' + @project.name + '/add', {collections: [@collection_03.name]}
+        post '/v1/projects/' + @project.name + '/collections/add', {collections: [@collection_03.name]}
 
         # check response status
         response.status.should == 401
@@ -136,12 +139,44 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/remove' do
+    describe 'POST /v1/projects/[:name]/collections/remove' do
       it 'removes specific collections' do
-        post '/v1/projects/' + @project.name + '/remove', {collections: [@collection_01.name]}
+        post '/v1/projects/' + @project.name + '/collections/remove', {collections: [@collection_01.name]}
 
         # check response status
         response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/items' do
+      it 'returns projects items' do
+        get '/v1/projects/' + @project.name + '/items'
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/items/[:name]' do
+      it 'returns projects item' do
+        get '/v1/projects/' + @project.name + '/items/' + @item_01.name
+
+            # check response status
+            response.status.should == 401
 
         # parse response
         data = JSON.parse(response.body)
@@ -218,9 +253,9 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/add' do
+    describe 'POST /v1/projects/[:name]/collections/add' do
       it 'adds specific collections' do
-        post '/v1/projects/' + @project_admin.name + '/add' + '?token=' + @author_token, {collections: [@collection_01.name]}
+        post '/v1/projects/' + @project_admin.name + '/collections/add' + '?token=' + @author_token, {collections: [@collection_01.name]}
 
         # check response status
         response.status.should == 403
@@ -234,9 +269,41 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/remove' do
+    describe 'POST /v1/projects/[:name]/collections/remove' do
       it 'removes specific collections' do
-        post '/v1/projects/' + @project_admin.name + '/remove' + '?token=' + @author_token, {collections: [@collection_03.name]}
+        post '/v1/projects/' + @project_admin.name + '/collections/remove' + '?token=' + @author_token, {collections: [@collection_03.name]}
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/items' do
+      it 'returns projects items' do
+        get '/v1/projects/' + @project_admin.name + '/items' + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/items/[:name]' do
+      it 'returns projects item' do
+        get '/v1/projects/' + @project_admin.name + '/items/' + @item_01.name + '?token=' + @author_token
 
         # check response status
         response.status.should == 403
@@ -342,10 +409,10 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/add' do
+    describe 'POST /v1/projects/[:name]/collections/add' do
       it 'adds specific collections' do
         # send request
-        post '/v1/projects/' + @project.name + '/add' + '?token=' + @author_token, {collections: [@collection_03.name, @collection_04.name]}
+        post '/v1/projects/' + @project.name + '/collections/add' + '?token=' + @author_token, {collections: [@collection_03.name, @collection_04.name]}
 
         # check response status
         response.status.should == 201
@@ -364,10 +431,10 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/remove' do
+    describe 'POST /v1/projects/[:name]/collections/remove' do
       it 'removes specific collections' do
         # send request
-        post '/v1/projects/' + @project.name + '/remove' + '?token=' + @author_token, {collections: [@collection_01.name, @collection_02.name]}
+        post '/v1/projects/' + @project.name + '/collections/remove' + '?token=' + @author_token, {collections: [@collection_01.name, @collection_02.name]}
 
         # check response status
         response.status.should == 201
@@ -383,6 +450,46 @@ describe Narra::API::Modules::ProjectsV1 do
         data['status'].should == 'OK'
         data['project']['name'].should == @project.name
         data['project']['collections'].count.should == 0
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/items' do
+      it 'returns projects items' do
+        get '/v1/projects/' + @project.name + '/items' + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 200
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('items')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['items'].count.should == 1
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/items/[:name]' do
+      it 'returns projects item' do
+        get '/v1/projects/' + @project.name + '/items/' + @item_01.name + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 200
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('item')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['item']['name'].should == @item_01.name
       end
     end
   end

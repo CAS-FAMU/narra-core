@@ -27,6 +27,6 @@ describe Meta do
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:meta, provider: :source).should be_persisted
+    FactoryGirl.create(:meta, generator: :source).should be_persisted
   end
 end

@@ -68,9 +68,9 @@ module Narra
             delete_one(Project, :name, [:admin, :author])
           end
 
-          desc "Add or remove specific collections."
-          post ':name/:action' do
-            required_attributes! [:name, :collections]
+          desc "Return project's items."
+          post ':name/collections/:action' do
+            required_attributes! [:collections]
             update_one(Project, Narra::API::Entities::Project, :name, [:admin, :author]) do |project|
               params[:collections].each do |collection|
                 if params[:action] == 'add'
@@ -78,6 +78,27 @@ module Narra
                 elsif params[:action] == 'remove'
                   project.collections.delete(Collection.find_by(name: collection))
                 end
+              end
+            end
+          end
+
+          desc "Return project's items."
+          get ':name/items' do
+            return_one_custom(Project, :name, [:admin, :author]) do |project|
+              present_ok(:items, present(project.items, with: Narra::API::Entities::Item))
+            end
+          end
+
+          desc "Return project's item."
+          get ':name/items/:item' do
+            return_one_custom(Project, :name, [:admin, :author]) do |project|
+              # Get item
+              items = Item.where(name: params[:item]).any_in(collection_ids: project.collection_ids)
+              # Check if the item is part of the project
+              if items.empty?
+                error_not_found!
+              else
+                present_ok(:item, present(items.first, with: Narra::API::Entities::Item, type: :detail, project: project))
               end
             end
           end

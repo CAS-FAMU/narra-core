@@ -26,6 +26,7 @@ class Project
   # Fields
   field :name, type: String
   field :title, type: String
+  field :generators, type: Array, default: []
 
   # User Relations
   belongs_to :owner, class_name: "User", autosave: true, inverse_of: :projects
@@ -37,4 +38,9 @@ class Project
   # Validations
   validate :name, presence: true, uniqueness: true
   validate :title, presence: true
+
+  # Return all project items
+  def items
+    Item.any_in(collection_ids: self.collection_ids)
+  end
 end

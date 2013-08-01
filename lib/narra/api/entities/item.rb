@@ -25,18 +25,16 @@ module Narra
       class Item < Grape::Entity
 
         expose :_id, as: 'id'
-        expose :name
-        expose :url
-        expose(:owner) { |model, options| {id: model.owner._id, name: model.owner.name} }
-        expose :collections, format_with: :collections, :if => {:type => :detail}
-        expose :meta, as: 'metadata', format_with: :metadata, :if => {:type => :detail}
-
-        format_with :collections do |collections|
-          collections.collect { |collection| {id: collection._id, name: collection.name, title: collection.title, owner: {id: collection.owner._id, name: collection.owner.name}} }
+        expose :name, :url
+        expose :owner do |model, options|
+          { id: model.owner._id, name: model.owner.name}
         end
-
-        format_with :metadata do |metadata|
-          metadata.collect { |meta| {name: meta.name, content: meta.content, provider: meta.provider} }
+        expose :collections, using: Narra::API::Entities::Collection, :if => {:type => :detail}
+        expose :meta, as: :metadata, :if => {:type => :detail} do |item, options|
+          # get scoped metadata for item
+          meta = options[:project].nil? ? item.meta : ::Meta.where(item: item).generators(options[:project].generators)
+          # format them
+          meta.collect { |m| { name: m.name, content: m.content, generator: m.generator} }
         end
       end
     end

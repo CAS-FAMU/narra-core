@@ -25,11 +25,11 @@ FactoryGirl.define do
     sequence(:content) {|n| "Test Meta Content #{n}" }
 
     trait :source do
-      sequence(:provider) { :source }
+      sequence(:generator) { :source }
     end
 
     trait :generated do
-      sequence(:provider) { :generator }
+      sequence(:generator) { :generated }
     end
   end
 end

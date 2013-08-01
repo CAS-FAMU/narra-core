@@ -25,9 +25,10 @@ module Narra
       class Collection < Grape::Entity
 
         expose :_id, as: 'id'
-        expose :name
-        expose :title
-        expose(:owner) { |model, options| {id: model.owner._id, name: model.owner.name} }
+        expose :name, :title
+        expose :owner do |model, options|
+          { id: model.owner._id, name: model.owner.name}
+        end
         expose :projects, format_with: :projects, :if => {:type => :detail}
 
         format_with :projects do |projects|

@@ -19,24 +19,13 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Meta
-  include Mongoid::Document
-  include Mongoid::Timestamps
+module Narra
+  module API
+    module Entities
+      class Meta < Grape::Entity
 
-  # Fields
-  field :name, type: String
-  field :content, type: String
-  field :generator, type: String
-
-  # Relations
-  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta
-
-  # Validations
-  validates :name, presence: true
-  validates :content, presence: true
-  validates :generator, presence: true
-  validates_uniqueness_of :name, :scope => [:generator, :item_id]
-
-  # Scopes
-  scope :generators, ->(generators) {any_in(generator: generators | [:source])}
+        expose :name, :content, :generator
+      end
+    end
+  end
 end

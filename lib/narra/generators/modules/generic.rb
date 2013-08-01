@@ -44,7 +44,7 @@ module Narra
 
         def add_meta(options)
           # push new meta entry
-          @item.meta << Meta.new({provider: self.class.identifier}.merge(options))
+          @item.meta << Meta.new({generator: self.class.identifier}.merge(options))
           # save item
           @item.save
         end
