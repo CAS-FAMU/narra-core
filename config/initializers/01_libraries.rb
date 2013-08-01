@@ -19,12 +19,15 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-module Narra
-  VERSION = File.read(Rails.root.join("VERSION")).strip
-  REVISION = `git log --pretty=format:'%h' -n 1`
+# Load all modules
+Dir[Rails.root + 'lib/narra/api/modules/**/*.rb'].each do |file|
+  require file
 end
 
-#
-# Load all libs for threadsafety
-#
-Dir["#{Rails.root}/lib/**/*.rb"].each { |file| require file }
+Dir[Rails.root + 'lib/narra/generators/modules/**/*.rb'].each do |file|
+  require file
+end
+
+Dir[Rails.root + 'lib/narra/synthesizers/modules/**/*.rb'].each do |file|
+  require file
+end
