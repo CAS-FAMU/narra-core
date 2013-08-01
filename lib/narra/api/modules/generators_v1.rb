@@ -19,18 +19,29 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+module Narra
+  module API
+    module Modules
+      class GeneratorsV1 < Narra::API::Modules::Generic
 
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-  end
+        version 'v1', :using => :path
+        format :json
 
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
-    # validation
-    @item.meta.count.should == 1
+        helpers Narra::API::Helpers::User
+        helpers Narra::API::Helpers::Error
+        helpers Narra::API::Helpers::Present
+        helpers Narra::API::Helpers::Generic
+
+        resource :generators do
+
+          desc "Return all active generators."
+          get do
+            auth! [:admin, :author]
+            # present
+            present_ok(:generators, present(Narra::Core.generators))
+          end
+        end
+      end
+    end
   end
 end

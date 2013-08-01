@@ -22,7 +22,7 @@
 
 require 'spec_helper'
 
-describe API::Modules::ItemsV1 do
+describe Narra::API::Modules::ItemsV1 do
   before(:each) do
     # create collection
     @collection_01 = FactoryGirl.create(:collection, owner: @author_user)
@@ -89,7 +89,7 @@ describe API::Modules::ItemsV1 do
 
     describe 'POST /v1/items/new' do
       it 'creates new item' do
-        post '/v1/items/new', {name: '', url: '', collection: ''}
+        post '/v1/items/new', {name: 'test', url: 'test', collection: 'test'}
 
         # check response status
         response.status.should == 401
@@ -171,7 +171,7 @@ describe API::Modules::ItemsV1 do
 
     describe 'POST /v1/items/new' do
       it 'creates new item' do
-        post '/v1/items/new' + '?token=' + @unroled_token, {name: '', url: '', collection: ''}
+        post '/v1/items/new' + '?token=' + @unroled_token, {name: 'test', url: 'test', collection: 'test'}
 
         # check response status
         response.status.should == 403
@@ -309,7 +309,8 @@ describe API::Modules::ItemsV1 do
         # check received data
         data['status'].should == 'OK'
         data['event']['item']['id'].should == @item._id.to_s
-        data['event']['generators'].count.should == 1
+        data['event']['worker'].should == 'Narra::Generators::Worker'
+        data['event']['identifiers'].count.should == 1
         @item.meta.count.should == 1
       end
     end

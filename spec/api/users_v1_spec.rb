@@ -21,7 +21,7 @@
 
 require 'spec_helper'
 
-describe API::Modules::UsersV1 do
+describe Narra::API::Modules::UsersV1 do
   context 'not authenticated' do
     describe 'GET /v1/users' do
       it 'returns users' do

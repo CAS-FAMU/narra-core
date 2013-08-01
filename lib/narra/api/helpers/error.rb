@@ -19,18 +19,34 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+module Narra
+  module API
+    module Helpers
+      module Error
+        def error_not_authenticated!
+          error_generic!('Not Authenticated', 401)
+        end
 
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-  end
+        def error_not_authorized!
+          error_generic!('Not Authorized', 403)
+        end
 
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
-    # validation
-    @item.meta.count.should == 1
+        def error_not_found!
+          error_generic!('Not Found', 404)
+        end
+
+        def error_already_exists!
+          error_generic!('Already Exists', 404)
+        end
+
+        def error_parameter_missing!(parameter)
+          error_generic!('Parameter Missing', 404, {parameter: parameter})
+        end
+
+        def error_generic!(message, status, optional = {})
+          error!({status: 'ERROR', message: message}.merge(optional), status)
+        end
+      end
+    end
   end
 end

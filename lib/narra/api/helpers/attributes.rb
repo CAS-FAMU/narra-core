@@ -19,18 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
-
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-  end
-
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
-    # validation
-    @item.meta.count.should == 1
+module Narra
+  module API
+    module Helpers
+      module Attributes
+        def required_attributes!(keys)
+          keys.each do |key|
+            error_parameter_missing!(key) unless params[key].present?
+          end
+        end
+      end
+    end
   end
 end

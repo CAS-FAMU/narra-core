@@ -23,4 +23,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-NarraCore::Application.load_tasks
+Narra::Application.load_tasks

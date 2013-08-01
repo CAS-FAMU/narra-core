@@ -98,16 +98,36 @@ RSpec.configure do |config|
     @unroled_user.save
 
     # testing generator
-    module Generators
-      module Modules
-        class Testing < Generators::Modules::Generic
-          # Set title and description fields
-          @identifier = :testing
-          @title = 'Testing'
-          @description = 'Testing Metadata Generator'
+    module Narra
+      module Generators
+        module Modules
+          class Testing < Narra::Generators::Modules::Generic
+            # Set title and description fields
+            @identifier = :testing
+            @title = 'Testing'
+            @description = 'Testing Metadata Generator'
 
-          def generate
-            add_meta(name: 'test', content: 'test')
+            def generate
+              add_meta(name: 'test', content: 'test')
+            end
+          end
+        end
+      end
+    end
+
+    # testing synthesizer
+    module Narra
+      module Synthesizers
+        module Modules
+          class Testing < Narra::Synthesizers::Modules::Generic
+            # Set title and description fields
+            @identifier = :testing
+            @title = 'Testing'
+            @description = 'Testing Metadata Synthesizer'
+
+            def generate
+              add_meta(name: 'test', content: 'test')
+            end
           end
         end
       end

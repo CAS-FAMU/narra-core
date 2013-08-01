@@ -22,7 +22,7 @@
 
 require 'spec_helper'
 
-describe Narra::API::Modules::GeneratorsV1 do
+describe Narra::API::Modules::SynthesizersV1 do
   context 'not authenticated' do
     describe 'GET /v1/generators' do
       it 'returns generators' do

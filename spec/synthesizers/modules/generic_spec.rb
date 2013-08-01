@@ -21,16 +21,23 @@
 
 require 'spec_helper'
 
-describe Narra::Generators::Worker do
+describe Narra::Synthesizers::Modules::Generic do
   before(:each) do
     # create item
     @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
   end
 
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
-    # validation
-    @item.meta.count.should == 1
+  it 'can be instantiated' do
+    Narra::Synthesizers::Modules::Generic.new(@item).should be_an_instance_of(Narra::Synthesizers::Modules::Generic)
+  end
+
+  it 'should have accessible fields' do
+    Narra::Synthesizers::Modules::Generic.identifier.should == :generic
+    Narra::Synthesizers::Modules::Generic.title.should == 'Generic'
+    Narra::Synthesizers::Modules::Generic.description.should == 'Generic Synthesizer'
+  end
+
+  it 'can be used to create a new module' do
+    Narra::Core.synthesizers.should include(Narra::Synthesizers::Modules::Testing)
   end
 end

@@ -21,10 +21,10 @@
 
 require 'sidekiq/web'
 
-NarraCore::Application.routes.draw do
+Narra::Application.routes.draw do
 
   # Mount the API root mounter
-  mount API::Mounter => '/'
+  mount Narra::API::Mounter => '/'
 
   # Sidekiq monitoring
   mount Sidekiq::Web => '/sidekiq'

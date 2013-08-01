@@ -21,15 +21,23 @@
 
 require 'spec_helper'
 
-describe Narra::Generators::Worker do
+describe Narra::Core do
   before(:each) do
     # create item
     @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
   end
 
+  it 'should return all active generators' do
+    Narra::Core.generators.count.should == 2
+  end
+
+  it 'should return all active synthesizers' do
+    Narra::Core.synthesizers.count.should == 1
+  end
+
   it 'should process item to generate new metadata' do
     # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
+    Narra::Core.generate(@item, [:testing])
     # validation
     @item.meta.count.should == 1
   end

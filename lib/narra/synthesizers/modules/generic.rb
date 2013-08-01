@@ -19,18 +19,35 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+module Narra
+  module Synthesizers
+    module Modules
+      # Generic template for synthesizers
+      class Generic
+        include Tools::Class
 
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-  end
+        # Attributes for human readable format
+        # These have to be imlemented in descendants
+        class << self
+          attr_accessor :identifier, :title, :description
+        end
 
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
-    # validation
-    @item.meta.count.should == 1
+        # Default values
+        @identifier = :generic
+        @title = 'Generic'
+        @description = 'Generic Synthesizer'
+
+        # Generic constructor to store an item to be processed
+        def initialize(item)
+          @item = item
+        end
+
+        # Generic synthesize method
+        def synthesize
+          # Nothing to do
+          # This has to be overridden in descendants
+        end
+      end
+    end
   end
 end

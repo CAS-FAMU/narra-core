@@ -21,7 +21,7 @@
 
 require 'spec_helper'
 
-describe Narra::Generators::Worker do
+describe Narra::Synthesizers::Worker do
   before(:each) do
     # create item
     @item = FactoryGirl.create(:item, collections: [], owner: @author_user)

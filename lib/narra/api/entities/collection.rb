@@ -19,18 +19,21 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+module Narra
+  module API
+    module Entities
+      class Collection < Grape::Entity
 
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-  end
+        expose :_id, as: 'id'
+        expose :name
+        expose :title
+        expose(:owner) { |model, options| {id: model.owner._id, name: model.owner.name} }
+        expose :projects, format_with: :projects, :if => {:type => :detail}
 
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
-    # validation
-    @item.meta.count.should == 1
+        format_with :projects do |projects|
+          projects.collect { |project| {id: project._id, name: project.name, title: project.title, owner: {id: project.owner._id, name: project.owner.name}} }
+        end
+      end
+    end
   end
 end

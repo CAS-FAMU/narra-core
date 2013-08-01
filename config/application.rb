@@ -33,14 +33,14 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-module NarraCore
+module Narra
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    config.paths.add "app/logic", :glob => "**/*.rb"
-    config.autoload_paths += Dir["#{Rails.root}/app/logic/*"]
+    # Custom directories with classes and modules you want to be autoloadable.
+    config.autoload_paths += %W(#{config.root}/lib)
 
     #config.autoload_paths += Dir["#{config.root}/lib/api/**/"]
     #config.autoload_paths += Dir["#{config.root}/app/models/**/"]

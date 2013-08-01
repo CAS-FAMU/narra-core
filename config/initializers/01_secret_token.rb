@@ -19,4 +19,4 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-NarraCore::Application.config.secret_token = '93101510a88a0b7a33df04693c73a00121340f06c1ce20a779e642dac4b7908b33e58bffb3d9497c515d25463ba59fb9e548b9dd502bc70d6f619b1b01e8154d'
+Narra::Application.config.secret_token = '93101510a88a0b7a33df04693c73a00121340f06c1ce20a779e642dac4b7908b33e58bffb3d9497c515d25463ba59fb9e548b9dd502bc70d6f619b1b01e8154d'

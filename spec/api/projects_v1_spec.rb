@@ -22,7 +22,7 @@
 
 require 'spec_helper'
 
-describe API::Modules::ProjectsV1 do
+describe Narra::API::Modules::ProjectsV1 do
   before(:each) do
     # create collection
     @collection_01 = FactoryGirl.create(:collection, owner: @author_user)
@@ -90,7 +90,7 @@ describe API::Modules::ProjectsV1 do
 
     describe 'POST /v1/projects/new' do
       it 'creates new project' do
-        post '/v1/projects/new', {name: '', title: ''}
+        post '/v1/projects/new', {name: 'test', title: 'test'}
 
         # check response status
         response.status.should == 401
@@ -106,7 +106,7 @@ describe API::Modules::ProjectsV1 do
 
     describe 'POST /v1/projects/[:name]/update' do
       it 'updates a specific project' do
-        post '/v1/projects/' + @project.name + '/update', {title: ''}
+        post '/v1/projects/' + @project.name + '/update', {title: 'test'}
 
         # check response status
         response.status.should == 401
@@ -188,7 +188,7 @@ describe API::Modules::ProjectsV1 do
 
     describe 'POST /v1/projects/new' do
       it 'creates new project' do
-        post '/v1/projects/new' + '?token=' + @unroled_token, {name: '', title: ''}
+        post '/v1/projects/new' + '?token=' + @unroled_token, {name: 'test', title: 'test'}
 
         # check response status
         response.status.should == 403
@@ -204,7 +204,7 @@ describe API::Modules::ProjectsV1 do
 
     describe 'POST /v1/projects/[:name]/update' do
       it 'updates a specific project' do
-        post '/v1/projects/' + @project_admin.name + '/update' + '?token=' + @author_token, {title: ''}
+        post '/v1/projects/' + @project_admin.name + '/update' + '?token=' + @author_token, {title: 'test'}
 
         # check response status
         response.status.should == 403

@@ -22,7 +22,7 @@
 
 require 'spec_helper'
 
-describe API::Modules::SystemV1 do
+describe Narra::API::Modules::SystemV1 do
   describe "GET /v1/system/version" do
     it "returns system version" do
       # send request
@@ -32,7 +32,7 @@ describe API::Modules::SystemV1 do
       response.status.should == 200
 
       # check received data
-      JSON.parse(response.body).should == { 'status' => 'OK', 'version' => { 'branch' => Tools::Version::VERSION, 'revision' => Tools::Version::REVISION }}
+      JSON.parse(response.body).should == { 'status' => 'OK', 'version' => { 'version' => Narra::VERSION, 'revision' =>Narra::REVISION }}
     end
   end
 end
