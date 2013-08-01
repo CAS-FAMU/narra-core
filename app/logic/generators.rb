@@ -37,8 +37,7 @@ module Generators
 
   # Return all active generators
   def self.all
-    @generators ||= Generators::Modules.constants.collect { |c| Generators::Modules.const_get(c) }.
-        select { |c| c.is_a?(Class) && c.name != 'Generators::Modules::Generic' && c.ancestors.include?(Generators::Modules::Generic) }
+    @generators ||= Generators::Modules::Generic.descendants
   end
 
   # Return all active generators

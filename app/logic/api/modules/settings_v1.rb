@@ -21,7 +21,7 @@
 
 module API
   module Modules
-    class SettingsV1 < Grape::API
+    class SettingsV1 < API::Modules::Generic
 
       version 'v1', :using => :path
       format :json

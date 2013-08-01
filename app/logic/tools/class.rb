@@ -29,5 +29,9 @@ module Tools
     def self.class_name_to_sym(class_object)
       class_name_to_s(class_object).to_sym
     end
+
+    def self.descendants
+      ObjectSpace.each_object(Class).select { |c| c < self }
+    end
   end
 end

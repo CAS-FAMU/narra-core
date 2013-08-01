@@ -21,7 +21,7 @@
 
 module API
   module Modules
-    class CollectionsV1 < Grape::API
+    class CollectionsV1 < API::Modules::Generic
 
       version 'v1', :using => :path
       format :json

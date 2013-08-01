@@ -23,6 +23,8 @@ module Generators
   module Modules
     # Generic template for generators
     class Generic
+      include Tools::Class
+
       # Attributes for human readable format
       # These have to be imlemented in descendants
       class << self

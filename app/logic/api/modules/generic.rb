@@ -21,23 +21,10 @@
 
 module API
   module Modules
-    class GeneratorsV1 < API::Modules::Generic
+    class Generic < Grape::API
+      include Tools::Class
 
-      version 'v1', :using => :path
-      format :json
-
-      helpers API::Helpers::User
-      helpers API::Helpers::Error
-      helpers API::Helpers::Present
-      helpers API::Helpers::Generic
-
-      resource :generators do
-
-        desc "Return all active generators."
-        get do
-          return_many(Generators, nil, [:admin, :author])
-        end
-      end
+      # Generic API module to be implemented
     end
   end
 end

@@ -21,7 +21,7 @@
 
 module API
   module Modules
-    class Authentication < Grape::API
+    class Authentication < API::Modules::Generic
 
       format :json
 
