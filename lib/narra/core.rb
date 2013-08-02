@@ -32,13 +32,13 @@ module Narra
       process(item: item._id.to_s, identifiers: generators, worker: Narra::Generators::Worker)
     end
 
-    def self.synthesize(item, synthesizers = nil)
+    def self.synthesize(item, project, synthesizers = nil)
       # check synthesizers
       synthesizers ||= synthesizers_identifiers
       # select them
       synthesizers.select! {|s| synthesizers_identifiers.include?(s.to_sym)}
       # process item
-      process(item: item._id.to_s, identifiers: synthesizers, worker: Narra::Synthesizers::Worker)
+      process(item: item._id.to_s, project: project._id.to_s, identifiers: synthesizers, worker: Narra::Synthesizers::Worker)
     end
 
     # Return all active generators
@@ -52,15 +52,16 @@ module Narra
       # Get all descendants of the Generic synthesizer
       @synthesizers ||= Narra::Synthesizers::Modules::Generic.descendants
     end
-
+                   Hash
     private
     def self.process(options)
       # process item
       options[:identifiers].each do |identifier|
-        options[:worker].perform_async(options[:item], identifier)
+        options[:worker].perform_async(options.merge({identifier: identifier}))
       end
       # return event
-      { item: { id: options[:item] }, worker: options[:worker].name, identifiers: options[:identifiers] }
+      event ||= options[:project].nil? ? {} : { project: { id: options[:project] }}
+      event.merge!({ item: { id: options[:item] }, worker: options[:worker].name, identifiers: options[:identifiers] })
     end
 
     # Return all active generators

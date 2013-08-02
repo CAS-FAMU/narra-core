@@ -19,11 +19,17 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-ActiveSupport::Inflector.inflections do |inflect|
+class Junction
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  # cache singularity
-  inflect.irregular("cache", "cache")
-  inflect.irregular("meta", "meta")
-  inflect.irregular("in", "in")
-  inflect.irregular("out", "out")
+  # Fields
+  field :weight, type: Float
+
+  # Project relation
+  belongs_to :project, class_name: 'Project', autosave: true, inverse_of: :junctions
+
+  # Item Relations
+  belongs_to :in, class_name: 'Item', autosave: true, inverse_of: :out
+  belongs_to :out, class_name: 'Item', autosave: true, inverse_of: :in
 end

@@ -37,13 +37,13 @@ module Narra
           client = ::Wikipedia.client
 
           # get item's source meta name field
-          data = @item.meta.select { |meta| meta.provider == 'source' && meta.name == 'name' }
+          data = get_meta(name: :name, generator: :source)
 
           # perform opensearch on wiki
-          results = JSON.parse(client.request(action: 'opensearch', search: data.first.content)) unless data.empty?
+          results = JSON.parse(client.request(action: 'opensearch', search: data.content)) unless data.nil?
 
           # process results if not empy
-          add_meta(name: 'opensearch', content: results[1]) unless results[1].empty?
+          add_meta(name: 'opensearch', content: results[1]) unless results.nil? || results[1].empty?
         end
       end
     end

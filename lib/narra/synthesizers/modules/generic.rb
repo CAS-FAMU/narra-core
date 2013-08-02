@@ -38,8 +38,19 @@ module Narra
         @description = 'Generic Synthesizer'
 
         # Generic constructor to store an item to be processed
-        def initialize(item)
+        def initialize(item, project)
           @item = item
+          @project = project
+        end
+
+        def add_junction(options)
+          # input check
+          return if options[:out].nil? || options[:weight].nil? ||
+              !options[:out].instance_of?(Item) || !options[:weight].instance_of?(Float)
+          # push new junction entry
+          @project.junctions << Junction.new(weight: options[:weight], in: @item, out: options[:out])
+          # save project
+          @project.save
         end
 
         # Generic synthesize method

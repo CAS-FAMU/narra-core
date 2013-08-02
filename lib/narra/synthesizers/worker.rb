@@ -25,11 +25,12 @@ module Narra
       include Sidekiq::Worker
       sidekiq_options :queue => :synthesizers
 
-      def perform(item_id, identifier)
+      def perform(options)
+        return if options['item'].nil? || options['project'].nil? || options['identifier'].nil?
         # get generator
-        synthesizer = Narra::Core.synthesizers.all.detect { |s| s.identifier == identifier.to_sym }
+        synthesizer = Narra::Core.synthesizers.detect { |s| s.identifier == options['identifier'].to_sym }
         # perform generate if generator is available
-        synthesizer.new(Item.find(item_id)).synthesize
+        synthesizer.new(Item.find(options['item']), Project.find(options['project'])).synthesize
       end
     end
   end

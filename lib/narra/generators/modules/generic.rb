@@ -43,10 +43,19 @@ module Narra
         end
 
         def add_meta(options)
+          # input check
+          return if options[:name].nil? || options[:content].nil?
           # push new meta entry
           @item.meta << Meta.new({generator: self.class.identifier}.merge(options))
           # save item
           @item.save
+        end
+
+        def get_meta(options)
+          # do a query
+          result = @item.meta.where(options)
+          # check and return
+          result.empty? ? nil : (result.count > 1 ? result : result.first)
         end
 
         # Generic generate method

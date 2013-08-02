@@ -25,12 +25,15 @@ describe Narra::Synthesizers::Worker do
   before(:each) do
     # create item
     @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
+    @item_out = FactoryGirl.create(:item, collections: [], owner: @author_user)
+    # create project
+    @project = FactoryGirl.create(:project, owner: @author_user)
   end
 
-  it 'should process item to generate new metadata' do
+  it 'should process item to generate new junction' do
     # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
+    Narra::Synthesizers::Worker.perform_async(item: @item._id.to_s, project: @project._id.to_s, identifier: :testing)
     # validation
-    @item.meta.count.should == 1
+    @project.junctions.count.should == 1
   end
 end

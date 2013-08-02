@@ -28,13 +28,17 @@ class Item
   field :url, type: String
 
   # User Relations
-  belongs_to :owner, class_name: "User", autosave: true, inverse_of: :items
+  belongs_to :owner, class_name: 'User', autosave: true, inverse_of: :items
 
   # Collection Relations
-  has_and_belongs_to_many :collections, class_name: "Collection", autosave: true, inverse_of: :items
+  has_and_belongs_to_many :collections, class_name: 'Collection', autosave: true, inverse_of: :items
 
   # Meta Relations
-  has_many :meta, class_name: "Meta", autosave: true, dependent: :destroy, inverse_of: :item
+  has_many :meta, class_name: 'Meta', autosave: true, dependent: :destroy, inverse_of: :item
+
+  # Junction Relations
+  has_many :in, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :out
+  has_many :out, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :in
 
   # Validations
   validate :name, presence: true, uniqueness: true

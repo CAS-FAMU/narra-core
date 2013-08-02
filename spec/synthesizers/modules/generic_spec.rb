@@ -25,16 +25,26 @@ describe Narra::Synthesizers::Modules::Generic do
   before(:each) do
     # create item
     @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
+    @item_out = FactoryGirl.create(:item, collections: [], owner: @author_user)
+    # create project
+    @project = FactoryGirl.create(:project, owner: @author_user)
   end
 
   it 'can be instantiated' do
-    Narra::Synthesizers::Modules::Generic.new(@item).should be_an_instance_of(Narra::Synthesizers::Modules::Generic)
+    Narra::Synthesizers::Modules::Generic.new(@item, @project).should be_an_instance_of(Narra::Synthesizers::Modules::Generic)
   end
 
   it 'should have accessible fields' do
     Narra::Synthesizers::Modules::Generic.identifier.should == :generic
     Narra::Synthesizers::Modules::Generic.title.should == 'Generic'
     Narra::Synthesizers::Modules::Generic.description.should == 'Generic Synthesizer'
+  end
+
+  it 'can add junction to the project' do
+    # add meta
+    Narra::Synthesizers::Modules::Generic.new(@item, @project).add_junction(weight: 1.0, out: @item_out)
+    # validation
+    @project.junctions.count.should == 1
   end
 
   it 'can be used to create a new module' do

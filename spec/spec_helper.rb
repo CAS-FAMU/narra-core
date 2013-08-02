@@ -125,8 +125,8 @@ RSpec.configure do |config|
             @title = 'Testing'
             @description = 'Testing Metadata Synthesizer'
 
-            def generate
-              add_meta(name: 'test', content: 'test')
+            def synthesize
+              add_junction(weight: 1.0, out: Item.last)
             end
           end
         end

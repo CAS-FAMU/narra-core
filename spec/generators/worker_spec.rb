@@ -29,7 +29,7 @@ describe Narra::Generators::Worker do
 
   it 'should process item to generate new metadata' do
     # generate through main process
-    Narra::Generators::Worker.perform_async(@item._id.to_s, :testing)
+    Narra::Generators::Worker.perform_async(item: @item._id.to_s, identifier: :testing)
     # validation
     @item.meta.count.should == 1
   end
