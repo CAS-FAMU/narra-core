@@ -52,7 +52,7 @@ module Narra
       # Get all descendants of the Generic synthesizer
       @synthesizers ||= Narra::Synthesizers::Modules::Generic.descendants
     end
-                   Hash
+
     private
     def self.process(options)
       # process item
