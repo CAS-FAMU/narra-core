@@ -23,4 +23,4 @@ require 'rubygems'
 require 'rufus/scheduler'
 
 # start new scheduler thread
-scheduler = Rufus::Scheduler.start_new
+scheduler = Rufus::Scheduler.new

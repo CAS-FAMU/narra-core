@@ -27,7 +27,6 @@ development:
         - localhost:27017
       options:
   options:
-    allow_dynamic_fields: false
     preload_models: true
     raise_not_found_error: false
 
@@ -39,7 +38,6 @@ production:
         - localhost:27017
       options:
   options:
-    allow_dynamic_fields: false
     preload_models: true
     raise_not_found_error: false
 
@@ -50,12 +48,10 @@ test:
       hosts:
         - localhost:27017
       options:
-        consistency: :strong
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
   options:
-      allow_dynamic_fields: false
       preload_models: true
       raise_not_found_error: false
