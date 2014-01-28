@@ -1,14 +1,6 @@
 language: ruby
 rvm:
-  - 2.0.0-p247
+  - 2.1.0
 
 services:
   - mongodb
-
-notifications:
-  webhooks:
-    urls:
-      - http://webhook.narra.eu/core
-    on_success: always
-    on_failure: never
-    on_start: false
