@@ -33,7 +33,7 @@ module Narra
 
           desc "Return system version."
           get '/version' do
-            present_ok(:version, present({ version: Narra::VERSION, revision: Narra::REVISION }))
+            present_ok(:version, present({ version: Narra::Version::VERSION, revision: Narra::Version::REVISION }))
           end
         end
       end

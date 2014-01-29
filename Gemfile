@@ -36,12 +36,15 @@ gem 'sinatra', :require => false
 gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
+gem 'fog'
 
 # SYNTESIZERS
 # EDL Synthesizer Modules dependencies
 gem 'edl'
 
 # GENERATORS
+# Video Info Generator Module dependencies
+gem 'streamio-ffmpeg'
 # Wikipedia Generator Module dependencies
 gem 'wikipedia-client'
 

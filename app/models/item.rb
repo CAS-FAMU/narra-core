@@ -43,4 +43,26 @@ class Item
   # Validations
   validate :name, presence: true, uniqueness: true
   validate :url, presence: true
+
+  # Hooks
+  # Create item's directory after create
+  after_create do |item|
+    # create item's storage
+    Narra::Storage::ITEMS.directories.create(key: item._id.to_s, public: true)
+  end
+  # Destroy item's directory after destroy
+  after_destroy do |item|
+    # destroy item's storage content
+    item.storage.files.each do |file|
+      file.destroy
+    end
+    # destroy item's storage
+    item.storage.destroy
+  end
+
+  # Helper methods
+  # Return item's storage
+  def storage
+    Narra::Storage::ITEMS.directories.get(self._id.to_s)
+  end
 end

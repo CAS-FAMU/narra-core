@@ -20,6 +20,8 @@
 #
 
 module Narra
-  VERSION = File.read(Rails.root.join("VERSION")).strip
-  REVISION = `git log --pretty=format:'%h' -n 1`
+  module Version
+    VERSION = File.read(Rails.root.join("VERSION")).strip
+    REVISION = `git log --pretty=format:'%h' -n 1`
+  end
 end

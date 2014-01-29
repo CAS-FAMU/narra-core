@@ -32,7 +32,7 @@ describe Narra::API::Modules::SystemV1 do
       response.status.should == 200
 
       # check received data
-      JSON.parse(response.body).should == { 'status' => 'OK', 'version' => { 'version' => Narra::VERSION, 'revision' =>Narra::REVISION }}
+      JSON.parse(response.body).should == { 'status' => 'OK', 'version' => { 'version' => Narra::Version::VERSION, 'revision' =>Narra::Version::REVISION }}
     end
   end
 end

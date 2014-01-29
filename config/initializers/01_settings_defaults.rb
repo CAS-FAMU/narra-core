@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -18,3 +18,9 @@
 #
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
+
+Narra::Tools::Settings.defaults[:storage_temp] = '/tmp/narra'
+Narra::Tools::Settings.defaults[:storage_local_path] = '/opt/narra/storage'
+Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://storage.narra.dev'
+
+Narra::Tools::Settings.defaults[:video_thumbnail_resolution] = '320x180'

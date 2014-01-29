@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2013 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,10 +19,19 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-#Sidekiq.configure_server do |config|
-#  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
-#end
+require 'fog'
 
-#Sidekiq.configure_client do |config|
-#  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
-#end
+# Recreating temp
+FileUtils.rm_rf(Narra::Tools::Settings.storage_temp)
+FileUtils.mkdir_p(Narra::Tools::Settings.storage_temp)
+
+# Setup Default Storage
+module Narra
+  module Storage
+    # Items folder
+    ITEMS ||= Fog::Storage.new({ local_root: Narra::Tools::Settings.storage_local_path + '/items',
+                                   endpoint: Narra::Tools::Settings.storage_local_endpoint + '/items',
+                                   provider: 'Local' })
+  end
+end
+

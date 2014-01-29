@@ -58,4 +58,13 @@ Narra::Application.configure do
   # Mongoid logging setup
   Mongoid.logger.level = Logger::INFO
   Moped.logger.level = Logger::INFO
+
+  # Fog
+  Fog.mock!
+  # Setup mock storage
+  module Narra
+    module Storage
+      ITEMS = Fog::Storage.new({ aws_access_key_id: 'test', aws_secret_access_key: 'test', provider: 'AWS' })
+    end
+  end
 end

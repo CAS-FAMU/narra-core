@@ -29,4 +29,22 @@ describe Item do
   it "can be saved successfully" do
     FactoryGirl.create(:item).should be_persisted
   end
+
+  it "should have storage available" do
+    # Temporary item
+    item = FactoryGirl.create(:item)
+    # Check storage
+    item.storage.should be_a_kind_of(Fog::Model)
+  end
+
+  it "should destroy storage after destroy" do
+    # Temporary item
+    item = FactoryGirl.create(:item)
+    # Store id
+    id = item._id.to_s
+    # Destroy item
+    item.destroy
+    # Check storage
+    Narra::Storage::ITEMS.directories.get(id).should be_nil
+  end
 end

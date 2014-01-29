@@ -77,7 +77,7 @@ describe Narra::API::Modules::GeneratorsV1 do
 
         # check received data
         data['status'].should == 'OK'
-        data['generators'].count.should == 2
+        data['generators'].count.should == 4
       end
     end
   end

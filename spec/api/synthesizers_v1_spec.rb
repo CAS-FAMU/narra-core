@@ -24,9 +24,9 @@ require 'spec_helper'
 
 describe Narra::API::Modules::SynthesizersV1 do
   context 'not authenticated' do
-    describe 'GET /v1/generators' do
-      it 'returns generators' do
-        get '/v1/generators'
+    describe 'GET /v1/synthesizers' do
+      it 'returns synthesizers' do
+        get '/v1/synthesizers'
 
         # check response status
         response.status.should == 401
@@ -42,9 +42,9 @@ describe Narra::API::Modules::SynthesizersV1 do
   end
 
   context 'not authorized' do
-    describe 'GET /v1/generators' do
-      it 'returns generators' do
-        get '/v1/generators' + '?token=' + @unroled_token
+    describe 'GET /v1/synthesizers' do
+      it 'returns synthesizers' do
+        get '/v1/synthesizers' + '?token=' + @unroled_token
 
         # check response status
         response.status.should == 403
@@ -60,10 +60,10 @@ describe Narra::API::Modules::SynthesizersV1 do
   end
 
   context 'authenticated & authorized' do
-    describe 'GET /v1/generators' do
-      it 'returns generators' do
+    describe 'GET /v1/synthesizers' do
+      it 'returns synthesizers' do
         # send request
-        get '/v1/generators' + '?token=' + @author_token
+        get '/v1/synthesizers' + '?token=' + @author_token
 
         # check response status
         response.status.should == 200
@@ -73,11 +73,11 @@ describe Narra::API::Modules::SynthesizersV1 do
 
         # check received data format
         data.should have_key('status')
-        data.should have_key('generators')
+        data.should have_key('synthesizers')
 
         # check received data
         data['status'].should == 'OK'
-        data['generators'].count.should == 2
+        data['synthesizers'].count.should == 1
       end
     end
   end

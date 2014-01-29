@@ -72,6 +72,11 @@ RSpec.configure do |config|
     DatabaseCleaner.orm = "mongoid"
   end
 
+  config.after(:suite) do
+    Fog.unmock!
+    Fog::Mock.reset
+  end
+
   config.before(:each) do
     # clean database
     DatabaseCleaner.clean
