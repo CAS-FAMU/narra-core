@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,24 +19,22 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-module Narra
-  module API
-    module Entities
-      class Collection < Grape::Entity
+class Sequence
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-        expose :id do |model, options|
-          model._id.to_s
-        end
-        expose :name, :title
-        expose :owner do |model, options|
-          { id: model.owner._id.to_s, name: model.owner.name}
-        end
-        expose :projects, format_with: :projects, :if => {:type => :detail}
+  # Fields
+  field :name, type: String
+  field :playlist, type: Array, default: []
 
-        format_with :projects do |projects|
-          projects.collect { |project| {id: project._id.to_s, name: project.name, title: project.title, owner: {id: project.owner._id.to_s, name: project.owner.name}} }
-        end
-      end
-    end
+  # Relations
+  belongs_to :project, class_name: 'Project', autosave: true, inverse_of: :sequences
+
+  # Validations
+  validate :name, presence: true
+
+  # Logic
+  def add(item = nil)
+      self.playlist << item._id
   end
 end

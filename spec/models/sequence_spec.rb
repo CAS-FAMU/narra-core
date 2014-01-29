@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,24 +19,14 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-module Narra
-  module API
-    module Entities
-      class Collection < Grape::Entity
+require 'spec_helper'
 
-        expose :id do |model, options|
-          model._id.to_s
-        end
-        expose :name, :title
-        expose :owner do |model, options|
-          { id: model.owner._id.to_s, name: model.owner.name}
-        end
-        expose :projects, format_with: :projects, :if => {:type => :detail}
+describe Sequence do
+  it "can be instantiated" do
+    FactoryGirl.build(:sequence).should be_an_instance_of(Sequence)
+  end
 
-        format_with :projects do |projects|
-          projects.collect { |project| {id: project._id.to_s, name: project.name, title: project.title, owner: {id: project.owner._id.to_s, name: project.owner.name}} }
-        end
-      end
-    end
+  it "can be saved successfully" do
+    FactoryGirl.create(:sequence).should be_persisted
   end
 end

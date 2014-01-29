@@ -37,6 +37,7 @@ class Project
 
   # Junction Relations
   has_many :junctions, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :project
+  has_many :sequences, class_name: 'Sequence', autosave: true, dependent: :destroy, inverse_of: :project
 
   # Validations
   validate :name, presence: true, uniqueness: true

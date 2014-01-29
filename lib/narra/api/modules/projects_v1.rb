@@ -68,7 +68,7 @@ module Narra
             delete_one(Project, :name, [:admin, :author])
           end
 
-          desc "Return project's items."
+          desc "Add or remove collections"
           post ':name/collections/:action' do
             required_attributes! [:collections]
             update_one(Project, Narra::API::Entities::Project, :name, [:admin, :author]) do |project|
@@ -99,6 +99,27 @@ module Narra
                 error_not_found!
               else
                 present_ok(:item, present(items.first, with: Narra::API::Entities::Item, type: :detail, project: project))
+              end
+            end
+          end
+
+          desc "Return project's sequences."
+          get ':name/sequences' do
+            return_one_custom(Project, :name, [:admin, :author]) do |project|
+              present_ok(:sequences, present(project.sequences, with: Narra::API::Entities::Sequence))
+            end
+          end
+
+          desc "Return project's sequence."
+          get ':name/sequences/:sequence' do
+            return_one_custom(Project, :name, [:admin, :author]) do |project|
+              # Get item
+              sequences = project.sequences.where(id: params[:sequence])
+              # Check if the item is part of the project
+              if sequences.empty?
+                error_not_found!
+              else
+                present_ok(:sequence, present(sequences.first, with: Narra::API::Entities::Sequence, type: :detail))
               end
             end
           end

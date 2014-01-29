@@ -24,10 +24,12 @@ module Narra
     module Entities
       class Project < Grape::Entity
 
-        expose :_id, as: 'id'
+        expose :id do |model, options|
+          model._id.to_s
+        end
         expose :name, :title, :generators
         expose :owner do |model, options|
-          { id: model.owner._id, name: model.owner.name}
+          { id: model.owner._id.to_s, name: model.owner.name}
         end
         expose :collections, using: Narra::API::Entities::Collection, :if => {:type => :detail}
       end

@@ -36,13 +36,19 @@ gem 'sinatra', :require => false
 gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
-gem 'coveralls', :require => false
 
+# SYNTESIZERS
+# EDL Synthesizer Modules dependencies
+gem 'edl'
+
+# GENERATORS
 # Wikipedia Generator Module dependencies
 gem 'wikipedia-client'
 
+# TESTS
 gem 'rspec-rails', :group => [:test, :development]
 gem 'rspec-mocks', :group => [:test, :development]
 gem 'database_cleaner', :group => :test
 gem 'mongoid-rspec', :group => :test
 gem 'factory_girl_rails', :group => :test
+gem 'coveralls', :require => false

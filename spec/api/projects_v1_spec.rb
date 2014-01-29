@@ -36,6 +36,10 @@ describe Narra::API::Modules::ProjectsV1 do
     # create projects for testing purpose
     @project = FactoryGirl.create(:project, owner: @author_user, collections: [@collection_01, @collection_02])
     @project_admin = FactoryGirl.create(:project, owner: @admin_user, collections: [@collection_03, @collection_04])
+
+    # create sequences for testing purpose
+    @sequence = FactoryGirl.create(:sequence, project: @project)
+    @sequence_admin = FactoryGirl.create(:sequence, project: @project_admin)
   end
 
   context 'not authenticated' do
@@ -186,6 +190,38 @@ describe Narra::API::Modules::ProjectsV1 do
         data['message'].should == 'Not Authenticated'
       end
     end
+
+    describe 'GET /v1/projects/[:name]/sequences' do
+      it 'returns projects sequences' do
+        get '/v1/projects/' + @project.name + '/sequences'
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/sequences/[:id]' do
+      it 'returns projects sequence' do
+        get '/v1/projects/' + @project.name + '/sequences/' + @sequence._id
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
   end
 
   context 'not authorized' do
@@ -304,6 +340,38 @@ describe Narra::API::Modules::ProjectsV1 do
     describe 'GET /v1/projects/[:name]/items/[:name]' do
       it 'returns projects item' do
         get '/v1/projects/' + @project_admin.name + '/items/' + @item_01.name + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/sequences' do
+      it 'returns projects sequences' do
+        get '/v1/projects/' + @project_admin.name + '/sequences' + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/sequences/[:id]' do
+      it 'returns projects sequence' do
+        get '/v1/projects/' + @project_admin.name + '/sequences/' + @sequence_admin._id + '?token=' + @author_token
 
         # check response status
         response.status.should == 403
@@ -490,6 +558,47 @@ describe Narra::API::Modules::ProjectsV1 do
         # check received data
         data['status'].should == 'OK'
         data['item']['name'].should == @item_01.name
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/sequences' do
+      it 'returns projects sequences' do
+        get '/v1/projects/' + @project.name + '/sequences' + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 200
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('sequences')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['sequences'].count.should == 1
+      end
+    end
+
+    describe 'GET /v1/projects/[:name]/sequences/[:id]' do
+      it 'returns projects sequence' do
+        get '/v1/projects/' + @project.name + '/sequences/' + @sequence._id + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 200
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('sequence')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['sequence']['id'].should == @sequence._id.to_s
+        data['sequence'].should have_key('playlist')
       end
     end
   end
