@@ -19,10 +19,13 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-#Sidekiq.configure_server do |config|
-#  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
-#end
+module Narra
+  module Tools
+    module Probeable
 
-#Sidekiq.configure_client do |config|
-#  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
-#end
+      def probe
+        # to be implemented in descendants
+      end
+    end
+  end
+end

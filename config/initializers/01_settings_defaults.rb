@@ -24,3 +24,5 @@ Narra::Tools::Settings.defaults[:storage_local_path] = '/opt/narra/storage'
 Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://storage.narra.dev'
 
 Narra::Tools::Settings.defaults[:video_thumbnail_resolution] = '320x180'
+
+Narra::Tools::Settings.defaults[:items_probe_interval] = 30.minutes.to_s

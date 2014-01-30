@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,24 +19,10 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Meta
-  include Mongoid::Document
-  include Mongoid::Timestamps
+Sidekiq.configure_server do |config|
+  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
+end
 
-  # Fields
-  field :name, type: String
-  field :content, type: String
-  field :generator, type: String
-
-  # Relations
-  belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta
-
-  # Validations
-  validates :name, presence: true
-  validates :content, presence: true
-  validates :generator, presence: true
-  validates_uniqueness_of :name, :scope => [:generator, :item_id]
-
-  # Scopes
-  scope :generators, ->(generators, source = true) {any_in(generator: source ? (generators | [:source]) : generators)}
+Sidekiq.configure_client do |config|
+  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
 end

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -45,8 +45,6 @@ gem 'edl'
 # GENERATORS
 # Video Info Generator Module dependencies
 gem 'streamio-ffmpeg'
-# Wikipedia Generator Module dependencies
-gem 'wikipedia-client'
 
 # TESTS
 gem 'rspec-rails', :group => [:test, :development]

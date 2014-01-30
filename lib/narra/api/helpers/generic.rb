@@ -72,6 +72,8 @@ module Narra
             yield object if block_given?
             # save
             object.save!
+            # probe
+            object.probe if object.is_a? Narra::Tools::Probeable
             # present
             present_ok(Narra::Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
           else
@@ -93,6 +95,8 @@ module Narra
             yield object if block_given?
             # save
             object.save!
+            # probe
+            object.probe if object.is_a? Narra::Tools::Probeable
             # present
             present_ok(Narra::Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
           end

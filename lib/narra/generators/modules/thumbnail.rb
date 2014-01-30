@@ -37,8 +37,12 @@ module Narra
           path = Narra::Tools::Settings.storage_temp + '/' + @item._id.to_s + '_thumbnail_video'
 
           # download
-          File.open(path, 'wb') do |file|
-            file.write open(@item.url).read
+          begin
+            File.open(path, 'wb') do |file|
+              file.write open(@item.url).read
+            end
+          rescue
+            # Nothing to do
           end
 
           # prepare ffmpeg client

@@ -32,7 +32,7 @@ describe Narra::Core do
   end
 
   it 'should return all active generators' do
-    Narra::Core.generators.count.should == 4
+    Narra::Core.generators.count.should == 3
   end
 
   it 'should return all active synthesizers' do

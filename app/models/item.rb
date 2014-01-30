@@ -22,6 +22,7 @@
 class Item
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Narra::Tools::Probeable
 
   # Fields
   field :name, type: String
@@ -53,6 +54,7 @@ class Item
     # create item's storage
     Narra::Storage::ITEMS.directories.create(key: item._id.to_s, public: true)
   end
+
   # Destroy item's directory after destroy
   after_destroy do |item|
     # destroy item's storage content
@@ -67,5 +69,24 @@ class Item
   # Return item's storage
   def storage
     Narra::Storage::ITEMS.directories.get(self._id.to_s)
+  end
+
+  # Probe only the self object
+  def probe
+    Item.generate(self)
+  end
+
+  # Static methods
+  # Check items for generated metadata
+  def self.generate(input_item = nil)
+    # resolve items
+    items = input_item.nil? ? Item.all : [input_item]
+
+    # run generator process for those where exact generator wasn't executed
+    items.each do |item|
+      Narra::Core.generators_identifiers.each do |generator|
+        Narra::Core.generate(item, [generator]) if ::Meta.where(item: item).generators([generator], false).empty?
+      end
+    end
   end
 end

@@ -307,7 +307,7 @@ describe Narra::API::Modules::ItemsV1 do
     describe 'POST /v1/items/new' do
       it 'creates new item' do
         # send request
-        post '/v1/items/new' + '?token=' + @author_token, {name: 'test_item', url: 'url://test_item', collection: @collection_01.name, metadata: {meta_01: 'Meta 01', meta_02: 'Meta 02'}}
+        post '/v1/items/new' + '?token=' + @author_token, {name: 'test_item', url: 'http://test', collection: @collection_01.name, metadata: {meta_01: 'Meta 01', meta_02: 'Meta 02'}}
 
         # check response status
         response.status.should == 201
@@ -322,7 +322,7 @@ describe Narra::API::Modules::ItemsV1 do
         # check received data
         data['status'].should == 'OK'
         data['item']['name'].should == 'test_item'
-        data['item']['url'].should == 'url://test_item'
+        data['item']['url'].should == 'http://test'
         data['item']['metadata'].count.should == 6
       end
     end

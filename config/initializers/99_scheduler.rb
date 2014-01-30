@@ -19,8 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'rubygems'
-require 'rufus/scheduler'
+unless Rails.env.test?
 
-# start new scheduler thread
-scheduler = Rufus::Scheduler.new
+  require 'rufus/scheduler'
+
+  # start new scheduler thread
+  scheduler = Rufus::Scheduler.new
+
+  # probe items to generate metada
+  scheduler.every Integer(Narra::Tools::Settings.items_probe_interval) do
+    # run items probe
+    Item.generate
+  end
+end

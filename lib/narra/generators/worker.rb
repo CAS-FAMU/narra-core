@@ -32,10 +32,12 @@ module Narra
         generator = Narra::Core.generators.detect { |g| g.identifier == options['identifier'].to_sym }
         # get event
         event = Event.find(options['event'])
+        # get item
+        item = Item.find(options['item'])
         # fire event
         event.run!
         # perform generate if generator is available
-        generator.new(Item.find(options['item']), event).generate
+        generator.new(item, event).generate unless item.nil?
         # event done
         event.done!
       end

@@ -31,10 +31,12 @@ module Narra
         synthesizer = Narra::Core.synthesizers.detect { |s| s.identifier == options['identifier'].to_sym }
         # get event
         event = Event.find(options['event'])
+        # get project
+        project = Project.find(options['project'])
         # fire event
         event.run!
         # perform generate if generator is available
-        synthesizer.new(Project.find(options['project']), event).synthesize
+        synthesizer.new(project, event).synthesize unless project.nil?
         # event done
         event.done!
       end
