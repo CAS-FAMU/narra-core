@@ -36,8 +36,13 @@ module Narra
         item = Item.find(options['item'])
         # fire event
         event.run!
-        # perform generate if generator is available
-        generator.new(item, event).generate unless item.nil?
+        begin
+          # perform generate if generator is available
+          generator.new(item, event).generate unless item.nil?
+        rescue
+          # nothing to do
+          # TODO logging system
+        end
         # event done
         event.done!
       end

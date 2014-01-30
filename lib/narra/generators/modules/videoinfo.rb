@@ -38,12 +38,8 @@ module Narra
           path = Narra::Tools::Settings.storage_temp + '/' + @item._id.to_s + '_videoinfo_video'
 
           # download
-          begin
-            File.open(path, 'wb') do |file|
-              file.write open(@item.url).read
-            end
-          rescue
-            # nothing to do
+          File.open(path, 'wb') do |file|
+            file.write open(@item.url).read
           end
 
           # prepare ffmpeg client
