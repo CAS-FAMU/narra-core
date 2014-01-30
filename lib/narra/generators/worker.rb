@@ -27,11 +27,17 @@ module Narra
 
       def perform(options)
         # check
-        return if options['item'].nil? || options['identifier'].nil?
+        return if options['item'].nil? || options['identifier'].nil? || options['event'].nil?
         # get generator
         generator = Narra::Core.generators.detect { |g| g.identifier == options['identifier'].to_sym }
+        # get event
+        event = Event.find(options['event'])
+        # fire event
+        event.run!
         # perform generate if generator is available
-        generator.new(Item.find(options['item'])).generate
+        generator.new(Item.find(options['item']), event).generate
+        # event done
+        event.done!
       end
     end
   end

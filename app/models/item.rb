@@ -40,6 +40,9 @@ class Item
   has_many :in, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :out
   has_many :out, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :in
 
+  # Event Relations
+  has_many :events, class_name: 'Event', autosave: true, dependent: :destroy, inverse_of: :item
+
   # Validations
   validate :name, presence: true, uniqueness: true
   validate :url, presence: true

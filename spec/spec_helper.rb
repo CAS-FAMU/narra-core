@@ -131,7 +131,7 @@ RSpec.configure do |config|
             @description = 'Testing Metadata Synthesizer'
 
             def synthesize
-              add_junction(weight: 1.0, out: Item.last)
+              add_junction(weight: 1.0, out: @project.items.last)
             end
           end
         end

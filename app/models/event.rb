@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,20 +19,33 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+class Event
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  include AASM
 
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-    # create event
-    @event = FactoryGirl.create(:event, item: @item)
-  end
+  # fields
+  field :message, type: String
+  field :progress, type: Float
+  field :status, type: Symbol
 
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(item: @item._id.to_s, identifier: :testing, event: @event._id.to_s)
-    # validation
-    @item.meta.count.should == 1
+  # item relation
+  belongs_to :item, class_name: 'Item', autosave: true, inverse_of: :events
+
+  # project relation
+  belongs_to :project, class_name: 'Item', autosave: true, inverse_of: :events
+
+  aasm :column => :status, :skip_validation_on_save => true do
+    state :pending, :initial => true
+    state :running
+    state :done
+
+    event :run do
+      transitions :to => :running, :from => [:pending]
+    end
+
+    event :done, after: Proc.new { self.destroy } do
+      transitions :to => :done, :from => [:running]
+    end
   end
 end

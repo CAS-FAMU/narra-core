@@ -36,6 +36,9 @@ describe Narra::API::Modules::ItemsV1 do
     @item = FactoryGirl.create(:item, collections: [@collection_01], owner: @author_user)
     @item_admin = FactoryGirl.create(:item, collections: [@collection_02], owner: @admin_user)
     @item_meta = FactoryGirl.create(:item, collections: [@collection_02], meta: [@meta_src_01, @meta_src_02], owner: @author_user)
+
+    # create events
+    @event = FactoryGirl.create(:event, item: @item)
   end
 
   context 'not authenticated' do
@@ -118,6 +121,22 @@ describe Narra::API::Modules::ItemsV1 do
         data['message'].should == 'Not Authenticated'
       end
     end
+
+    describe 'GET /v1/items/[:name]/events' do
+      it 'returns item events' do
+        get '/v1/items/' + @item.name + '/events'
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
   end
 
   context 'not authorized' do
@@ -188,6 +207,22 @@ describe Narra::API::Modules::ItemsV1 do
     describe 'POST /v1/items/[:name]/generate' do
       it 'runs generators over specified item' do
         post '/v1/items/' + @item_admin.name + '/generate?token=' + @author_token, {generators: [:testing]}
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'GET /v1/items/[:name]/events' do
+      it 'returns item events' do
+        get '/v1/items/' + @item_admin.name + '/events?token=' + @author_token
 
         # check response status
         response.status.should == 403
@@ -304,14 +339,36 @@ describe Narra::API::Modules::ItemsV1 do
 
         # check received data format
         data.should have_key('status')
-        data.should have_key('event')
+        data.should have_key('events')
 
         # check received data
         data['status'].should == 'OK'
-        data['event']['item']['id'].should == @item._id.to_s
-        data['event']['worker'].should == 'Narra::Generators::Worker'
-        data['event']['identifiers'].count.should == 1
+        data['events'].count.should == 1
+        data['events'][0].should have_key('message')
+        data['events'][0].should have_key('status')
+        data['events'][0]['status'].should == 'pending'
         @item.meta.count.should == 1
+      end
+    end
+
+    describe 'GET /v1/items/[:name]/events' do
+      it 'returns item events' do
+        get '/v1/items/' + @item.name + '/events?token=' + @author_token
+
+        # check response status
+        response.status.should == 200
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('events')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['events'].count.should == 1
+        data['events'][0]['status'].should == 'pending'
       end
     end
   end

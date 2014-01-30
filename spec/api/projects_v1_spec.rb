@@ -222,6 +222,22 @@ describe Narra::API::Modules::ProjectsV1 do
         data['message'].should == 'Not Authenticated'
       end
     end
+
+    describe 'POST /v1/projects/[:name]/synthesize' do
+      it 'runs synthesizers over specified project' do
+        post '/v1/projects/' + @project.name + '/synthesize', {synthesizers: [:testing]}
+
+        # check response status
+        response.status.should == 401
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authenticated'
+      end
+    end
   end
 
   context 'not authorized' do
@@ -372,6 +388,22 @@ describe Narra::API::Modules::ProjectsV1 do
     describe 'GET /v1/projects/[:name]/sequences/[:id]' do
       it 'returns projects sequence' do
         get '/v1/projects/' + @project_admin.name + '/sequences/' + @sequence_admin._id + '?token=' + @author_token
+
+        # check response status
+        response.status.should == 403
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data
+        data['status'].should == 'ERROR'
+        data['message'].should == 'Not Authorized'
+      end
+    end
+
+    describe 'POST /v1/projects/[:name]/synthesize' do
+      it 'runs synthesizers over specified project' do
+        post '/v1/projects/' + @project_admin.name + '/synthesize?token=' + @author_token, {synthesizers: [:testing]}
 
         # check response status
         response.status.should == 403
@@ -599,6 +631,30 @@ describe Narra::API::Modules::ProjectsV1 do
         data['status'].should == 'OK'
         data['sequence']['id'].should == @sequence._id.to_s
         data['sequence'].should have_key('playlist')
+      end
+    end
+
+    describe 'POST /v1/projects/[:name]/synthesize' do
+      it 'runs synthesizers over specified project' do
+        post '/v1/projects/' + @project.name + '/synthesize?token=' + @author_token, {synthesizers: [:testing]}
+
+        # check response status
+        response.status.should == 201
+
+        # parse response
+        data = JSON.parse(response.body)
+
+        # check received data format
+        data.should have_key('status')
+        data.should have_key('events')
+
+        # check received data
+        data['status'].should == 'OK'
+        data['events'].count.should == 1
+        data['events'][0].should have_key('message')
+        data['events'][0].should have_key('status')
+        data['events'][0]['status'].should == 'pending'
+        @project.junctions.count.should == 1
       end
     end
   end

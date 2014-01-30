@@ -38,8 +38,9 @@ module Narra
         @description = 'Generic Generator'
 
         # Generic constructor to store an item to be processed
-        def initialize(item)
+        def initialize(item, event)
           @item = item
+          @event = event
         end
 
         def add_meta(options)

@@ -38,9 +38,9 @@ module Narra
         @description = 'Generic Synthesizer'
 
         # Generic constructor to store an item to be processed
-        def initialize(item, project)
-          @item = item
+        def initialize(project, event)
           @project = project
+          @event = event
         end
 
         def add_junction(options)

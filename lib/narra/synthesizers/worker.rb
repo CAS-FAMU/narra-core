@@ -26,11 +26,17 @@ module Narra
       sidekiq_options :queue => :synthesizers
 
       def perform(options)
-        return if options['item'].nil? || options['project'].nil? || options['identifier'].nil?
+        return if options['project'].nil? || options['identifier'].nil? || options['event'].nil?
         # get generator
         synthesizer = Narra::Core.synthesizers.detect { |s| s.identifier == options['identifier'].to_sym }
+        # get event
+        event = Event.find(options['event'])
+        # fire event
+        event.run!
         # perform generate if generator is available
-        synthesizer.new(Item.find(options['item']), Project.find(options['project'])).synthesize
+        synthesizer.new(Project.find(options['project']), event).synthesize
+        # event done
+        event.done!
       end
     end
   end

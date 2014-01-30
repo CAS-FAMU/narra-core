@@ -23,15 +23,18 @@ require 'spec_helper'
 
 describe Narra::Synthesizers::Modules::Generic do
   before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-    @item_out = FactoryGirl.create(:item, collections: [], owner: @author_user)
     # create project
     @project = FactoryGirl.create(:project, owner: @author_user)
+    # create collection
+    @collection = FactoryGirl.create(:collection, owner: @author_user, projects: [@project])
+    # create item
+    @item = FactoryGirl.create(:item, collections: [@collection], owner: @author_user)
+    # create event
+    @event = FactoryGirl.create(:event, project: @project)
   end
 
   it 'can be instantiated' do
-    Narra::Synthesizers::Modules::Generic.new(@item, @project).should be_an_instance_of(Narra::Synthesizers::Modules::Generic)
+    Narra::Synthesizers::Modules::Generic.new(@project, @event).should be_an_instance_of(Narra::Synthesizers::Modules::Generic)
   end
 
   it 'should have accessible fields' do
@@ -42,7 +45,7 @@ describe Narra::Synthesizers::Modules::Generic do
 
   it 'can add junction to the project' do
     # add meta
-    Narra::Synthesizers::Modules::Generic.new(@item, @project).add_junction(weight: 1.0, out: @item_out)
+    Narra::Synthesizers::Modules::Generic.new(@project, @event).add_junction(weight: 1.0, out: @item)
     # validation
     @project.junctions.count.should == 1
   end

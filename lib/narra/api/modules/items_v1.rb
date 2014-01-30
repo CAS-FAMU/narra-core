@@ -83,9 +83,16 @@ module Narra
             required_attributes! [:generators]
             return_one_custom(Item, :name, [:admin, :author]) do |item|
               # Process item
-              event = Narra::Core.generate(item, params[:generators])
+              events = Narra::Core.generate(item, params[:generators])
               # Present event
-              present_ok(:event, event)
+              present_ok(:events, present(events, with: Narra::API::Entities::Event))
+            end
+          end
+
+          desc "Return item's events."
+          get ':name/events' do
+            return_one_custom(Item, :name, [:admin, :author]) do |item|
+              present_ok(:events, present(item.events, with: Narra::API::Entities::Event))
             end
           end
         end

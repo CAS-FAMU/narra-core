@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -130,22 +130,6 @@ describe Narra::API::Modules::CollectionsV1 do
         data['message'].should == 'Not Authenticated'
       end
     end
-
-    describe 'POST /v1/collections/[:name]/generate' do
-      it 'runs generators over specified collection' do
-        post '/v1/collections/' + @collection_items.name + '/generate', {generators: [:testing]}
-
-        # check response status
-        response.status.should == 401
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
-      end
-    end
   end
 
   context 'not authorized' do
@@ -233,22 +217,6 @@ describe Narra::API::Modules::CollectionsV1 do
     describe 'POST /v1/collections/[:name]/update' do
       it 'updates specific collection' do
         post '/v1/collections/' + @collection_admin.name + '/update' + '?token=' + @author_token, {title: 'test'}
-
-        # check response status
-        response.status.should == 403
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
-      end
-    end
-
-    describe 'POST /v1/collections/[:name]/generate' do
-      it 'runs generators over specified collection' do
-        post '/v1/collections/' + @collection_admin.name + '/generate?token=' + @author_token, {generators: [:testing]}
 
         # check response status
         response.status.should == 403
@@ -393,28 +361,6 @@ describe Narra::API::Modules::CollectionsV1 do
         data['collection']['name'].should == @collection.name
         data['collection']['title'].should == 'Test Collection Updated'
         data['collection']['owner']['name'].should == @author_user.name
-      end
-    end
-
-    describe 'POST /v1/collections/[:name]/generate' do
-      it 'runs generators over specified collection' do
-        post '/v1/collections/' + @collection_items.name + '/generate?token=' + @author_token, {generators: [:testing]}
-
-        # check response status
-        response.status.should == 201
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data format
-        data.should have_key('status')
-        data.should have_key('events')
-
-        # check received data
-        data['status'].should == 'OK'
-        data['events'].count.should == 2
-        @item_01.meta.count.should == 1
-        @item_02.meta.count.should == 1
       end
     end
   end

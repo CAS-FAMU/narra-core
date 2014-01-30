@@ -25,10 +25,12 @@ describe Narra::Generators::Modules::Generic do
   before(:each) do
     # create item
     @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
+    # create event
+    @event = FactoryGirl.create(:event, item: @item)
   end
 
   it 'can be instantiated' do
-    Narra::Generators::Modules::Generic.new(@item).should be_an_instance_of(Narra::Generators::Modules::Generic)
+    Narra::Generators::Modules::Generic.new(@item, @event).should be_an_instance_of(Narra::Generators::Modules::Generic)
   end
 
   it 'should have accessible fields' do
@@ -39,7 +41,7 @@ describe Narra::Generators::Modules::Generic do
 
   it 'can add metadata to the item' do
     # add meta
-    Narra::Generators::Modules::Generic.new(@item).add_meta(name: 'test', content: 'test')
+    Narra::Generators::Modules::Generic.new(@item, @event).add_meta(name: 'test', content: 'test')
     # validation
     @item.meta.count.should == 1
   end

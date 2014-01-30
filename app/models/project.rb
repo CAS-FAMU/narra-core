@@ -27,6 +27,7 @@ class Project
   field :name, type: String
   field :title, type: String
   field :generators, type: Array, default: []
+  field :synthesizers, type: Array, default: []
 
   # User Relations
   belongs_to :owner, class_name: 'User', autosave: true, inverse_of: :projects
@@ -38,6 +39,9 @@ class Project
   # Junction Relations
   has_many :junctions, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :project
   has_many :sequences, class_name: 'Sequence', autosave: true, dependent: :destroy, inverse_of: :project
+
+  # Event Relations
+  has_many :events, class_name: 'Event', autosave: true, dependent: :destroy, inverse_of: :project
 
   # Validations
   validate :name, presence: true, uniqueness: true

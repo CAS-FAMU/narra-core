@@ -19,24 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
-
-describe Narra::Synthesizers::Worker do
-  before(:each) do
-    # create project
-    @project = FactoryGirl.create(:project, owner: @author_user)
-    # create collection
-    @collection = FactoryGirl.create(:collection, owner: @author_user, projects: [@project])
-    # create item
-    @item = FactoryGirl.create(:item, collections: [@collection], owner: @author_user)
-    # create event
-    @event = FactoryGirl.create(:event, project: @project)
-  end
-
-  it 'should process project to generate new junction' do
-    # generate through main process
-    Narra::Synthesizers::Worker.perform_async(project: @project._id.to_s, identifier: :testing, event: @event._id.to_s)
-    # validation
-    @project.junctions.count.should == 1
+FactoryGirl.define do
+  factory :event do
+    sequence(:message) {|n| "test_event_#{n}" }
   end
 end

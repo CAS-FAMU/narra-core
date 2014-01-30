@@ -32,13 +32,13 @@ module Narra
       process(item: item._id.to_s, identifiers: generators, worker: Narra::Generators::Worker)
     end
 
-    def self.synthesize(item, project, synthesizers = nil)
+    def self.synthesize(project, synthesizers = nil)
       # check synthesizers
       synthesizers ||= synthesizers_identifiers
       # select them
       synthesizers.select! {|s| synthesizers_identifiers.include?(s.to_sym)}
       # process item
-      process(item: item._id.to_s, project: project._id.to_s, identifiers: synthesizers, worker: Narra::Synthesizers::Worker)
+      process(project: project._id.to_s, identifiers: synthesizers, worker: Narra::Synthesizers::Worker)
     end
 
     # Return all active generators
@@ -55,13 +55,21 @@ module Narra
 
     private
     def self.process(options)
+      # events container
+      events = []
       # process item
       options[:identifiers].each do |identifier|
-        options[:worker].perform_async(options.merge({identifier: identifier}))
+        # create an event
+        event = Event.create(message: options[:worker].to_s + '::' + identifier.to_s,
+                             item: options[:item].nil? ? nil : Item.find(options[:item]),
+                             project: options[:project].nil? ? nil : Project.find(options[:project]))
+        # process
+        options[:worker].perform_async(options.merge({identifier: identifier, event: event._id.to_s}))
+        # push event
+        events << event
       end
-      # return event
-      event ||= options[:project].nil? ? {} : { project: { id: options[:project] }}
-      event.merge!({ item: { id: options[:item] }, worker: options[:worker].name, identifiers: options[:identifiers] })
+      # return events
+      return events
     end
 
     # Return all active generators

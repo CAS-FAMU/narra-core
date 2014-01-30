@@ -60,19 +60,6 @@ module Narra
             return_one(Collection, Narra::API::Entities::Collection, :name, [:admin, :author])
           end
 
-          desc "Return a specific collection's items."
-          get ':name/items' do
-            auth! [:admin, :author]
-            # get user
-            collection = Collection.find_by(name: params[:name])
-            # present or not found
-            if (collection.nil?)
-              error_not_found!
-            else
-              present_ok(:items, present(collection.items, with: Narra::API::Entities::Item))
-            end
-          end
-
           desc "Update a specific collection."
           post ':name/update' do
             required_attributes! [:title]
@@ -86,19 +73,16 @@ module Narra
             delete_one(Collection, :name, [:admin, :author])
           end
 
-          desc "Run generator over specified collection"
-          post ':name/generate' do
-            required_attributes! [:generators]
-            return_one_custom(Collection, :name, [:admin, :author]) do |collection|
-              # Multi event list
-              events = []
-              # Process items in collection
-              collection.items.each do |item|
-                # Process item
-                events << Narra::Core.generate(item, params[:generators])
-              end
-              # Present event
-              present_ok(:events, events)
+          desc "Return a specific collection's items."
+          get ':name/items' do
+            auth! [:admin, :author]
+            # get user
+            collection = Collection.find_by(name: params[:name])
+            # present or not found
+            if (collection.nil?)
+              error_not_found!
+            else
+              present_ok(:items, present(collection.items, with: Narra::API::Entities::Item))
             end
           end
         end

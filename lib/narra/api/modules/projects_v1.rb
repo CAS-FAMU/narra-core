@@ -123,6 +123,17 @@ module Narra
               end
             end
           end
+
+          desc "Run synthesizer over specified project"
+          post ':name/synthesize' do
+            required_attributes! [:synthesizers]
+            return_one_custom(Project, :name, [:admin, :author]) do |project|
+              # Process item
+              events = Narra::Core.synthesize(project, params[:synthesizers])
+              # Present event
+              present_ok(:events, present(events, with: Narra::API::Entities::Event))
+            end
+          end
         end
       end
     end

@@ -23,11 +23,12 @@ require 'spec_helper'
 
 describe Narra::Core do
   before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-    @item_out = FactoryGirl.create(:item, collections: [], owner: @author_user)
     # create project
     @project = FactoryGirl.create(:project, owner: @author_user)
+    # create collection
+    @collection = FactoryGirl.create(:collection, owner: @author_user, projects: [@project])
+    # create item
+    @item = FactoryGirl.create(:item, collections: [@collection], owner: @author_user)
   end
 
   it 'should return all active generators' do
@@ -47,7 +48,7 @@ describe Narra::Core do
 
   it 'should process item to generate new junction' do
     # generate through main process
-    Narra::Core.synthesize(@item, @project, [:testing])
+    Narra::Core.synthesize(@project, [:testing])
     # validation
     @project.junctions.count.should == 1
   end
