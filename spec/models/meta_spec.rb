@@ -23,10 +23,10 @@ require 'spec_helper'
 
 describe Meta do
   it "can be instantiated" do
-    FactoryGirl.build(:meta).should be_an_instance_of(Meta)
+    expect(FactoryGirl.build(:meta)).to be_an_instance_of(Meta)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:meta, generator: :source).should be_persisted
+    expect(FactoryGirl.create(:meta, generator: :source)).to be_persisted
   end
 end

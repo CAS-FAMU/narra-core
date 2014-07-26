@@ -23,5 +23,6 @@ FactoryGirl.define do
   factory :project do
     sequence(:name) {|n| "test_project_#{n}" }
     sequence(:title) {|n| "Test Project #{n}" }
+    sequence(:description) {|n| "Description for the Test Project #{n}" }
   end
 end

@@ -27,7 +27,7 @@ module Narra
         expose :id do |model, options|
           model._id.to_s
         end
-        expose :name, :title
+        expose :name, :title, :description, :thumbnail
         expose :owner do |model, options|
           { id: model.owner._id.to_s, name: model.owner.name}
         end

@@ -29,14 +29,14 @@ describe Narra::API::Modules::SynthesizersV1 do
         get '/v1/synthesizers'
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
   end
@@ -47,14 +47,14 @@ describe Narra::API::Modules::SynthesizersV1 do
         get '/v1/synthesizers' + '?token=' + @unroled_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
   end
@@ -66,18 +66,18 @@ describe Narra::API::Modules::SynthesizersV1 do
         get '/v1/synthesizers' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('synthesizers')
+        expect(data).to have_key('status')
+        expect(data).to have_key('synthesizers')
 
         # check received data
-        data['status'].should == 'OK'
-        data['synthesizers'].count.should == 1
+        expect(data['status']).to match('OK')
+        expect(data['synthesizers'].count).to match(1)
       end
     end
   end

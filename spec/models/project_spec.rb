@@ -23,10 +23,10 @@ require 'spec_helper'
 
 describe Project do
   it "can be instantiated" do
-    FactoryGirl.build(:project).should be_an_instance_of(Project)
+    expect(FactoryGirl.build(:project)).to be_an_instance_of(Project)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:project).should be_persisted
+    expect(FactoryGirl.create(:project)).to be_persisted
   end
 end

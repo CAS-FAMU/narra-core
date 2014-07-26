@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -27,7 +27,7 @@ module Narra
         expose :id do |model, options|
           model._id.to_s
         end
-        expose :name, :title, :generators
+        expose :name, :title, :description, :generators, :thumbnail
         expose :owner do |model, options|
           { id: model.owner._id.to_s, name: model.owner.name}
         end

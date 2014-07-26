@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -43,7 +43,7 @@ module Narra
           desc "Create new collection."
           post 'new' do
             required_attributes! [:name, :title]
-            new_one(Collection, Narra::API::Entities::Collection, :name, {name: params[:name], title: params[:title], owner: current_user}, [:admin, :author]) do |collection|
+            new_one(Collection, Narra::API::Entities::Collection, :name, {name: params[:name], title: params[:title], description: params[:description], owner: current_user}, [:admin, :author]) do |collection|
               # check for the project if any
               project = Project.find_by(name: params[:project]) unless params[:project].nil?
               # authorize the owner
@@ -62,9 +62,9 @@ module Narra
 
           desc "Update a specific collection."
           post ':name/update' do
-            required_attributes! [:title]
             update_one(Collection, Narra::API::Entities::Collection, :name, [:admin, :author]) do |collection|
-              collection.update_attributes(title: params[:title])
+              collection.update_attributes(title: params[:title]) unless params[:title].nil?
+              collection.update_attributes(description: params[:description]) unless params[:description].nil?
             end
           end
 
@@ -82,7 +82,7 @@ module Narra
             if (collection.nil?)
               error_not_found!
             else
-              present_ok(:items, present(collection.items, with: Narra::API::Entities::Item))
+              present_ok(:items, present(collection.items.limit(params[:limit]), with: Narra::API::Entities::Item))
             end
           end
         end

@@ -22,10 +22,12 @@
 class Collection
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Narra::Extensions::Thumbnail
 
   # Fields
   field :name, type: String
   field :title, type: String
+  field :description, type: String
 
   # User Relations
   belongs_to :owner, class_name: "User", autosave: true, inverse_of: :collections

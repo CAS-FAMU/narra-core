@@ -37,6 +37,6 @@ describe Narra::Synthesizers::Worker do
     # generate through main process
     Narra::Synthesizers::Worker.perform_async(project: @project._id.to_s, identifier: :testing, event: @event._id.to_s)
     # validation
-    @project.junctions.count.should == 1
+    expect(@project.junctions.count).to match(1)
   end
 end

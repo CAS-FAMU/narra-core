@@ -32,4 +32,7 @@ class Junction
   # Item Relations
   belongs_to :in, class_name: 'Item', autosave: true, inverse_of: :out
   belongs_to :out, class_name: 'Item', autosave: true, inverse_of: :in
+
+  # Scopes
+  scope :project, ->(project) { where(project: project) }
 end

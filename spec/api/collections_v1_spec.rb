@@ -40,14 +40,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections'
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -56,14 +56,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection.name
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -72,14 +72,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection.name + '/items'
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -88,14 +88,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection.name + '/delete'
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -104,14 +104,14 @@ describe Narra::API::Modules::CollectionsV1 do
         post '/v1/collections/new', {name: 'test', title: 'test'}
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -120,14 +120,14 @@ describe Narra::API::Modules::CollectionsV1 do
         post '/v1/collections/' + @collection.name + '/update', {title: 'test'}
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
   end
@@ -138,14 +138,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections' + '?token=' + @unroled_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -154,14 +154,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection.name + '?token=' + @unroled_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -170,14 +170,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection.name + '/items?token=' + @unroled_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -187,14 +187,14 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection_admin.name + '/delete' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -203,14 +203,14 @@ describe Narra::API::Modules::CollectionsV1 do
         post '/v1/collections/new' + '?token=' + @unroled_token, {name: 'test', title: 'test'}
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -219,14 +219,14 @@ describe Narra::API::Modules::CollectionsV1 do
         post '/v1/collections/' + @collection_admin.name + '/update' + '?token=' + @author_token, {title: 'test'}
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
   end
@@ -238,18 +238,18 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('collections')
+        expect(data).to have_key('status')
+        expect(data).to have_key('collections')
 
         # check received data
-        data['status'].should == 'OK'
-        data['collections'].count.should == 3
+        expect(data['status']).to match('OK')
+        expect(data['collections'].count).to match(3)
       end
     end
 
@@ -259,19 +259,19 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection.name + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('collection')
+        expect(data).to have_key('status')
+        expect(data).to have_key('collection')
 
         # check received data
-        data['status'].should == 'OK'
-        data['collection']['name'].should == @collection.name
-        data['collection']['title'].should == @collection.title
+        expect(data['status']).to match('OK')
+        expect(data['collection']['name']).to match(@collection.name)
+        expect(data['collection']['title']).to match(@collection.title)
       end
     end
 
@@ -281,18 +281,18 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection_items.name + '/items?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('items')
+        expect(data).to have_key('status')
+        expect(data).to have_key('items')
 
         # check received data
-        data['status'].should == 'OK'
-        data['items'].count.should == 2
+        expect(data['status']).to match('OK')
+        expect(data['items'].count).to match(2)
       end
     end
 
@@ -302,65 +302,67 @@ describe Narra::API::Modules::CollectionsV1 do
         get '/v1/collections/' + @collection.name + '/delete' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
+        expect(data).to have_key('status')
 
         # check received data
-        data['status'].should == 'OK'
+        expect(data['status']).to match('OK')
 
         # check if the user is deleted
-        Collection.find(@collection._id).should == nil
+        expect(Collection.find(@collection._id)).to be_nil
       end
     end
 
     describe 'POST /v1/collections/new' do
       it 'creates new collection' do
         # send request
-        post '/v1/collections/new' + '?token=' + @author_token, {name: 'test_collection', title: 'Test Collection'}
+        post '/v1/collections/new' + '?token=' + @author_token, {name: 'test_collection', title: 'Test Collection', description: 'Test Collection Description'}
 
         # check response status
-        response.status.should == 201
+        expect(response.status).to match(201)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('collection')
+        expect(data).to have_key('status')
+        expect(data).to have_key('collection')
 
         # check received data
-        data['status'].should == 'OK'
-        data['collection']['name'].should == 'test_collection'
-        data['collection']['title'].should == 'Test Collection'
-        data['collection']['owner']['name'].should == @author_user.name
+        expect(data['status']).to match('OK')
+        expect(data['collection']['name']).to match('test_collection')
+        expect(data['collection']['title']).to match('Test Collection')
+        expect(data['collection']['description']).to match('Test Collection Description')
+        expect(data['collection']['owner']['name']).to match(@author_user.name)
       end
     end
 
     describe 'POST /v1/collections/[:name]/update' do
       it 'updates specific collection' do
         # send request
-        post '/v1/collections/' + @collection.name + '/update' + '?token=' + @author_token, {title: 'Test Collection Updated'}
+        post '/v1/collections/' + @collection.name + '/update' + '?token=' + @author_token, {title: 'Test Collection Updated', description: 'Test Collection Description Updated'}
 
         # check response status
-        response.status.should == 201
+        expect(response.status).to match(201)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('collection')
+        expect(data).to have_key('status')
+        expect(data).to have_key('collection')
 
         # check received data
-        data['status'].should == 'OK'
-        data['collection']['name'].should == @collection.name
-        data['collection']['title'].should == 'Test Collection Updated'
-        data['collection']['owner']['name'].should == @author_user.name
+        expect(data['status']).to match('OK')
+        expect(data['collection']['name']).to match(@collection.name)
+        expect(data['collection']['title']).to match('Test Collection Updated')
+        expect(data['collection']['description']).to match('Test Collection Description Updated')
+        expect(data['collection']['owner']['name']).to match(@author_user.name)
       end
     end
   end

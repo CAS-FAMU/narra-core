@@ -23,15 +23,15 @@ require 'spec_helper'
 
 describe Identity do
   it "can be instantiated" do
-    FactoryGirl.build(:identity).should be_an_instance_of(Identity)
+    expect(FactoryGirl.build(:identity)).to be_an_instance_of(Identity)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:identity, user: FactoryGirl.create(:user)).should be_persisted
+    expect(FactoryGirl.create(:identity, user: FactoryGirl.create(:user))).to be_persisted
   end
 
   it "creates from hash" do
     # expect 3 users as far as we are using create_from_hash in the spec_helper
-    User.all.count.should == 3
+    expect(User.all.count).to match(3)
   end
 end

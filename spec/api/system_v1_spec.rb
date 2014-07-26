@@ -29,10 +29,10 @@ describe Narra::API::Modules::SystemV1 do
       get "/v1/system/version"
 
       # check response status
-      response.status.should == 200
+      expect(response.status).to match(200)
 
       # check received data
-      JSON.parse(response.body).should == { 'status' => 'OK', 'version' => { 'version' => Narra::Version::VERSION, 'revision' =>Narra::Version::REVISION }}
+      expect(JSON.parse(response.body)).to match({ 'status' => 'OK', 'version' => { 'version' => Narra::Version::VERSION, 'revision' =>Narra::Version::REVISION }})
     end
   end
 end

@@ -23,10 +23,10 @@ require 'spec_helper'
 
 describe Sequence do
   it "can be instantiated" do
-    FactoryGirl.build(:sequence).should be_an_instance_of(Sequence)
+    expect(FactoryGirl.build(:sequence)).to be_an_instance_of(Sequence)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:sequence).should be_persisted
+    expect(FactoryGirl.create(:sequence)).to be_persisted
   end
 end

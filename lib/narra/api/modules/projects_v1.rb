@@ -47,7 +47,7 @@ module Narra
           end
           post 'new' do
             required_attributes! [:name, :title]
-            new_one(Project, Narra::API::Entities::Project, :name, {name: params[:name], title: params[:title], owner: current_user}, [:admin, :author])
+            new_one(Project, Narra::API::Entities::Project, :name, {name: params[:name], title: params[:title], description: params[:description], owner: current_user}, [:admin, :author])
           end
 
           desc "Return a specific project."
@@ -57,9 +57,9 @@ module Narra
 
           desc "Update a specific project."
           post ':name/update' do
-            required_attributes! [:name, :title]
             update_one(Project, Narra::API::Entities::Project, :name, [:admin, :author]) do |project|
-              project.update_attributes(title: params[:title])
+              project.update_attributes(title: params[:title]) unless params[:title].nil?
+              project.update_attributes(description: params[:description]) unless params[:description].nil?
             end
           end
 
@@ -85,7 +85,7 @@ module Narra
           desc "Return project's items."
           get ':name/items' do
             return_one_custom(Project, :name, [:admin, :author]) do |project|
-              present_ok(:items, present(project.items, with: Narra::API::Entities::Item))
+              present_ok(:items, present(project.items.limit(params[:limit]), with: Narra::API::Entities::Item))
             end
           end
 
@@ -94,6 +94,9 @@ module Narra
             return_one_custom(Project, :name, [:admin, :author]) do |project|
               # Get item
               items = Item.where(name: params[:item]).any_in(collection_ids: project.collection_ids)
+              # Check for the first and the last
+              items |= [project.items.first] if params[:item].equal?('first')
+              items |= [project.items.last] if params[:item].equal?('last')
               # Check if the item is part of the project
               if items.empty?
                 error_not_found!
@@ -106,7 +109,7 @@ module Narra
           desc "Return project's sequences."
           get ':name/sequences' do
             return_one_custom(Project, :name, [:admin, :author]) do |project|
-              present_ok(:sequences, present(project.sequences, with: Narra::API::Entities::Sequence))
+              present_ok(:sequences, present(project.sequences.limit(params[:limit]), with: Narra::API::Entities::Sequence))
             end
           end
 

@@ -22,11 +22,13 @@
 class Project
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Narra::Extensions::Thumbnail
 
   # Fields
   field :name, type: String
   field :title, type: String
-  field :generators, type: Array, default: []
+  field :description, type: String
+  field :generators, type: Array, default: [:videoinfo, :thumbnail]
   field :synthesizers, type: Array, default: []
 
   # User Relations

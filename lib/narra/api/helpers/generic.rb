@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -24,17 +24,19 @@ module Narra
     module Helpers
       module Generic
 
-        # Generic auth process
+        # generic auth process
         def auth!(authorization = [], authentication = true)
           authenticate! if authentication
           authorize!(authorization) unless authorization.empty?
         end
 
-        # Generic method for returning of the specific object based on the owner
+        # generic method for returning of the specific object based on the owner
         def return_many(model, entity = nil, authorization = [], authentication = true)
           auth!(authorization, authentication)
+          # get items
+          items = params[:owner].nil? ? model.limit(params[:limit]) : model.where(owner: ::User.find(params[:owner])).limit(params[:limit])
           # present
-          present_ok(Narra::Tools::Class.class_name_to_s(model).pluralize.to_sym, present(model.all, with: entity))
+          present_ok(Narra::Tools::Class.class_name_to_s(model).pluralize.to_sym, present(items, with: entity))
         end
 
         # Generic method for returning of the specific object based on the owner

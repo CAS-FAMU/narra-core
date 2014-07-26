@@ -23,10 +23,10 @@ require 'spec_helper'
 
 describe Collection do
   it "can be instantiated" do
-    FactoryGirl.build(:collection).should be_an_instance_of(Collection)
+    expect(FactoryGirl.build(:collection)).to be_an_instance_of(Collection)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:collection).should be_persisted
+    expect(FactoryGirl.create(:collection)).to be_persisted
   end
 end

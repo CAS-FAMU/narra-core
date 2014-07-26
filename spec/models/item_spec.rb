@@ -23,18 +23,18 @@ require 'spec_helper'
 
 describe Item do
   it "can be instantiated" do
-    FactoryGirl.build(:item).should be_an_instance_of(Item)
+    expect(FactoryGirl.build(:item)).to be_an_instance_of(Item)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:item).should be_persisted
+    expect(FactoryGirl.create(:item)).to be_persisted
   end
 
   it "should have storage available" do
     # Temporary item
     item = FactoryGirl.create(:item)
     # Check storage
-    item.storage.should be_a_kind_of(Fog::Model)
+    expect(item.storage).to be_a_kind_of(Fog::Model)
   end
 
   it "should destroy storage after destroy" do
@@ -45,6 +45,6 @@ describe Item do
     # Destroy item
     item.destroy
     # Check storage
-    Narra::Storage::ITEMS.directories.get(id).should be_nil
+    expect(Narra::Storage::ITEMS.directories.get(id)).to be_nil
   end
 end

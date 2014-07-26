@@ -30,23 +30,23 @@ describe Narra::Generators::Modules::Generic do
   end
 
   it 'can be instantiated' do
-    Narra::Generators::Modules::Generic.new(@item, @event).should be_an_instance_of(Narra::Generators::Modules::Generic)
+    expect(Narra::Generators::Modules::Generic.new(@item, @event)).to be_an_instance_of(Narra::Generators::Modules::Generic)
   end
 
   it 'should have accessible fields' do
-    Narra::Generators::Modules::Generic.identifier.should == :generic
-    Narra::Generators::Modules::Generic.title.should == 'Generic'
-    Narra::Generators::Modules::Generic.description.should == 'Generic Generator'
+    expect(Narra::Generators::Modules::Generic.identifier).to match(:generic)
+    expect(Narra::Generators::Modules::Generic.title).to match('Generic')
+    expect(Narra::Generators::Modules::Generic.description).to match('Generic Generator')
   end
 
   it 'can add metadata to the item' do
     # add meta
     Narra::Generators::Modules::Generic.new(@item, @event).add_meta(name: 'test', content: 'test')
     # validation
-    @item.meta.count.should == 1
+    expect(@item.meta.count).to match(1)
   end
 
   it 'can be used to create a new module' do
-    Narra::Core.generators.should include(Narra::Generators::Modules::Testing)
+    expect(Narra::Core.generators).to include(Narra::Generators::Modules::Testing)
   end
 end

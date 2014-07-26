@@ -34,23 +34,23 @@ describe Narra::Synthesizers::Modules::Generic do
   end
 
   it 'can be instantiated' do
-    Narra::Synthesizers::Modules::Generic.new(@project, @event).should be_an_instance_of(Narra::Synthesizers::Modules::Generic)
+    expect(Narra::Synthesizers::Modules::Generic.new(@project, @event)).to be_an_instance_of(Narra::Synthesizers::Modules::Generic)
   end
 
   it 'should have accessible fields' do
-    Narra::Synthesizers::Modules::Generic.identifier.should == :generic
-    Narra::Synthesizers::Modules::Generic.title.should == 'Generic'
-    Narra::Synthesizers::Modules::Generic.description.should == 'Generic Synthesizer'
+    expect(Narra::Synthesizers::Modules::Generic.identifier).to match(:generic)
+    expect(Narra::Synthesizers::Modules::Generic.title).to match('Generic')
+    expect(Narra::Synthesizers::Modules::Generic.description).to match('Generic Synthesizer')
   end
 
   it 'can add junction to the project' do
     # add meta
     Narra::Synthesizers::Modules::Generic.new(@project, @event).add_junction(weight: 1.0, out: @item)
     # validation
-    @project.junctions.count.should == 1
+    expect(@project.junctions.count).to match(1)
   end
 
   it 'can be used to create a new module' do
-    Narra::Core.synthesizers.should include(Narra::Synthesizers::Modules::Testing)
+    expect(Narra::Core.synthesizers).to include(Narra::Synthesizers::Modules::Testing)
   end
 end

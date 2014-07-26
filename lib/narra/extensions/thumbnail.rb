@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,20 +19,23 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+module Narra
+  module Extensions
+    module Thumbnail
 
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-    # create event
-    @event = FactoryGirl.create(:event, item: @item)
-  end
-
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(item: @item._id.to_s, identifier: :testing, event: @event._id.to_s)
-    # validation
-    expect(@item.meta.count).to match(1)
+      def thumbnail
+        # get thumbnail if not resolved yet
+        if @thumbnail.nil?
+          # get the first item available
+          item = self.items.first
+          # get the first thumbnail if available
+          thumbnails = item.meta.generators([:thumbnail], false) unless item.nil?
+          # get the content if available
+          @thumbnail = thumbnails.first.content unless thumbnails.nil? || thumbnails.empty?
+        end
+        # return thumbnail
+        @thumbnail
+      end
+    end
   end
 end

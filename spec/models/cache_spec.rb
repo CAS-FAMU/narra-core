@@ -23,10 +23,10 @@ require 'spec_helper'
 
 describe Cache do
   it "can be instantiated" do
-    FactoryGirl.build(:cache).should be_an_instance_of(Cache)
+    expect(FactoryGirl.build(:cache)).to be_an_instance_of(Cache)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:cache).should be_persisted
+    expect(FactoryGirl.create(:cache)).to be_persisted
   end
 end

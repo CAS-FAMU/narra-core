@@ -32,24 +32,24 @@ describe Narra::Core do
   end
 
   it 'should return all active generators' do
-    Narra::Core.generators.count.should == 3
+    expect(Narra::Core.generators.count).to match(3)
   end
 
   it 'should return all active synthesizers' do
-    Narra::Core.synthesizers.count.should == 1
+    expect(Narra::Core.synthesizers.count).to match(1)
   end
 
   it 'should process item to generate new metadata' do
     # generate through main process
     Narra::Core.generate(@item, [:testing])
     # validation
-    @item.meta.count.should == 1
+    expect(@item.meta.count).to match(1)
   end
 
   it 'should process item to generate new junction' do
     # generate through main process
     Narra::Core.synthesize(@project, [:testing])
     # validation
-    @project.junctions.count.should == 1
+    expect(@project.junctions.count).to match(1)
   end
 end

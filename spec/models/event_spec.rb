@@ -23,40 +23,40 @@ require 'spec_helper'
 
 describe Event do
   it "can be instantiated" do
-    FactoryGirl.build(:event).should be_an_instance_of(Event)
+    expect(FactoryGirl.build(:event)).to be_an_instance_of(Event)
   end
 
   it "can be saved successfully" do
-    FactoryGirl.create(:event).should be_persisted
+    expect(FactoryGirl.create(:event)).to be_persisted
   end
 
   it "should be in pending state" do
     # create an event
-    FactoryGirl.create(:event).should be_persisted
+    expect(FactoryGirl.create(:event)).to be_persisted
     # check state
-    Event.first.pending?.should be_true
+    expect(Event.first.pending?).to be_truthy
   end
 
   it "can be run successfully" do
     # create an event
-    FactoryGirl.create(:event).should be_persisted
+    expect(FactoryGirl.create(:event)).to be_persisted
     # check state
-    Event.first.pending?.should be_true
+    expect(Event.first.pending?).to be_truthy
     # run
     Event.first.run!
     # check state
-    Event.first.running?.should be_true
+    expect(Event.first.running?).to be_truthy
   end
 
   it "can be successfully finished" do
     # create an event
-    FactoryGirl.create(:event).should be_persisted
+    expect(FactoryGirl.create(:event)).to be_persisted
     # check state
-    Event.first.pending?.should be_true
+    expect(Event.first.pending?).to be_truthy
     # run
     Event.first.run!
     Event.first.done!
     # check event existence
-    Event.all.count.should == 0
+    expect(Event.all.count).to match(0)
   end
 end

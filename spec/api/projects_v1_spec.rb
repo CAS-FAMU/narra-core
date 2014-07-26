@@ -48,18 +48,18 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects'
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('projects')
+        expect(data).to have_key('status')
+        expect(data).to have_key('projects')
 
         # check received data
-        data['status'].should == 'OK'
-        data['projects'].count.should == 2
+        expect(data['status']).to match('OK')
+        expect(data['projects'].count).to match(2)
       end
     end
 
@@ -68,14 +68,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -84,14 +84,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/delete'
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -100,14 +100,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/new', {name: 'test', title: 'test'}
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -116,14 +116,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project.name + '/update', {title: 'test'}
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -132,14 +132,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project.name + '/collections/add', {collections: [@collection_03.name]}
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -148,14 +148,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project.name + '/collections/remove', {collections: [@collection_01.name]}
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -164,14 +164,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/items'
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -180,14 +180,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/items/' + @item_01.name
 
             # check response status
-            response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -196,14 +196,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/sequences'
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -212,14 +212,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/sequences/' + @sequence._id
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
 
@@ -228,14 +228,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project.name + '/synthesize', {synthesizers: [:testing]}
 
         # check response status
-        response.status.should == 401
+        expect(response.status).to match(401)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authenticated'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authenticated')
       end
     end
   end
@@ -246,14 +246,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project_admin.name + '?token=' + @author_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -262,14 +262,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/delete' + '?token=' + @unroled_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -278,14 +278,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/new' + '?token=' + @unroled_token, {name: 'test', title: 'test'}
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -294,14 +294,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project_admin.name + '/update' + '?token=' + @author_token, {title: 'test'}
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -310,14 +310,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project_admin.name + '/collections/add' + '?token=' + @author_token, {collections: [@collection_01.name]}
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -326,14 +326,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project_admin.name + '/collections/remove' + '?token=' + @author_token, {collections: [@collection_03.name]}
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -342,14 +342,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project_admin.name + '/items' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -358,14 +358,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project_admin.name + '/items/' + @item_01.name + '?token=' + @author_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -374,14 +374,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project_admin.name + '/sequences' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -390,14 +390,14 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project_admin.name + '/sequences/' + @sequence_admin._id + '?token=' + @author_token
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
 
@@ -406,14 +406,14 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project_admin.name + '/synthesize?token=' + @author_token, {synthesizers: [:testing]}
 
         # check response status
-        response.status.should == 403
+        expect(response.status).to match(403)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data
-        data['status'].should == 'ERROR'
-        data['message'].should == 'Not Authorized'
+        expect(data['status']).to match('ERROR')
+        expect(data['message']).to match('Not Authorized')
       end
     end
   end
@@ -425,19 +425,19 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('project')
+        expect(data).to have_key('status')
+        expect(data).to have_key('project')
 
         # check received data
-        data['status'].should == 'OK'
-        data['project']['name'].should == @project.name
-        data['project']['title'].should == @project.title
+        expect(data['status']).to match('OK')
+        expect(data['project']['name']).to match(@project.name)
+        expect(data['project']['title']).to match(@project.title)
       end
     end
 
@@ -447,65 +447,67 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/delete' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
+        expect(data).to have_key('status')
 
         # check received data
-        data['status'].should == 'OK'
+        expect(data['status']).to match('OK')
 
         # check if the user is deleted
-        Project.find(@project._id).should == nil
+        expect(Project.find(@project._id)).to be_nil
       end
     end
 
     describe 'POST /v1/projects/new' do
       it 'creates new project' do
         # send request
-        post '/v1/projects/new' + '?token=' + @author_token, {name: 'test_project', title: 'Test Project'}
+        post '/v1/projects/new' + '?token=' + @author_token, {name: 'test_project', title: 'Test Project', description: 'Test Project Description'}
 
         # check response status
-        response.status.should == 201
+        expect(response.status).to match(201)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('project')
+        expect(data).to have_key('status')
+        expect(data).to have_key('project')
 
         # check received data
-        data['status'].should == 'OK'
-        data['project']['name'].should == 'test_project'
-        data['project']['title'].should == 'Test Project'
-        data['project']['owner']['name'].should == @author_user.name
+        expect(data['status']).to match('OK')
+        expect(data['project']['name']).to match('test_project')
+        expect(data['project']['title']).to match('Test Project')
+        expect(data['project']['description']).to match('Test Project Description')
+        expect(data['project']['owner']['name']).to match(@author_user.name)
       end
     end
 
     describe 'POST /v1/projects/[:name]/update' do
       it 'creates new project' do
         # send request
-        post '/v1/projects/' + @project.name + '/update' + '?token=' + @author_token, {title: 'Test Project Updated'}
+        post '/v1/projects/' + @project.name + '/update' + '?token=' + @author_token, {title: 'Test Project Updated', description: 'Test Project Description Updated'}
 
         # check response status
-        response.status.should == 201
+        expect(response.status).to match(201)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('project')
+        expect(data).to have_key('status')
+        expect(data).to have_key('project')
 
         # check received data
-        data['status'].should == 'OK'
-        data['project']['name'].should == @project.name
-        data['project']['title'].should == 'Test Project Updated'
-        data['project']['owner']['name'].should == @author_user.name
+        expect(data['status']).to match('OK')
+        expect(data['project']['name']).to match(@project.name)
+        expect(data['project']['title']).to match('Test Project Updated')
+        expect(data['project']['description']).to match('Test Project Description Updated')
+        expect(data['project']['owner']['name']).to match(@author_user.name)
       end
     end
 
@@ -515,19 +517,19 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project.name + '/collections/add' + '?token=' + @author_token, {collections: [@collection_03.name, @collection_04.name]}
 
         # check response status
-        response.status.should == 201
+        expect(response.status).to match(201)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('project')
+        expect(data).to have_key('status')
+        expect(data).to have_key('project')
 
         # check received data
-        data['status'].should == 'OK'
-        data['project']['name'].should == @project.name
-        data['project']['collections'].count.should == 4
+        expect(data['status']).to match('OK')
+        expect(data['project']['name']).to match(@project.name)
+        expect(data['project']['collections'].count).to match(4)
       end
     end
 
@@ -537,19 +539,19 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project.name + '/collections/remove' + '?token=' + @author_token, {collections: [@collection_01.name, @collection_02.name]}
 
         # check response status
-        response.status.should == 201
+        expect(response.status).to match(201)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('project')
+        expect(data).to have_key('status')
+        expect(data).to have_key('project')
 
         # check received data
-        data['status'].should == 'OK'
-        data['project']['name'].should == @project.name
-        data['project']['collections'].count.should == 0
+        expect(data['status']).to match('OK')
+        expect(data['project']['name']).to match(@project.name)
+        expect(data['project']['collections'].count).to match(0)
       end
     end
 
@@ -558,18 +560,18 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/items' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('items')
+        expect(data).to have_key('status')
+        expect(data).to have_key('items')
 
         # check received data
-        data['status'].should == 'OK'
-        data['items'].count.should == 1
+        expect(data['status']).to match('OK')
+        expect(data['items'].count).to match(1)
       end
     end
 
@@ -578,18 +580,18 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/items/' + @item_01.name + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('item')
+        expect(data).to have_key('status')
+        expect(data).to have_key('item')
 
         # check received data
-        data['status'].should == 'OK'
-        data['item']['name'].should == @item_01.name
+        expect(data['status']).to match('OK')
+        expect(data['item']['name']).to match(@item_01.name)
       end
     end
 
@@ -598,18 +600,18 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/sequences' + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('sequences')
+        expect(data).to have_key('status')
+        expect(data).to have_key('sequences')
 
         # check received data
-        data['status'].should == 'OK'
-        data['sequences'].count.should == 1
+        expect(data['status']).to match('OK')
+        expect(data['sequences'].count).to match(1)
       end
     end
 
@@ -618,19 +620,19 @@ describe Narra::API::Modules::ProjectsV1 do
         get '/v1/projects/' + @project.name + '/sequences/' + @sequence._id + '?token=' + @author_token
 
         # check response status
-        response.status.should == 200
+        expect(response.status).to match(200)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('sequence')
+        expect(data).to have_key('status')
+        expect(data).to have_key('sequence')
 
         # check received data
-        data['status'].should == 'OK'
-        data['sequence']['id'].should == @sequence._id.to_s
-        data['sequence'].should have_key('playlist')
+        expect(data['status']).to match('OK')
+        expect(data['sequence']['id']).to match(@sequence._id.to_s)
+        expect(data['sequence']).to have_key('playlist')
       end
     end
 
@@ -639,22 +641,22 @@ describe Narra::API::Modules::ProjectsV1 do
         post '/v1/projects/' + @project.name + '/synthesize?token=' + @author_token, {synthesizers: [:testing]}
 
         # check response status
-        response.status.should == 201
+        expect(response.status).to match(201)
 
         # parse response
         data = JSON.parse(response.body)
 
         # check received data format
-        data.should have_key('status')
-        data.should have_key('events')
+        expect(data).to have_key('status')
+        expect(data).to have_key('events')
 
         # check received data
-        data['status'].should == 'OK'
-        data['events'].count.should == 1
-        data['events'][0].should have_key('message')
-        data['events'][0].should have_key('status')
-        data['events'][0]['status'].should == 'pending'
-        @project.junctions.count.should == 1
+        expect(data['status']).to match('OK')
+        expect(data['events'].count).to match(1)
+        expect(data['events'][0]).to have_key('message')
+        expect(data['events'][0]).to have_key('status')
+        expect(data['events'][0]['status']).to match('pending')
+        expect(@project.junctions.count).to match(1)
       end
     end
   end
