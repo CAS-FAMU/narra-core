@@ -29,7 +29,7 @@ module Narra
         end
         expose :name, :url
         expose :owner do |model, options|
-          { id: model.owner._id.to_s, name: model.owner.name}
+          { username: model.owner.username, name: model.owner.name}
         end
         expose :collections, using: Narra::API::Entities::Collection, :if => {:type => :detail}
         expose :meta, as: :metadata, :if => {:type => :detail} do |item, options|

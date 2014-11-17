@@ -44,8 +44,9 @@ class Item
   has_many :events, class_name: 'Event', autosave: true, dependent: :destroy, inverse_of: :item
 
   # Validations
-  validate :name, presence: true, uniqueness: true
+  validate :name, presence: true
   validate :url, presence: true
+  validates_uniqueness_of :name , scope: :collection_id
 
   # Hooks
   # Create item's directory after create

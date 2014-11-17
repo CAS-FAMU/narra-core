@@ -58,9 +58,9 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]' do
+    describe 'GET /v1/items/[:id]' do
       it 'returns a specific item' do
-        get '/v1/items/' + @item.name
+        get '/v1/items/' + @item._id
 
         # check response status
         expect(response.status).to match(401)
@@ -74,9 +74,9 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]/delete' do
+    describe 'GET /v1/items/[:id]/delete' do
       it 'deletes a specific item' do
-        get '/v1/items/' + @item.name + '/delete'
+        get '/v1/items/' + @item._id + '/delete'
 
         # check response status
         expect(response.status).to match(401)
@@ -106,9 +106,9 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]/events' do
+    describe 'GET /v1/items/[:id]/events' do
       it 'returns item events' do
-        get '/v1/items/' + @item.name + '/events'
+        get '/v1/items/' + @item._id + '/events'
 
         # check response status
         expect(response.status).to match(401)
@@ -126,7 +126,7 @@ describe Narra::API::Modules::ItemsV1 do
   context 'not authorized' do
     describe 'GET /v1/items' do
       it 'returns items' do
-        get '/v1/items' + '?token=' + @unroled_token
+        get '/v1/items' + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(403)
@@ -140,9 +140,9 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]' do
+    describe 'GET /v1/items/[:id]' do
       it 'returns a specific item' do
-        get '/v1/items/' + @item.name + '?token=' + @unroled_token
+        get '/v1/items/' + @item._id + '?token=' + @unroled_token
 
         # check response status
         expect(response.status).to match(403)
@@ -156,9 +156,9 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]/delete' do
+    describe 'GET /v1/items/[:id]/delete' do
       it 'deletes a specific item' do
-        get '/v1/items/' + @item_admin.name + '/delete' + '?token=' + @author_token
+        get '/v1/items/' + @item_admin._id + '/delete' + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(403)
@@ -188,9 +188,9 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]/events' do
+    describe 'GET /v1/items/[:id]/events' do
       it 'returns item events' do
-        get '/v1/items/' + @item_admin.name + '/events?token=' + @author_token
+        get '/v1/items/' + @item_admin._id + '/events?token=' + @author_token
 
         # check response status
         expect(response.status).to match(403)
@@ -209,7 +209,7 @@ describe Narra::API::Modules::ItemsV1 do
     describe 'GET /v1/items' do
       it 'returns items' do
         # send request
-        get '/v1/items' + '?token=' + @author_token
+        get '/v1/items' + '?token=' + @admin_token
 
         # check response status
         expect(response.status).to match(200)
@@ -227,10 +227,10 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]' do
+    describe 'GET /v1/items/[:id]' do
       it 'returns a specific item' do
         # send request
-        get '/v1/items/' + @item_meta.name + '?token=' + @author_token
+        get '/v1/items/' + @item_meta._id + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(200)
@@ -250,10 +250,10 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]/delete' do
+    describe 'GET /v1/items/[:id]/delete' do
       it 'deletes a specific item' do
         # send request
-        get '/v1/items/' + @item.name + '/delete' + '?token=' + @author_token
+        get '/v1/items/' + @item._id + '/delete' + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(200)
@@ -295,9 +295,9 @@ describe Narra::API::Modules::ItemsV1 do
       end
     end
 
-    describe 'GET /v1/items/[:name]/events' do
+    describe 'GET /v1/items/[:id]/events' do
       it 'returns item events' do
-        get '/v1/items/' + @item.name + '/events?token=' + @author_token
+        get '/v1/items/' + @item._id + '/events?token=' + @author_token
 
         # check response status
         expect(response.status).to match(200)

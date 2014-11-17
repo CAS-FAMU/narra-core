@@ -24,10 +24,7 @@ module Narra
     module Entities
       class User < Grape::Entity
 
-        expose :id do |model, options|
-          model._id.to_s
-        end
-        expose :name, :email, :roles
+        expose :username, :name, :email, :roles
         expose :identities do |user, options|
           user.identities.collect { |identity| identity.provider }
         end

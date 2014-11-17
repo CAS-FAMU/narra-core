@@ -43,7 +43,7 @@ class User
   has_many :identities, dependent: :destroy
 
   # Validations
-  validate :username, uniqueness: true
+  validates_uniqueness_of :username
 
   # Check if the user has certain role
   def is?(roles_check = [])
@@ -58,7 +58,7 @@ class User
   # Create a new user from the omniauth hash
   def self.create_from_hash!(hash)
     # create new user
-    user = User.new(name: hash['info']['name'], email: hash['info']['email'])
+    user = User.new(username: hash['info']['name'].downcase.tr(' ', '_'), name: hash['info']['name'], email: hash['info']['email'])
 
     # assign default roles
     user.roles = (User.empty?) ? [:admin] : [:author]

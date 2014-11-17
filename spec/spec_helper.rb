@@ -95,15 +95,12 @@ RSpec.configure do |config|
     # get admin token and user
     @admin_token = CGI::escape(Base64.urlsafe_encode64(admin_hash['uid']))
     @admin_user = User.find_by(name: 'Admin')
-    @admin_user.update_attributes(username: 'admin')
     # get author token and user
     @author_token = CGI::escape(Base64.urlsafe_encode64(author_hash['uid']))
     @author_user = User.find_by(name: 'Author')
-    @author_user.update_attributes(username: 'author')
     # get guest token and user
     @unroled_token = CGI::escape(Base64.urlsafe_encode64(unroled_hash['uid']))
     @unroled_user = User.find_by(name: 'Unroled')
-    @unroled_user.update_attributes(username: 'unroled')
     @unroled_user.roles = []
     @unroled_user.save
 

@@ -87,9 +87,9 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'GET /v1/users/[:id]' do
+    describe 'GET /v1/users/[:username]' do
       it 'returns a specific user' do
-        get '/v1/users/' + @unroled_user._id
+        get '/v1/users/' + @unroled_user.username
 
         # check response status
         expect(response.status).to match(401)
@@ -103,9 +103,9 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'GET /v1/users/[:id]/delete' do
+    describe 'GET /v1/users/[:username]/delete' do
       it 'deletes a specific user' do
-        get '/v1/users/' + @unroled_user._id + '/delete'
+        get '/v1/users/' + @unroled_user.username + '/delete'
 
         # check response status
         expect(response.status).to match(401)
@@ -119,9 +119,9 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'POST /v1/users/[:id]/update' do
+    describe 'POST /v1/users/[:username]/update' do
       it 'updates a specific user' do
-        post '/v1/users/' + @unroled_user._id + '/update', { roles: ['author']}
+        post '/v1/users/' + @unroled_user.username + '/update', { roles: ['author']}
 
         # check response status
         expect(response.status).to match(401)
@@ -169,9 +169,9 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'GET /v1/users/[:id]' do
+    describe 'GET /v1/users/[:username]' do
       it 'returns a specific user' do
-        get '/v1/users/' + @unroled_user._id + '?token=' + @author_token
+        get '/v1/users/' + @unroled_user.username + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(403)
@@ -185,9 +185,9 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'GET /v1/users/[:id]/delete' do
+    describe 'GET /v1/users/[:username]/delete' do
       it 'deletes a specific user' do
-        get '/v1/users/' + @unroled_user._id + '/delete' + '?token=' + @author_token
+        get '/v1/users/' + @unroled_user.username + '/delete' + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(403)
@@ -201,9 +201,9 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'POST /v1/users/[:id]/update' do
+    describe 'POST /v1/users/[:username]/update' do
       it 'updates a specific user' do
-        post '/v1/users/' + @unroled_user._id + '/update' + '?token=' + @author_token, { roles: ['author']}
+        post '/v1/users/' + @unroled_user.username + '/update' + '?token=' + @author_token, { roles: ['author']}
 
         # check response status
         expect(response.status).to match(403)
@@ -281,10 +281,10 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'GET /v1/users/[:id]' do
+    describe 'GET /v1/users/[:username]' do
       it 'returns a specific user' do
         # send request
-        get '/v1/users/' + @admin_user._id + '?token=' + @admin_token
+        get '/v1/users/' + @admin_user.username + '?token=' + @admin_token
 
         # check response status
         expect(response.status).to match(200)
@@ -298,16 +298,17 @@ describe Narra::API::Modules::UsersV1 do
 
         # check received data
         expect(data['status']).to match('OK')
+        expect(data['user']['username']).to match(@admin_user.username)
         expect(data['user']['name']).to match(@admin_user.name)
         expect(data['user']['email']).to match(@admin_user.email)
         expect(data['user']['roles'].collect {|role| role.to_sym}).to match(@admin_user.roles)
       end
     end
 
-    describe 'GET /v1/users/[:id]/delete' do
+    describe 'GET /v1/users/[:username]/delete' do
       it 'deletes a specific user' do
         # send request
-        get '/v1/users/' + @unroled_user._id + '/delete' + '?token=' + @admin_token
+        get '/v1/users/' + @unroled_user.username + '/delete' + '?token=' + @admin_token
 
         # check response status
         expect(response.status).to match(200)
@@ -326,10 +327,10 @@ describe Narra::API::Modules::UsersV1 do
       end
     end
 
-    describe 'POST /v1/users/[:id]/update' do
+    describe 'POST /v1/users/[:username]/update' do
       it 'updates a specific user' do
         # send request
-        post '/v1/users/' + @unroled_user._id + '/update' + '?token=' + @admin_token, {roles: ['author']}
+        post '/v1/users/' + @unroled_user.username + '/update' + '?token=' + @admin_token, {roles: ['author']}
 
         # check response status
         expect(response.status).to match(201)

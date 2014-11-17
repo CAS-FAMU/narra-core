@@ -37,7 +37,7 @@ module Narra
 
           desc "Return all items."
           get do
-            return_many(Item, Narra::API::Entities::Item, [:admin, :author])
+            return_many(Item, Narra::API::Entities::Item, [:admin])
           end
 
           desc "Create new item."
@@ -62,18 +62,18 @@ module Narra
           end
 
           desc "Return a specific item."
-          get ':name' do
-            return_one(Item, Narra::API::Entities::Item, :name, [:admin, :author])
+          get ':id' do
+            return_one(Item, Narra::API::Entities::Item, :id, [:admin, :author])
           end
 
           desc "Delete a specific item."
-          get ':name/delete' do
-            delete_one(Item, :name, [:admin, :author])
+          get ':id/delete' do
+            delete_one(Item, :id, [:admin, :author])
           end
 
           desc "Return item's events."
-          get ':name/events' do
-            return_one_custom(Item, :name, [:admin, :author]) do |item|
+          get ':id/events' do
+            return_one_custom(Item, :id, [:admin, :author]) do |item|
               present_ok(:events, present(item.events, with: Narra::API::Entities::Event))
             end
           end

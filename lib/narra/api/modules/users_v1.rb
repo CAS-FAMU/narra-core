@@ -62,19 +62,19 @@ module Narra
           end
 
           desc "Return a specific user."
-          get ':id' do
-            return_one(User, Narra::API::Entities::User, :id, [:admin])
+          get ':username' do
+            return_one(User, Narra::API::Entities::User, :username, [:admin])
           end
 
           desc "Delete a specific user."
-          get ':id/delete' do
-            delete_one(User, :id, [:admin])
+          get ':username/delete' do
+            delete_one(User, :username, [:admin])
           end
 
           desc "Update a user."
-          post ':id/update' do
+          post ':username/update' do
             required_attributes! [:roles]
-            update_one(User, Narra::API::Entities::User, :id, [:admin]) do |user|
+            update_one(User, Narra::API::Entities::User, :username, [:admin]) do |user|
               user.roles = params[:roles].collect { |role| role.to_sym }
             end
           end
