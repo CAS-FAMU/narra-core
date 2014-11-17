@@ -53,4 +53,4 @@ gem 'rspec-mocks', :group => [:test, :development]
 gem 'database_cleaner', :group => :test
 gem 'mongoid-rspec', :group => :test
 gem 'factory_girl_rails', :group => :test
-gem 'coveralls', :require => false
+gem 'codeclimate-test-reporter', :group => :test, :require => nil

@@ -25,9 +25,9 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'database_cleaner'
 
-# Coveralls
-require 'coveralls'
-Coveralls.wear!
+# Codeclimate coverage
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
 
 # Sidekiq
 require 'sidekiq'
