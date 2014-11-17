@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,23 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
-
-describe Narra::Generators::Worker do
-  before(:each) do
-    # create item
-    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
-    # create event
-    @event = FactoryGirl.create(:event, item: @item)
-  end
-
-  it 'should process item to generate new metadata' do
-    # generate through main process
-    Narra::Generators::Worker.perform_async(item: @item._id.to_s, identifier: :testing, event: @event._id.to_s)
-    # validation
-    expect(@item.meta.count).to match(1)
-  end
-end
+# Transcode listener fires generation process on the item
+Wisper.subscribe(Narra::Listeners::Transcoder.new, on: :narra_transcoder_done)

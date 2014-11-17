@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,29 +16,30 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
 module Narra
-  module Generators
-    class Worker
+  module Workers
+    class Synthesizer
       include Sidekiq::Worker
-      sidekiq_options :queue => :generators
+      sidekiq_options :queue => :synthesizers
 
       def perform(options)
         # check
-        return if options['item'].nil? || options['identifier'].nil? || options['event'].nil?
-        # get generator
-        generator = Narra::Core.generators.detect { |g| g.identifier == options['identifier'].to_sym }
+        return if options['project'].nil? || options['identifier'].nil? || options['event'].nil?
         # get event
         event = Event.find(options['event'])
-        # get item
-        item = Item.find(options['item'])
+        # get project
+        project = Project.find(options['project']) unless options['project'].nil?
         # fire event
         event.run!
+        # get synthesizer
+        synthesizer = Narra::Core.synthesizers.detect { |s| s.identifier == options['identifier'].to_sym }
+        # execute
         begin
           # perform generate if generator is available
-          generator.new(item, event).generate unless item.nil?
+          synthesizer.new(project, event).synthesize unless project.nil?
         rescue
           # nothing to do
           # TODO logging system

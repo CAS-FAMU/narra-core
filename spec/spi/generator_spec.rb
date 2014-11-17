@@ -21,22 +21,32 @@
 
 require 'spec_helper'
 
-describe Narra::Synthesizers::Worker do
+describe Narra::SPI::Generator do
   before(:each) do
-    # create project
-    @project = FactoryGirl.create(:project, owner: @author_user)
-    # create collection
-    @collection = FactoryGirl.create(:collection, owner: @author_user, projects: [@project])
     # create item
-    @item = FactoryGirl.create(:item, collections: [@collection], owner: @author_user)
+    @item = FactoryGirl.create(:item, collections: [], owner: @author_user)
     # create event
-    @event = FactoryGirl.create(:event, project: @project)
+    @event = FactoryGirl.create(:event, item: @item)
   end
 
-  it 'should process project to generate new junction' do
-    # generate through main process
-    Narra::Synthesizers::Worker.perform_async(project: @project._id.to_s, identifier: :testing, event: @event._id.to_s)
+  it 'can be instantiated' do
+    expect(Narra::SPI::Generator.new(@item, @event)).to be_an_instance_of(Narra::SPI::Generator)
+  end
+
+  it 'should have accessible fields' do
+    expect(Narra::SPI::Generator.identifier).to match(:generic)
+    expect(Narra::SPI::Generator.title).to match('Generic')
+    expect(Narra::SPI::Generator.description).to match('Generic Generator')
+  end
+
+  it 'can add metadata to the item' do
+    # add meta
+    Narra::SPI::Generator.new(@item, @event).add_meta(name: 'test', content: 'test')
     # validation
-    expect(@project.junctions.count).to match(1)
+    expect(@item.meta.count).to match(1)
+  end
+
+  it 'can be used to create a new module' do
+    expect(Narra::Core.generators).to include(Narra::Generators::Testing)
   end
 end

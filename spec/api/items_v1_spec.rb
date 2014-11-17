@@ -92,23 +92,7 @@ describe Narra::API::Modules::ItemsV1 do
 
     describe 'POST /v1/items/new' do
       it 'creates new item' do
-        post '/v1/items/new', {name: 'test', url: 'test', collection: 'test'}
-
-        # check response status
-        expect(response.status).to match(401)
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data
-        expect(data['status']).to match('ERROR')
-        expect(data['message']).to match('Not Authenticated')
-      end
-    end
-
-    describe 'POST /v1/items/[:name]/generate' do
-      it 'runs generators over specified item' do
-        post '/v1/items/' + @item.name + '/generate', {generators: [:testing]}
+        post '/v1/items/new', {url: 'test', collection: 'test'}
 
         # check response status
         expect(response.status).to match(401)
@@ -190,23 +174,7 @@ describe Narra::API::Modules::ItemsV1 do
 
     describe 'POST /v1/items/new' do
       it 'creates new item' do
-        post '/v1/items/new' + '?token=' + @unroled_token, {name: 'test', url: 'test', collection: 'test'}
-
-        # check response status
-        expect(response.status).to match(403)
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data
-        expect(data['status']).to match('ERROR')
-        expect(data['message']).to match('Not Authorized')
-      end
-    end
-
-    describe 'POST /v1/items/[:name]/generate' do
-      it 'runs generators over specified item' do
-        post '/v1/items/' + @item_admin.name + '/generate?token=' + @author_token, {generators: [:testing]}
+        post '/v1/items/new' + '?token=' + @unroled_token, {url: 'test', collection: 'test'}
 
         # check response status
         expect(response.status).to match(403)
@@ -307,7 +275,7 @@ describe Narra::API::Modules::ItemsV1 do
     describe 'POST /v1/items/new' do
       it 'creates new item' do
         # send request
-        post '/v1/items/new' + '?token=' + @author_token, {name: 'test_item', url: 'http://test', collection: @collection_01.name, metadata: {meta_01: 'Meta 01', meta_02: 'Meta 02'}}
+        post '/v1/items/new' + '?token=' + @author_token, {url: 'http://test', collection: @collection_01._id.to_s, metadata: {meta_01: 'Meta 01', meta_02: 'Meta 02'}}
 
         # check response status
         expect(response.status).to match(201)
@@ -323,31 +291,7 @@ describe Narra::API::Modules::ItemsV1 do
         expect(data['status']).to match('OK')
         expect(data['item']['name']).to match('test_item')
         expect(data['item']['url']).to match('http://test')
-        expect(data['item']['metadata'].count).to match(6)
-      end
-    end
-
-    describe 'POST /v1/items/[:name]/generate' do
-      it 'runs generators over specified item' do
-        post '/v1/items/' + @item.name + '/generate?token=' + @author_token, {generators: [:testing]}
-
-        # check response status
-        expect(response.status).to match(201)
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data format
-        expect(data).to have_key('status')
-        expect(data).to have_key('events')
-
-        # check received data
-        expect(data['status']).to match('OK')
-        expect(data['events'].count).to match(1)
-        expect(data['events'][0]).to have_key('message')
-        expect(data['events'][0]).to have_key('status')
-        expect(data['events'][0]['status']).to match('pending')
-        expect(@item.meta.count).to match(1)
+        expect(data['item']['metadata'].count).to match(9)
       end
     end
 

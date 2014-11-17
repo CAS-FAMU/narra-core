@@ -16,11 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>
+# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-:concurrency: 4
-:queues:
-  - transcodes
-  - generators
-  - synthesizers
+FactoryGirl.define do
+  factory :junction do
+    sequence(:weight) { 1.00 }
+
+    trait :generic do
+      sequence(:synthesizer) { :generic }
+    end
+  end
+end

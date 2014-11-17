@@ -16,11 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>
+# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-:concurrency: 4
-:queues:
-  - transcodes
-  - generators
-  - synthesizers
+require 'spec_helper'
+
+describe Junction do
+  it "can be instantiated" do
+    expect(FactoryGirl.build(:junction)).to be_an_instance_of(Junction)
+  end
+
+  it "can be saved successfully" do
+    expect(FactoryGirl.create(:junction, synthesizer: :generic)).to be_persisted
+  end
+end

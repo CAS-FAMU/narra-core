@@ -19,16 +19,41 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-Narra::Tools::Settings.defaults[:storage_temp] = '/opt/narra/temp'
-Narra::Tools::Settings.defaults[:storage_local_path] = '/opt/narra/storage'
-Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://storage.narra.dev'
+require 'uri'
 
-Narra::Tools::Settings.defaults[:thumbnail_resolution] = '350x250'
+module Narra
+  module Connectors
+    class Direct < Narra::SPI::Connector
 
-Narra::Tools::Settings.defaults[:video_proxy_extension] = 'webm'
-Narra::Tools::Settings.defaults[:video_proxy_lq_resolution] = '320x180'
-Narra::Tools::Settings.defaults[:video_proxy_lq_bitrate] = '300'
-Narra::Tools::Settings.defaults[:video_proxy_hq_resolution] = '1280x720'
-Narra::Tools::Settings.defaults[:video_proxy_hq_bitrate] = '1200'
+      # Set title and description fields
+      @identifier = :direct
+      @title = 'Direct Connector'
+      @description = 'Direct connector uses direct http links to files'
 
-Narra::Tools::Settings.defaults[:items_probe_interval] = 1.minute.to_s
+      def self.valid?(url)
+        url.start_with?('http://') and (url.end_with?('.webm') or url.end_with?('.mp4') or url.end_with?('.mov'))
+      end
+
+      def initialization
+        @uri = URI.parse(@url)
+        @name = File.basename(@uri.path).split('.').first
+      end
+
+      def name
+        @name
+      end
+
+      def type
+        :video
+      end
+
+      def metadata
+        []
+      end
+
+      def download_url
+        @url
+      end
+    end
+  end
+end

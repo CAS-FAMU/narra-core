@@ -25,10 +25,4 @@ unless Rails.env.test?
 
   # start new scheduler thread
   scheduler = Rufus::Scheduler.new
-
-  # probe items to generate metada
-  scheduler.every Integer(Narra::Tools::Settings.items_probe_interval) do
-    # run items probe
-    Item.generate
-  end
 end

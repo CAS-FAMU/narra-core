@@ -22,7 +22,6 @@
 class Item
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Narra::Tools::Probeable
 
   # Fields
   field :name, type: String
@@ -71,9 +70,13 @@ class Item
     Narra::Storage::ITEMS.directories.get(self._id.to_s)
   end
 
-  # Probe only the self object
-  def probe
+  def generate
     Item.generate(self)
+  end
+
+  def prepared?
+    # This has to be overridden in descendants
+    return false
   end
 
   # Static methods

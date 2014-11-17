@@ -26,7 +26,7 @@ class Meta
   # Fields
   field :name, type: String
   field :content, type: String
-  field :generator, type: String
+  field :generator, type: Symbol
 
   # Relations
   belongs_to :item, class_name: "Item", autosave: true, inverse_of: :meta

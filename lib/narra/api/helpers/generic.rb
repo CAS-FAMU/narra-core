@@ -36,14 +36,14 @@ module Narra
           # get items
           items = params[:owner].nil? ? model.limit(params[:limit]) : model.where(owner: ::User.find(params[:owner])).limit(params[:limit])
           # present
-          present_ok(Narra::Tools::Class.class_name_to_s(model).pluralize.to_sym, present(items, with: entity))
+          present_ok(Narra::Extensions::Class.class_name_to_s(model).pluralize.to_sym, present(items, with: entity))
         end
 
         # Generic method for returning of the specific object based on the owner
         def return_one(model, entity, key, authorization = [], authentication = true)
           return_one_custom(model, key, authorization, authentication) do |object|
             # present
-            present_ok(Narra::Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
+            present_ok(Narra::Extensions::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
           end
         end
 
@@ -77,9 +77,23 @@ module Narra
             # probe
             object.probe if object.is_a? Narra::Tools::Probeable
             # present
-            present_ok(Narra::Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
+            present_ok(Narra::Extensions::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
           else
             error_already_exists!
+          end
+        end
+
+        def new_one_custom(model, entity, authorization = [], authentication = true)
+          auth!(authorization, authentication)
+            # object specified code
+            object = yield if block_given?
+          if not object.nil?
+            # probe
+            object.probe if object.is_a? Narra::Tools::Probeable
+            # present
+            present_ok(Narra::Extensions::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
+          else
+            error_unknown!
           end
         end
 
@@ -100,7 +114,7 @@ module Narra
             # probe
             object.probe if object.is_a? Narra::Tools::Probeable
             # present
-            present_ok(Narra::Tools::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
+            present_ok(Narra::Extensions::Class.class_name_to_sym(model), present(object, with: entity, type: :detail))
           end
         end
 

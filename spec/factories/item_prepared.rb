@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2013 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,11 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>
+# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-:concurrency: 4
-:queues:
-  - transcodes
-  - generators
-  - synthesizers
+FactoryGirl.define do
+  factory :item_prepared do
+    sequence(:name) {|n| "test_item_prepared_#{n}" }
+    sequence(:url) {|n| "url://test_item_prepared_url_#{n}" }
+  end
+end

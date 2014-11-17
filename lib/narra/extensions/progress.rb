@@ -19,8 +19,21 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-:concurrency: 4
-:queues:
-  - transcodes
-  - generators
-  - synthesizers
+module Narra
+  module Extensions
+    module Progress
+
+      def set_progress(progress)
+        # cache progress locally
+        @progress ||= 0.0
+        # if changed more than 5% push it
+        if (progress - @progress) >= 0.05
+          # update event
+          Event.find(@event_id).set_progress(progress)
+          # update cache
+          @progress = progress
+        end
+      end
+    end
+  end
+end

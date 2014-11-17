@@ -29,10 +29,12 @@ describe Narra::Core do
     @collection = FactoryGirl.create(:collection, owner: @author_user, projects: [@project])
     # create item
     @item = FactoryGirl.create(:item, collections: [@collection], owner: @author_user)
+    # create item prepared
+    @item_prepared= FactoryGirl.create(:item_prepared, collections: [@collection], owner: @author_user)
   end
 
   it 'should return all active generators' do
-    expect(Narra::Core.generators.count).to match(3)
+    expect(Narra::Core.generators.count).to match(1)
   end
 
   it 'should return all active synthesizers' do
@@ -40,14 +42,16 @@ describe Narra::Core do
   end
 
   it 'should process item to generate new metadata' do
-    # generate through main process
+    # generate through main process with non prepared item
     Narra::Core.generate(@item, [:testing])
+    # generate through main process with prepared item
+    Narra::Core.generate(@item_prepared, [:testing])
     # validation
-    expect(@item.meta.count).to match(1)
+    expect(@item.meta.count).to match(0)
+    expect(@item_prepared.meta.count).to match(1)
   end
 
   it 'should process item to generate new junction' do
-    # generate through main process
     Narra::Core.synthesize(@project, [:testing])
     # validation
     expect(@project.junctions.count).to match(1)

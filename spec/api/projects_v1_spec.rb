@@ -222,22 +222,6 @@ describe Narra::API::Modules::ProjectsV1 do
         expect(data['message']).to match('Not Authenticated')
       end
     end
-
-    describe 'POST /v1/projects/[:name]/synthesize' do
-      it 'runs synthesizers over specified project' do
-        post '/v1/projects/' + @project.name + '/synthesize', {synthesizers: [:testing]}
-
-        # check response status
-        expect(response.status).to match(401)
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data
-        expect(data['status']).to match('ERROR')
-        expect(data['message']).to match('Not Authenticated')
-      end
-    end
   end
 
   context 'not authorized' do
@@ -388,22 +372,6 @@ describe Narra::API::Modules::ProjectsV1 do
     describe 'GET /v1/projects/[:name]/sequences/[:id]' do
       it 'returns projects sequence' do
         get '/v1/projects/' + @project_admin.name + '/sequences/' + @sequence_admin._id + '?token=' + @author_token
-
-        # check response status
-        expect(response.status).to match(403)
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data
-        expect(data['status']).to match('ERROR')
-        expect(data['message']).to match('Not Authorized')
-      end
-    end
-
-    describe 'POST /v1/projects/[:name]/synthesize' do
-      it 'runs synthesizers over specified project' do
-        post '/v1/projects/' + @project_admin.name + '/synthesize?token=' + @author_token, {synthesizers: [:testing]}
 
         # check response status
         expect(response.status).to match(403)
@@ -633,30 +601,6 @@ describe Narra::API::Modules::ProjectsV1 do
         expect(data['status']).to match('OK')
         expect(data['sequence']['id']).to match(@sequence._id.to_s)
         expect(data['sequence']).to have_key('playlist')
-      end
-    end
-
-    describe 'POST /v1/projects/[:name]/synthesize' do
-      it 'runs synthesizers over specified project' do
-        post '/v1/projects/' + @project.name + '/synthesize?token=' + @author_token, {synthesizers: [:testing]}
-
-        # check response status
-        expect(response.status).to match(201)
-
-        # parse response
-        data = JSON.parse(response.body)
-
-        # check received data format
-        expect(data).to have_key('status')
-        expect(data).to have_key('events')
-
-        # check received data
-        expect(data['status']).to match('OK')
-        expect(data['events'].count).to match(1)
-        expect(data['events'][0]).to have_key('message')
-        expect(data['events'][0]).to have_key('status')
-        expect(data['events'][0]['status']).to match('pending')
-        expect(@project.junctions.count).to match(1)
       end
     end
   end

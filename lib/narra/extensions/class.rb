@@ -20,7 +20,7 @@
 #
 
 module Narra
-  module Tools
+  module Extensions
     module Class
 
       def self.class_name_to_s(class_object)

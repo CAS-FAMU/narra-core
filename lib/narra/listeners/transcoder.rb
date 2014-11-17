@@ -19,8 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-:concurrency: 4
-:queues:
-  - transcodes
-  - generators
-  - synthesizers
+module Narra
+  module Listeners
+    class Transcoder
+
+      def narra_transcoder_done(options)
+        # get item
+        item = Item.find(options[:item])
+        # run generators
+        item.generate
+      end
+    end
+  end
+end

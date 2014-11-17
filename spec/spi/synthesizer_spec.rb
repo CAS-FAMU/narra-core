@@ -21,7 +21,7 @@
 
 require 'spec_helper'
 
-describe Narra::Synthesizers::Modules::Generic do
+describe Narra::SPI::Synthesizer do
   before(:each) do
     # create project
     @project = FactoryGirl.create(:project, owner: @author_user)
@@ -34,23 +34,23 @@ describe Narra::Synthesizers::Modules::Generic do
   end
 
   it 'can be instantiated' do
-    expect(Narra::Synthesizers::Modules::Generic.new(@project, @event)).to be_an_instance_of(Narra::Synthesizers::Modules::Generic)
+    expect(Narra::SPI::Synthesizer.new(@project, @event)).to be_an_instance_of(Narra::SPI::Synthesizer)
   end
 
   it 'should have accessible fields' do
-    expect(Narra::Synthesizers::Modules::Generic.identifier).to match(:generic)
-    expect(Narra::Synthesizers::Modules::Generic.title).to match('Generic')
-    expect(Narra::Synthesizers::Modules::Generic.description).to match('Generic Synthesizer')
+    expect(Narra::SPI::Synthesizer.identifier).to match(:generic)
+    expect(Narra::SPI::Synthesizer.title).to match('Generic')
+    expect(Narra::SPI::Synthesizer.description).to match('Generic Synthesizer')
   end
 
   it 'can add junction to the project' do
     # add meta
-    Narra::Synthesizers::Modules::Generic.new(@project, @event).add_junction(weight: 1.0, out: @item)
+    Narra::SPI::Synthesizer.new(@project, @event).add_junction(weight: 1.0, out: @item)
     # validation
     expect(@project.junctions.count).to match(1)
   end
 
   it 'can be used to create a new module' do
-    expect(Narra::Core.synthesizers).to include(Narra::Synthesizers::Modules::Testing)
+    expect(Narra::Core.synthesizers).to include(Narra::Synthesizers::Testing)
   end
 end

@@ -43,6 +43,10 @@ module Narra
           error_generic!('Parameter Missing', 404, {parameter: parameter})
         end
 
+        def error_unknown!
+          error_generic!('Unknown Error', 404)
+        end
+
         def error_generic!(message, status, optional = {})
           error!({status: 'ERROR', message: message}.merge(optional), status)
         end

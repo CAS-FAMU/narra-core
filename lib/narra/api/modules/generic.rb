@@ -23,7 +23,7 @@ module Narra
   module API
     module Modules
       class Generic < Grape::API
-        include Narra::Tools::Class
+        include Narra::Extensions::Class
 
         # Generic API module to be implemented
       end

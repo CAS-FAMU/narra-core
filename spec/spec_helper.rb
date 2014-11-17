@@ -95,28 +95,71 @@ RSpec.configure do |config|
     # get admin token and user
     @admin_token = CGI::escape(Base64.urlsafe_encode64(admin_hash['uid']))
     @admin_user = User.find_by(name: 'Admin')
+    @admin_user.update_attributes(username: 'admin')
     # get author token and user
     @author_token = CGI::escape(Base64.urlsafe_encode64(author_hash['uid']))
     @author_user = User.find_by(name: 'Author')
+    @author_user.update_attributes(username: 'author')
     # get guest token and user
     @unroled_token = CGI::escape(Base64.urlsafe_encode64(unroled_hash['uid']))
     @unroled_user = User.find_by(name: 'Unroled')
+    @unroled_user.update_attributes(username: 'unroled')
     @unroled_user.roles = []
     @unroled_user.save
+
+    # testing item prepared
+    class ItemPrepared < Item
+      def prepared?
+        return true
+      end
+    end
+
+    # testing connector
+    module Narra
+      module Connectors
+        class Testing < Narra::SPI::Connector
+          # Set title and description fields
+          @identifier = :testing
+          @title = 'Testing'
+          @description = 'Testing Connector'
+
+          def self.valid?(url)
+            url.end_with?('test')
+          end
+
+          def name
+            'test_item'
+          end
+
+          def type
+            :video
+          end
+
+          def metadata
+            [
+                { name: 'meta_03', content: 'Meta 03' },
+                { name: 'meta_04', content: 'Meta 04' }
+            ]
+          end
+        end
+      end
+    end
 
     # testing generator
     module Narra
       module Generators
-        module Modules
-          class Testing < Narra::Generators::Modules::Generic
-            # Set title and description fields
-            @identifier = :testing
-            @title = 'Testing'
-            @description = 'Testing Metadata Generator'
+        class Testing < Narra::SPI::Generator
+          # Set title and description fields
+          @identifier = :testing
+          @title = 'Testing'
+          @description = 'Testing Metadata Generator'
 
-            def generate
-              add_meta(name: 'test', content: 'test')
-            end
+          def self.valid?(item_to_check)
+            return true
+          end
+
+          def generate
+            add_meta(name: 'test', content: 'test')
           end
         end
       end
@@ -125,16 +168,14 @@ RSpec.configure do |config|
     # testing synthesizer
     module Narra
       module Synthesizers
-        module Modules
-          class Testing < Narra::Synthesizers::Modules::Generic
-            # Set title and description fields
-            @identifier = :testing
-            @title = 'Testing'
-            @description = 'Testing Metadata Synthesizer'
+        class Testing < Narra::SPI::Synthesizer
+          # Set title and description fields
+          @identifier = :testing
+          @title = 'Testing'
+          @description = 'Testing Metadata Synthesizer'
 
-            def synthesize
-              add_junction(weight: 1.0, out: @project.items.last)
-            end
+          def synthesize
+            add_junction(weight: 1.0, out: @project.items.last)
           end
         end
       end

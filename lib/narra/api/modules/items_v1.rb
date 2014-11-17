@@ -42,29 +42,22 @@ module Narra
 
           desc "Create new item."
           post 'new' do
-            required_attributes! [:name, :url, :collection]
-            new_one(Item, Narra::API::Entities::Item, :name, {name: params[:name], url: params[:url], owner: current_user}, [:admin, :author]) do |item|
-              # check for the collection if any
-              collection = Collection.find_by(name: params[:collection]) unless params[:collection].nil?
-              # authorize the owner
-              if !collection.nil?
-                authorize!([:author], collection)
-                # add into collection if authorized
-                item.collections << collection unless params[:collection].nil?
-              end
-              # create source metadata from essential fields
-              item.meta << Meta.new(name: 'name', content: params[:name], generator: :source)
-              item.meta << Meta.new(name: 'url', content: params[:url], generator: :source)
-              item.meta << Meta.new(name: 'collection', content: params[:collection], generator: :source)
-              item.meta << Meta.new(name: 'owner', content: current_user.name, generator: :source)
-              # parse metadata if exists
+            required_attributes! [:url, :collection]
+            new_one_custom(Item, Narra::API::Entities::Item, [:admin, :author]) do
+              # trying to get collection
+              collection = Collection.find(params[:collection])
+              # input metadata container
+              metadata = []
+              # check for metadata
               if !params[:metadata].nil? && !params[:metadata].empty?
                 # iterate through hash
                 params[:metadata].each do |key, value|
                   # store new source metadata
-                  item.meta << Meta.new(name: key, content: value, generator: :source)
+                  metadata << {name: key, content: value}
                 end
               end
+              # add new item
+              Narra::Core.add_item(params[:url], current_user, collection, metadata)
             end
           end
 
@@ -76,17 +69,6 @@ module Narra
           desc "Delete a specific item."
           get ':name/delete' do
             delete_one(Item, :name, [:admin, :author])
-          end
-
-          desc "Run generator over specified item"
-          post ':name/generate' do
-            required_attributes! [:generators]
-            return_one_custom(Item, :name, [:admin, :author]) do |item|
-              # Process item
-              events = Narra::Core.generate(item, params[:generators])
-              # Present event
-              present_ok(:events, present(events, with: Narra::API::Entities::Event))
-            end
           end
 
           desc "Return item's events."

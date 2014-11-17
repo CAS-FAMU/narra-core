@@ -19,8 +19,32 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-:concurrency: 4
-:queues:
-  - transcodes
-  - generators
-  - synthesizers
+class Video < Item
+  include Narra::Extensions::Thumbnail
+
+  # Helper methods
+  def proxy_lq
+    @proxy_lq_file ||= storage.files.get(_id.to_s + '_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension)
+  end
+
+  def proxy_hq
+    @proxy_hq_file ||= storage.files.get(_id.to_s + '_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension)
+  end
+
+  def url_proxy_lq
+    proxy_lq.public_url
+  end
+
+  def url_proxy_hq
+    proxy_hq.public_url
+  end
+
+  # Return as an array
+  def items
+    [self]
+  end
+
+  def prepared?
+    !proxy_hq.nil? && !proxy_lq.nil?
+  end
+end

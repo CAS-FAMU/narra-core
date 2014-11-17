@@ -25,6 +25,7 @@ class Junction
 
   # Fields
   field :weight, type: Float
+  field :synthesizer, type: Symbol
 
   # Project relation
   belongs_to :project, class_name: 'Project', autosave: true, inverse_of: :junctions

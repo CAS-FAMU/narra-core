@@ -29,7 +29,7 @@ module Narra
           # get the first item available
           item = self.items.first
           # get the first thumbnail if available
-          thumbnails = item.meta.generators([:thumbnail], false) unless item.nil?
+          thumbnails = item.meta.where(name: 'thumbnail_01') unless item.nil?
           # get the content if available
           @thumbnail = thumbnails.first.content unless thumbnails.nil? || thumbnails.empty?
         end

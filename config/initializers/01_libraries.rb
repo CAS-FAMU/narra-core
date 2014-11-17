@@ -24,10 +24,14 @@ Dir[Rails.root + 'lib/narra/api/modules/**/*.rb'].each do |file|
   require file
 end
 
-Dir[Rails.root + 'lib/narra/generators/modules/**/*.rb'].each do |file|
+Dir[Rails.root + 'lib/narra/generators/**/*.rb'].each do |file|
   require file
 end
 
-Dir[Rails.root + 'lib/narra/synthesizers/modules/**/*.rb'].each do |file|
+Dir[Rails.root + 'lib/narra/synthesizers/**/*.rb'].each do |file|
+  require file
+end
+
+Dir[Rails.root + 'lib/narra/connectors/**/*.rb'].each do |file|
   require file
 end

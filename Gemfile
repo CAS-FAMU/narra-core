@@ -21,7 +21,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.6'
+gem 'rails', '4.1.7'
 gem 'jquery-rails'
 gem 'thin'
 gem 'mongoid'
@@ -37,6 +37,7 @@ gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
 gem 'fog'
+gem 'wisper'
 
 # SYNTESIZERS
 # EDL Synthesizer Modules dependencies

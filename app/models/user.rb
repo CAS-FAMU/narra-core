@@ -24,6 +24,7 @@ class User
   include Mongoid::Timestamps
 
   # Fields
+  field :username, type: String
   field :name, type: String
   field :email, type: String
   field :roles, type: Array, default: []
@@ -40,6 +41,9 @@ class User
 
   # Identity Relations
   has_many :identities, dependent: :destroy
+
+  # Validations
+  validate :username, uniqueness: true
 
   # Check if the user has certain role
   def is?(roles_check = [])
