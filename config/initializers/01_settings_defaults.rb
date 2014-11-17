@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-Narra::Tools::Settings.defaults[:storage_temp] = '/opt/narra/temp'
+Narra::Tools::Settings.defaults[:storage_temp] = '/tmp/narra'
 Narra::Tools::Settings.defaults[:storage_local_path] = '/opt/narra/storage'
 Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://storage.narra.dev'
 
