@@ -23,9 +23,18 @@ module Narra
   module API
     class Mounter < Grape::API
 
+      format :json
+
+      helpers Narra::API::Helpers::Error
+
       # Mount all the API modules
       Narra::API::Modules::Generic.descendants.each do |api|
         mount(api)
+      end
+
+      # Catch all not resolved request and return not found error answer
+      route :any, '*path' do
+        error_not_found!
       end
     end
   end

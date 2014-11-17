@@ -28,7 +28,7 @@ class Junction
   field :synthesizer, type: Symbol
 
   # Project relation
-  belongs_to :project, class_name: 'Project', autosave: true, inverse_of: :junctions
+  belongs_to :project, autosave: true, inverse_of: :junctions
 
   # Item Relations
   belongs_to :in, class_name: 'Item', autosave: true, inverse_of: :out

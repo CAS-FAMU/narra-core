@@ -43,7 +43,7 @@ module Narra
           desc "Return logged user in the current session."
           get 'me' do
             auth!
-            present_ok(:user, present(current_user, with: Narra::API::Entities::User))
+            present_ok(current_user, User, Narra::API::Entities::User)
           end
 
           desc "Signout logged user in the current session."
@@ -58,7 +58,7 @@ module Narra
           desc "Return roles."
           get 'roles' do
             auth! [:admin]
-            present_ok(:roles, present(User.all_roles))
+            present_ok_generic(:roles, present(User.all_roles))
           end
 
           desc "Return a specific user."

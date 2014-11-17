@@ -23,9 +23,9 @@ module Narra
   class Core
 
     # Add item into the NARRA
-    def self.add_item(url, user, collection, metadata = [])
+    def self.add_item(url, user, library, metadata = [])
       # input check
-      return if url.nil? || user.nil? || collection.nil?
+      return if url.nil? || user.nil? || library.nil?
 
       # connector container
       connector = nil
@@ -49,7 +49,7 @@ module Narra
       case connector.type
         when :video
           # create specific item
-          item = Video.new(name: connector.name, url: url, owner: user)
+          item = Video.new(name: connector.name, url: url, owner: user, library: library)
           # push specific metadata
           item.meta << Meta.new(name: 'type', content: :video, generator: :source)
       end
@@ -57,7 +57,7 @@ module Narra
       # create source metadata from essential fields
       item.meta << Meta.new(name: 'name', content: connector.name, generator: :source)
       item.meta << Meta.new(name: 'url', content: url, generator: :source)
-      item.meta << Meta.new(name: 'collection', content: collection.name, generator: :source)
+      item.meta << Meta.new(name: 'library', content: library.name, generator: :source)
       item.meta << Meta.new(name: 'owner', content: user.name, generator: :source)
 
       # parse metadata from connector if exists
@@ -71,7 +71,6 @@ module Narra
       end
 
       # save item
-      item.collections << collection
       item.save!
 
       # start transcode process if video

@@ -22,7 +22,7 @@
 module Narra
   module API
     module Modules
-      class CollectionsV1 < Narra::API::Modules::Generic
+      class LibrariesV1 < Narra::API::Modules::Generic
 
         version 'v1', :using => :path
         format :json
@@ -33,56 +33,56 @@ module Narra
         helpers Narra::API::Helpers::Generic
         helpers Narra::API::Helpers::Attributes
 
-        resource :collections do
+        resource :libraries do
 
-          desc "Return all collections."
+          desc 'Return all libraries.'
           get do
-            return_many(Collection, Narra::API::Entities::Collection, [:admin, :author])
+            return_many(Library, Narra::API::Entities::Library, [:admin, :author])
           end
 
-          desc "Create new collection."
+          desc 'Create new library.'
           post 'new' do
             required_attributes! [:name, :title]
-            new_one(Collection, Narra::API::Entities::Collection, :name, {name: params[:name], title: params[:title], description: params[:description], owner: current_user}, [:admin, :author]) do |collection|
+            new_one(Library, Narra::API::Entities::Library, :name, {name: params[:name], title: params[:title], description: params[:description], owner: current_user}, [:admin, :author]) do |library|
               # check for the project if any
               project = Project.find_by(name: params[:project]) unless params[:project].nil?
               # authorize the owner
               if !project.nil?
                 authorize!([:author], project)
                 # update projects if authorized
-                collection.projects << project
+                library.projects << project
               end
             end
           end
 
-          desc "Return a specific collection."
+          desc 'Return a specific library.'
           get ':name' do
-            return_one(Collection, Narra::API::Entities::Collection, :name, [:admin, :author])
+            return_one(Library, Narra::API::Entities::Library, :name, [:admin, :author])
           end
 
-          desc "Update a specific collection."
+          desc 'Update a specific library.'
           post ':name/update' do
-            update_one(Collection, Narra::API::Entities::Collection, :name, [:admin, :author]) do |collection|
-              collection.update_attributes(title: params[:title]) unless params[:title].nil?
-              collection.update_attributes(description: params[:description]) unless params[:description].nil?
+            update_one(Library, Narra::API::Entities::Library, :name, [:admin, :author]) do |library|
+              library.update_attributes(title: params[:title]) unless params[:title].nil?
+              library.update_attributes(description: params[:description]) unless params[:description].nil?
             end
           end
 
-          desc "Delete a specific collection."
+          desc 'Delete a specific library.'
           get ':name/delete' do
-            delete_one(Collection, :name, [:admin, :author])
+            delete_one(Library, :name, [:admin, :author])
           end
 
-          desc "Return a specific collection's items."
+          desc 'Return a specific library items.'
           get ':name/items' do
             auth! [:admin, :author]
             # get user
-            collection = Collection.find_by(name: params[:name])
+            library = Library.find_by(name: params[:name])
             # present or not found
-            if (collection.nil?)
+            if (library.nil?)
               error_not_found!
             else
-              present_ok(:items, present(collection.items.limit(params[:limit]), with: Narra::API::Entities::Item))
+              present_ok(library.items.limit(params[:limit]), Item, Narra::API::Entities::Item)
             end
           end
         end

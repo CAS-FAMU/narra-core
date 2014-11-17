@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,17 +16,22 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
+module Narra
+  module API
+    module Entities
+      class Item < Narra::API::Entities::Item
 
-describe Collection do
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:collection)).to be_an_instance_of(Collection)
-  end
+        expose :video_proxy_hq, :if => {:type => :detail_video} do |model, options|
+          model.url_proxy_lq
+        end
 
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:collection)).to be_persisted
+        expose :video_proxy_lq, :if => {:type => :detail_video} do |model, options|
+          model.url_proxy_hq
+        end
+      end
+    end
   end
 end

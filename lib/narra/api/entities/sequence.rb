@@ -28,7 +28,7 @@ module Narra
           model._id.to_s
         end
         expose :name
-        expose :playlist, :if => {:type => :detail}
+        expose :playlist, :if => {:type => :detail_sequence}
       end
     end
   end

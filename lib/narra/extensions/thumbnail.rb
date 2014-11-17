@@ -24,17 +24,21 @@ module Narra
     module Thumbnail
 
       def thumbnail
+        thumbnails.first unless thumbnails.nil?
+      end
+
+      def thumbnails
         # get thumbnail if not resolved yet
-        if @thumbnail.nil?
+        if @thumbnails.nil?
           # get the first item available
           item = self.items.first
           # get the first thumbnail if available
-          thumbnails = item.meta.where(name: 'thumbnail_01') unless item.nil?
+          thumbnails = item.meta.where(name: /thumbnail/i) unless item.nil?
           # get the content if available
-          @thumbnail = thumbnails.first.content unless thumbnails.nil? || thumbnails.empty?
+          @thumbnails = thumbnails.collect { |thumbnail| thumbnail.content } unless thumbnails.nil? || thumbnails.empty?
         end
         # return thumbnail
-        @thumbnail
+        @thumbnails
       end
     end
   end

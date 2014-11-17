@@ -27,6 +27,6 @@ describe Project do
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:project)).to be_persisted
+    expect(FactoryGirl.create(:project, owner: @author_user)).to be_persisted
   end
 end

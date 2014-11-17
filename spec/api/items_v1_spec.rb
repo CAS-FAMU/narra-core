@@ -24,18 +24,18 @@ require 'spec_helper'
 
 describe Narra::API::Modules::ItemsV1 do
   before(:each) do
-    # create collection
-    @collection_01 = FactoryGirl.create(:collection, owner: @author_user)
-    @collection_02 = FactoryGirl.create(:collection, owner: @author_user)
+    # create libraries
+    @library_01 = FactoryGirl.create(:library, owner: @author_user)
+    @library_02 = FactoryGirl.create(:library, owner: @author_user)
 
     # create metadata
     @meta_src_01 = FactoryGirl.create(:meta, :source)
     @meta_src_02 = FactoryGirl.create(:meta, :source)
 
     # create items
-    @item = FactoryGirl.create(:item, collections: [@collection_01], owner: @author_user)
-    @item_admin = FactoryGirl.create(:item, collections: [@collection_02], owner: @admin_user)
-    @item_meta = FactoryGirl.create(:item, collections: [@collection_02], meta: [@meta_src_01, @meta_src_02], owner: @author_user)
+    @item = FactoryGirl.create(:item, library: @library_01, owner: @author_user)
+    @item_admin = FactoryGirl.create(:item, library: @library_02, owner: @admin_user)
+    @item_meta = FactoryGirl.create(:item, library: @library_02, meta: [@meta_src_01, @meta_src_02], owner: @author_user)
 
     # create events
     @event = FactoryGirl.create(:event, item: @item)
@@ -92,7 +92,7 @@ describe Narra::API::Modules::ItemsV1 do
 
     describe 'POST /v1/items/new' do
       it 'creates new item' do
-        post '/v1/items/new', {url: 'test', collection: 'test'}
+        post '/v1/items/new', {url: 'test', library: 'test'}
 
         # check response status
         expect(response.status).to match(401)
@@ -174,7 +174,7 @@ describe Narra::API::Modules::ItemsV1 do
 
     describe 'POST /v1/items/new' do
       it 'creates new item' do
-        post '/v1/items/new' + '?token=' + @unroled_token, {url: 'test', collection: 'test'}
+        post '/v1/items/new' + '?token=' + @unroled_token, {url: 'test', library: 'test'}
 
         # check response status
         expect(response.status).to match(403)
@@ -275,7 +275,7 @@ describe Narra::API::Modules::ItemsV1 do
     describe 'POST /v1/items/new' do
       it 'creates new item' do
         # send request
-        post '/v1/items/new' + '?token=' + @author_token, {url: 'http://test', collection: @collection_01._id.to_s, metadata: {meta_01: 'Meta 01', meta_02: 'Meta 02'}}
+        post '/v1/items/new' + '?token=' + @author_token, {url: 'http://test', library: @library_01._id.to_s, metadata: {meta_01: 'Meta 01', meta_02: 'Meta 02'}}
 
         # check response status
         expect(response.status).to match(201)

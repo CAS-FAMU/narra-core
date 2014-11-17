@@ -32,10 +32,10 @@ class Event
   field :broadcasts, type: Array, default: []
 
   # item relation
-  belongs_to :item, class_name: 'Item', autosave: true, inverse_of: :events
+  belongs_to :item, autosave: true, inverse_of: :events
 
   # project relation
-  belongs_to :project, class_name: 'Item', autosave: true, inverse_of: :events
+  belongs_to :project, autosave: true, inverse_of: :events
 
   # callbacks
   before_destroy :broadcast_events

@@ -28,10 +28,10 @@ class Sequence
   field :playlist, type: Array, default: []
 
   # Relations
-  belongs_to :project, class_name: 'Project', autosave: true, inverse_of: :sequences
+  belongs_to :project, autosave: true, inverse_of: :sequences
 
   # Validations
-  validate :name, presence: true
+  validates_presence_of :name
 
   # Logic
   def add(item = nil)

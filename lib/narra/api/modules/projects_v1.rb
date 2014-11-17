@@ -68,15 +68,15 @@ module Narra
             delete_one(Project, :name, [:admin, :author])
           end
 
-          desc "Add or remove collections"
-          post ':name/collections/:action' do
-            required_attributes! [:collections]
+          desc "Add or remove libraries"
+          post ':name/libraries/:action' do
+            required_attributes! [:libraries]
             update_one(Project, Narra::API::Entities::Project, :name, [:admin, :author]) do |project|
-              params[:collections].each do |collection|
+              params[:libraries].each do |library|
                 if params[:action] == 'add'
-                  project.collections << Collection.find_by(name: collection)
+                  project.libraries << Library.find_by(name: library)
                 elsif params[:action] == 'remove'
-                  project.collections.delete(Collection.find_by(name: collection))
+                  project.libraries.delete(Library.find_by(name: library))
                 end
               end
             end
@@ -85,7 +85,7 @@ module Narra
           desc "Return project's items."
           get ':name/items' do
             return_one_custom(Project, :name, [:admin, :author]) do |project|
-              present_ok(:items, present(project.items.limit(params[:limit]), with: Narra::API::Entities::Item))
+              present_ok(project.items.limit(params[:limit]), Item, Narra::API::Entities::Item)
             end
           end
 
@@ -93,7 +93,7 @@ module Narra
           get ':name/items/:item' do
             return_one_custom(Project, :name, [:admin, :author]) do |project|
               # Get item
-              items = Item.where(name: params[:item]).any_in(collection_ids: project.collection_ids)
+              items = Item.where(name: params[:item]).any_in(library_id: project.library_ids)
               # Check for the first and the last
               items |= [project.items.first] if params[:item].equal?('first')
               items |= [project.items.last] if params[:item].equal?('last')
@@ -101,7 +101,7 @@ module Narra
               if items.empty?
                 error_not_found!
               else
-                present_ok(:item, present(items.first, with: Narra::API::Entities::Item, type: :detail, project: project))
+                present_ok(items.first, Item, Narra::API::Entities::Item, 'detail', project: project)
               end
             end
           end
@@ -109,7 +109,7 @@ module Narra
           desc "Return project's sequences."
           get ':name/sequences' do
             return_one_custom(Project, :name, [:admin, :author]) do |project|
-              present_ok(:sequences, present(project.sequences.limit(params[:limit]), with: Narra::API::Entities::Sequence))
+              present_ok(project.sequences.limit(params[:limit]), Sequence, Narra::API::Entities::Sequence)
             end
           end
 
@@ -122,7 +122,7 @@ module Narra
               if sequences.empty?
                 error_not_found!
               else
-                present_ok(:sequence, present(sequences.first, with: Narra::API::Entities::Sequence, type: :detail))
+                present_ok(sequences.first, Sequence, Narra::API::Entities::Sequence, 'detail')
               end
             end
           end

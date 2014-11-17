@@ -22,16 +22,16 @@
 module Narra
   module API
     module Entities
-      class Collection < Grape::Entity
+      class Library < Grape::Entity
 
         expose :id do |model, options|
           model._id.to_s
         end
-        expose :name, :title, :description, :thumbnail
+        expose :name, :title, :description, :thumbnails
         expose :owner do |model, options|
-          { id: model.owner._id.to_s, name: model.owner.name}
+          { username: model.owner.username, name: model.owner.name}
         end
-        expose :projects, format_with: :projects, :if => {:type => :detail}
+        expose :projects, format_with: :projects, :if => {:type => :detail_library}
 
         format_with :projects do |projects|
           projects.collect { |project| {id: project._id.to_s, name: project.name, title: project.title, owner: {id: project.owner._id.to_s, name: project.owner.name}} }

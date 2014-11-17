@@ -43,7 +43,7 @@ module Narra
           desc "Return defaults."
           get 'defaults' do
             auth!
-            present_ok(:defaults, Narra::Tools::Settings.defaults)
+            present_ok_generic(:defaults, Narra::Tools::Settings.defaults)
           end
 
           desc "Return a specific setting."
@@ -55,7 +55,7 @@ module Narra
             if (setting.nil?)
               error_not_found
             else
-              present_ok(:setting, present({name: params[:name], value: setting}))
+              present_ok_generic(:setting, present({name: params[:name], value: setting}))
             end
           end
 

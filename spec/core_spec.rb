@@ -25,12 +25,12 @@ describe Narra::Core do
   before(:each) do
     # create project
     @project = FactoryGirl.create(:project, owner: @author_user)
-    # create collection
-    @collection = FactoryGirl.create(:collection, owner: @author_user, projects: [@project])
+    # create library
+    @library = FactoryGirl.create(:library, owner: @author_user, projects: [@project])
     # create item
-    @item = FactoryGirl.create(:item, collections: [@collection], owner: @author_user)
+    @item = FactoryGirl.create(:item, library: @library, owner: @author_user)
     # create item prepared
-    @item_prepared= FactoryGirl.create(:item_prepared, collections: [@collection], owner: @author_user)
+    @item_prepared= FactoryGirl.create(:item_prepared, library: @library, owner: @author_user)
   end
 
   it 'should return all active generators' do

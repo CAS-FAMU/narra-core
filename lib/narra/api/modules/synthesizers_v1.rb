@@ -38,7 +38,7 @@ module Narra
           get do
             auth! [:admin, :author]
             # present
-            present_ok(:synthesizers, present(Narra::Core.synthesizers))
+            present_ok_generic(:synthesizers, present(Narra::Core.synthesizers))
           end
         end
       end

@@ -27,11 +27,11 @@ module Narra
         expose :id do |model, options|
           model._id.to_s
         end
-        expose :name, :title, :description, :generators, :thumbnail
+        expose :name, :title, :description, :generators, :thumbnails
         expose :owner do |model, options|
-          { id: model.owner._id.to_s, name: model.owner.name}
+          { username: model.owner.username, name: model.owner.name}
         end
-        expose :collections, using: Narra::API::Entities::Collection, :if => {:type => :detail}
+        expose :libraries, using: Narra::API::Entities::Library, :if => {:type => :detail_project}
       end
     end
   end

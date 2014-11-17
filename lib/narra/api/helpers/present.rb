@@ -24,12 +24,20 @@ module Narra
     module Helpers
       module Present
 
-        def present_ok(key = nil, object = nil)
-          if key.nil? || object.nil?
+        def present_ok(object = nil, model = nil, entity = nil, type = '', options = {})
+          if model.nil?
             present({:status => 'OK'})
           else
-            present({:status => 'OK', key => object})
+            a = object.kind_of?(Array)
+            # prepare key
+            key = (object.kind_of?(Array) || object.kind_of?(Mongoid::Criteria)) ? Narra::Extensions::Class.class_name_to_s(model).pluralize.to_sym : Narra::Extensions::Class.class_name_to_sym(model)
+            # present
+            present({:status => 'OK', key => present(object, options.merge({with: entity, type: (type + '_' + Narra::Extensions::Class.class_name_to_s(model)).to_sym}))})
           end
+        end
+
+        def present_ok_generic(key, object)
+          present({:status => 'OK', key => object})
         end
       end
     end

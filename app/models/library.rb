@@ -19,10 +19,26 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-FactoryGirl.define do
-  factory :collection do
-    sequence(:name) {|n| "test_collection_#{n}" }
-    sequence(:title) {|n| "Test Collection #{n}" }
-    sequence(:description) {|n| "Description for the Test Collection #{n}" }
-  end
+class Library
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  include Narra::Extensions::Thumbnail
+
+  # Fields
+  field :name, type: String
+  field :title, type: String
+  field :description, type: String
+
+  # User Relations
+  belongs_to :owner, class_name: 'User', autosave: true, inverse_of: :libraries
+
+  # Item Relations
+  has_many :items, autosave: true, dependent: :destroy, inverse_of: :library
+
+  # Project Relations
+  has_and_belongs_to_many :projects, autosave: true, inverse_of: :libraries
+
+  # Validations
+  validates_uniqueness_of :name
+  validates_presence_of :name, :title, :owner_id
 end

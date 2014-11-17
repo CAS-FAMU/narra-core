@@ -35,17 +35,17 @@ module Narra
 
         resource :items do
 
-          desc "Return all items."
+          desc 'Return all items.'
           get do
             return_many(Item, Narra::API::Entities::Item, [:admin])
           end
 
-          desc "Create new item."
+          desc 'Create new item.'
           post 'new' do
-            required_attributes! [:url, :collection]
+            required_attributes! [:url, :library]
             new_one_custom(Item, Narra::API::Entities::Item, [:admin, :author]) do
-              # trying to get collection
-              collection = Collection.find(params[:collection])
+              # trying to get library
+              library = Library.find(params[:library])
               # input metadata container
               metadata = []
               # check for metadata
@@ -57,24 +57,24 @@ module Narra
                 end
               end
               # add new item
-              Narra::Core.add_item(params[:url], current_user, collection, metadata)
+              Narra::Core.add_item(params[:url], current_user, library, metadata)
             end
           end
 
-          desc "Return a specific item."
+          desc 'Return a specific item.'
           get ':id' do
             return_one(Item, Narra::API::Entities::Item, :id, [:admin, :author])
           end
 
-          desc "Delete a specific item."
+          desc 'Delete a specific item.'
           get ':id/delete' do
             delete_one(Item, :id, [:admin, :author])
           end
 
-          desc "Return item's events."
+          desc 'Return item events.'
           get ':id/events' do
             return_one_custom(Item, :id, [:admin, :author]) do |item|
-              present_ok(:events, present(item.events, with: Narra::API::Entities::Event))
+              present_ok(item.events, Event, Narra::API::Entities::Event)
             end
           end
         end

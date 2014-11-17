@@ -20,7 +20,6 @@
 #
 
 class Video < Item
-  include Narra::Extensions::Thumbnail
 
   # Helper methods
   def proxy_lq
@@ -37,11 +36,6 @@ class Video < Item
 
   def url_proxy_hq
     proxy_hq.public_url
-  end
-
-  # Return as an array
-  def items
-    [self]
   end
 
   def prepared?

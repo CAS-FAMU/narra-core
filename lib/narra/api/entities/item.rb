@@ -27,12 +27,21 @@ module Narra
         expose :id do |model, options|
           model._id.to_s
         end
-        expose :name, :url
+        expose :name, :url, :thumbnails
+        expose :prepared do |model, options|
+          model.prepared?
+        end
         expose :owner do |model, options|
           { username: model.owner.username, name: model.owner.name}
         end
-        expose :collections, using: Narra::API::Entities::Collection, :if => {:type => :detail}
-        expose :meta, as: :metadata, :if => {:type => :detail} do |item, options|
+
+        expose :library, format_with: :library, :if => {:type => :detail_item}
+
+        format_with :library do |library|
+          {id: library._id.to_s, name: library.name}
+        end
+
+        expose :meta, as: :metadata, :if => {:type => :detail_item} do |item, options|
           # get scoped metadata for item
           meta = options[:project].nil? ? item.meta : ::Meta.where(item: item).generators(options[:project].generators)
           # format them

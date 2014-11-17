@@ -22,22 +22,22 @@
 
 require 'spec_helper'
 
-describe Narra::API::Modules::CollectionsV1 do
+describe Narra::API::Modules::LibrariesV1 do
   before(:each) do
     # create items
     @item_01 = FactoryGirl.create(:item, owner: @author_user)
     @item_02 = FactoryGirl.create(:item, owner: @author_user)
 
-    # create collection
-    @collection = FactoryGirl.create(:collection, owner: @author_user)
-    @collection_admin = FactoryGirl.create(:collection, owner: @admin_user)
-    @collection_items = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01, @item_02])
+    # create libraries
+    @library = FactoryGirl.create(:library, owner: @author_user)
+    @library_admin = FactoryGirl.create(:library, owner: @admin_user)
+    @library_items = FactoryGirl.create(:library, owner: @author_user, items: [@item_01, @item_02])
   end
 
   context 'not authenticated' do
-    describe 'GET /v1/colletions' do
-      it 'returns collections' do
-        get '/v1/collections'
+    describe 'GET /v1/libraries' do
+      it 'returns libraries' do
+        get '/v1/libraries'
 
         # check response status
         expect(response.status).to match(401)
@@ -51,9 +51,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'GET /v1/collections/[:name]' do
-      it 'returns a specific collection' do
-        get '/v1/collections/' + @collection.name
+    describe 'GET /v1/libraries/[:name]' do
+      it 'returns a specific library' do
+        get '/v1/libraries/' + @library.name
 
         # check response status
         expect(response.status).to match(401)
@@ -67,9 +67,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'GET /v1/collections/[:name]/items' do
-      it 'returns a specific collection items' do
-        get '/v1/collections/' + @collection.name + '/items'
+    describe 'GET /v1/libraries/[:name]/items' do
+      it 'returns a specific library items' do
+        get '/v1/libraries/' + @library.name + '/items'
 
         # check response status
         expect(response.status).to match(401)
@@ -83,9 +83,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'GET /v1/collections/[:name]/delete' do
-      it 'deletes a specific collection' do
-        get '/v1/collections/' + @collection.name + '/delete'
+    describe 'GET /v1/libraries/[:name]/delete' do
+      it 'deletes a specific library' do
+        get '/v1/libraries/' + @library.name + '/delete'
 
         # check response status
         expect(response.status).to match(401)
@@ -99,9 +99,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'POST /v1/collections/new' do
-      it 'creates new collection' do
-        post '/v1/collections/new', {name: 'test', title: 'test'}
+    describe 'POST /v1/libraries/new' do
+      it 'creates new library' do
+        post '/v1/libraries/new', {name: 'test', title: 'test'}
 
         # check response status
         expect(response.status).to match(401)
@@ -115,9 +115,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'POST /v1/collections/[:name]/update' do
-      it 'updates specific collection' do
-        post '/v1/collections/' + @collection.name + '/update', {title: 'test'}
+    describe 'POST /v1/libraries/[:name]/update' do
+      it 'updates specific library' do
+        post '/v1/libraries/' + @library.name + '/update', {title: 'test'}
 
         # check response status
         expect(response.status).to match(401)
@@ -133,9 +133,9 @@ describe Narra::API::Modules::CollectionsV1 do
   end
 
   context 'not authorized' do
-    describe 'GET /v1/colletions' do
-      it 'returns collections' do
-        get '/v1/collections' + '?token=' + @unroled_token
+    describe 'GET /v1/libraries' do
+      it 'returns libraries' do
+        get '/v1/libraries' + '?token=' + @unroled_token
 
         # check response status
         expect(response.status).to match(403)
@@ -149,9 +149,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'GET /v1/collections/[:name]' do
-      it 'returns a specific collection' do
-        get '/v1/collections/' + @collection.name + '?token=' + @unroled_token
+    describe 'GET /v1/libraries/[:name]' do
+      it 'returns a specific library' do
+        get '/v1/libraries/' + @library.name + '?token=' + @unroled_token
 
         # check response status
         expect(response.status).to match(403)
@@ -165,9 +165,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'GET /v1/collections/[:name]/items' do
-      it 'returns a specific collection items' do
-        get '/v1/collections/' + @collection.name + '/items?token=' + @unroled_token
+    describe 'GET /v1/libraries/[:name]/items' do
+      it 'returns a specific library items' do
+        get '/v1/libraries/' + @library.name + '/items?token=' + @unroled_token
 
         # check response status
         expect(response.status).to match(403)
@@ -182,9 +182,9 @@ describe Narra::API::Modules::CollectionsV1 do
     end
 
 
-    describe 'GET /v1/collections/[:name]/delete' do
-      it 'deletes a specific collection' do
-        get '/v1/collections/' + @collection_admin.name + '/delete' + '?token=' + @author_token
+    describe 'GET /v1/libraries/[:name]/delete' do
+      it 'deletes a specific library' do
+        get '/v1/libraries/' + @library_admin.name + '/delete' + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(403)
@@ -198,9 +198,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'POST /v1/collections/new' do
-      it 'creates new collection' do
-        post '/v1/collections/new' + '?token=' + @unroled_token, {name: 'test', title: 'test'}
+    describe 'POST /v1/libraries/new' do
+      it 'creates new library' do
+        post '/v1/libraries/new' + '?token=' + @unroled_token, {name: 'test', title: 'test'}
 
         # check response status
         expect(response.status).to match(403)
@@ -214,9 +214,9 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'POST /v1/collections/[:name]/update' do
-      it 'updates specific collection' do
-        post '/v1/collections/' + @collection_admin.name + '/update' + '?token=' + @author_token, {title: 'test'}
+    describe 'POST /v1/libraries/[:name]/update' do
+      it 'updates specific library' do
+        post '/v1/libraries/' + @library_admin.name + '/update' + '?token=' + @author_token, {title: 'test'}
 
         # check response status
         expect(response.status).to match(403)
@@ -232,10 +232,10 @@ describe Narra::API::Modules::CollectionsV1 do
   end
 
   context 'authenticated & authorized' do
-    describe 'GET /v1/colletions' do
-      it 'returns collections' do
+    describe 'GET /v1/libraries' do
+      it 'returns libraries' do
         # send request
-        get '/v1/collections' + '?token=' + @author_token
+        get '/v1/libraries' + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(200)
@@ -245,18 +245,18 @@ describe Narra::API::Modules::CollectionsV1 do
 
         # check received data format
         expect(data).to have_key('status')
-        expect(data).to have_key('collections')
+        expect(data).to have_key('libraries')
 
         # check received data
         expect(data['status']).to match('OK')
-        expect(data['collections'].count).to match(3)
+        expect(data['libraries'].count).to match(3)
       end
     end
 
-    describe 'GET /v1/collections/[:name]' do
-      it 'returns a specific collection' do
+    describe 'GET /v1/libraries/[:name]' do
+      it 'returns a specific library' do
         # send request
-        get '/v1/collections/' + @collection.name + '?token=' + @author_token
+        get '/v1/libraries/' + @library.name + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(200)
@@ -266,19 +266,19 @@ describe Narra::API::Modules::CollectionsV1 do
 
         # check received data format
         expect(data).to have_key('status')
-        expect(data).to have_key('collection')
+        expect(data).to have_key('library')
 
         # check received data
         expect(data['status']).to match('OK')
-        expect(data['collection']['name']).to match(@collection.name)
-        expect(data['collection']['title']).to match(@collection.title)
+        expect(data['library']['name']).to match(@library.name)
+        expect(data['library']['title']).to match(@library.title)
       end
     end
 
-    describe 'GET /v1/collections/[:name]/items' do
-      it 'returns a specific collection items' do
+    describe 'GET /v1/libraries/[:name]/items' do
+      it 'returns a specific library items' do
         # send request
-        get '/v1/collections/' + @collection_items.name + '/items?token=' + @author_token
+        get '/v1/libraries/' + @library_items.name + '/items?token=' + @author_token
 
         # check response status
         expect(response.status).to match(200)
@@ -296,10 +296,10 @@ describe Narra::API::Modules::CollectionsV1 do
       end
     end
 
-    describe 'GET /v1/collections/[:name]/delete' do
-      it 'deletes a specific collection' do
+    describe 'GET /v1/libraries/[:name]/delete' do
+      it 'deletes a specific library' do
         # send request
-        get '/v1/collections/' + @collection.name + '/delete' + '?token=' + @author_token
+        get '/v1/libraries/' + @library.name + '/delete' + '?token=' + @author_token
 
         # check response status
         expect(response.status).to match(200)
@@ -314,14 +314,14 @@ describe Narra::API::Modules::CollectionsV1 do
         expect(data['status']).to match('OK')
 
         # check if the user is deleted
-        expect(Collection.find(@collection._id)).to be_nil
+        expect(Library.find(@library._id)).to be_nil
       end
     end
 
-    describe 'POST /v1/collections/new' do
-      it 'creates new collection' do
+    describe 'POST /v1/libraries/new' do
+      it 'creates new library' do
         # send request
-        post '/v1/collections/new' + '?token=' + @author_token, {name: 'test_collection', title: 'Test Collection', description: 'Test Collection Description'}
+        post '/v1/libraries/new' + '?token=' + @author_token, {name: 'test_library', title: 'Test Library', description: 'Test Library Description'}
 
         # check response status
         expect(response.status).to match(201)
@@ -331,21 +331,21 @@ describe Narra::API::Modules::CollectionsV1 do
 
         # check received data format
         expect(data).to have_key('status')
-        expect(data).to have_key('collection')
+        expect(data).to have_key('library')
 
         # check received data
         expect(data['status']).to match('OK')
-        expect(data['collection']['name']).to match('test_collection')
-        expect(data['collection']['title']).to match('Test Collection')
-        expect(data['collection']['description']).to match('Test Collection Description')
-        expect(data['collection']['owner']['name']).to match(@author_user.name)
+        expect(data['library']['name']).to match('test_library')
+        expect(data['library']['title']).to match('Test Library')
+        expect(data['library']['description']).to match('Test Library Description')
+        expect(data['library']['owner']['name']).to match(@author_user.name)
       end
     end
 
-    describe 'POST /v1/collections/[:name]/update' do
-      it 'updates specific collection' do
+    describe 'POST /v1/libraries/[:name]/update' do
+      it 'updates specific library' do
         # send request
-        post '/v1/collections/' + @collection.name + '/update' + '?token=' + @author_token, {title: 'Test Collection Updated', description: 'Test Collection Description Updated'}
+        post '/v1/libraries/' + @library.name + '/update' + '?token=' + @author_token, {title: 'Test Library Updated', description: 'Test Library Description Updated'}
 
         # check response status
         expect(response.status).to match(201)
@@ -355,14 +355,14 @@ describe Narra::API::Modules::CollectionsV1 do
 
         # check received data format
         expect(data).to have_key('status')
-        expect(data).to have_key('collection')
+        expect(data).to have_key('library')
 
         # check received data
         expect(data['status']).to match('OK')
-        expect(data['collection']['name']).to match(@collection.name)
-        expect(data['collection']['title']).to match('Test Collection Updated')
-        expect(data['collection']['description']).to match('Test Collection Description Updated')
-        expect(data['collection']['owner']['name']).to match(@author_user.name)
+        expect(data['library']['name']).to match(@library.name)
+        expect(data['library']['title']).to match('Test Library Updated')
+        expect(data['library']['description']).to match('Test Library Description Updated')
+        expect(data['library']['owner']['name']).to match(@author_user.name)
       end
     end
   end

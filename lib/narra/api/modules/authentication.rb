@@ -48,7 +48,7 @@ module Narra
             end
 
             # return token in json when request is not from browser
-            present_ok(:token, @token)
+            present_ok_generic(:token, @token)
           end
         end
       end

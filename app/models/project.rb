@@ -28,7 +28,7 @@ class Project
   field :name, type: String
   field :title, type: String
   field :description, type: String
-  field :generators, type: Array, default: [:videoinfo, :thumbnail]
+  field :generators, type: Array, default: []
   field :synthesizers, type: Array, default: []
 
   # User Relations
@@ -36,21 +36,21 @@ class Project
   has_and_belongs_to_many :authors, class_name: 'User', autosave: true, inverse_of: :contributions
 
   # Collection Relations
-  has_and_belongs_to_many :collections, class_name: 'Collection', autosave: true, inverse_of: :projects
+  has_and_belongs_to_many :libraries, autosave: true, inverse_of: :projects
 
   # Junction Relations
-  has_many :junctions, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :project
-  has_many :sequences, class_name: 'Sequence', autosave: true, dependent: :destroy, inverse_of: :project
+  has_many :junctions, autosave: true, dependent: :destroy, inverse_of: :project
+  has_many :sequences, autosave: true, dependent: :destroy, inverse_of: :project
 
   # Event Relations
-  has_many :events, class_name: 'Event', autosave: true, dependent: :destroy, inverse_of: :project
+  has_many :events, autosave: true, dependent: :destroy, inverse_of: :project
 
   # Validations
-  validate :name, presence: true, uniqueness: true
-  validate :title, presence: true
+  validates_uniqueness_of :name
+  validates_presence_of :name, :title, :owner_id
 
   # Return all project items
   def items
-    Item.any_in(collection_ids: self.collection_ids)
+    Item.any_in(library_id: self.library_ids)
   end
 end

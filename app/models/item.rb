@@ -22,6 +22,7 @@
 class Item
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Narra::Extensions::Thumbnail
 
   # Fields
   field :name, type: String
@@ -30,23 +31,22 @@ class Item
   # User Relations
   belongs_to :owner, class_name: 'User', autosave: true, inverse_of: :items
 
-  # Collection Relations
-  has_and_belongs_to_many :collections, class_name: 'Collection', autosave: true, inverse_of: :items
+  # Library Relations
+  belongs_to :library, autosave: true, inverse_of: :items
 
   # Meta Relations
-  has_many :meta, class_name: 'Meta', autosave: true, dependent: :destroy, inverse_of: :item
+  has_many :meta, autosave: true, dependent: :destroy, inverse_of: :item
 
   # Junction Relations
   has_many :in, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :out
   has_many :out, class_name: 'Junction', autosave: true, dependent: :destroy, inverse_of: :in
 
   # Event Relations
-  has_many :events, class_name: 'Event', autosave: true, dependent: :destroy, inverse_of: :item
+  has_many :events, autosave: true, dependent: :destroy, inverse_of: :item
 
   # Validations
-  validate :name, presence: true
-  validate :url, presence: true
-  validates_uniqueness_of :name , scope: :collection_id
+  validates_uniqueness_of :name, scope: :library_id
+  validates_presence_of :name, :url, :owner_id
 
   # Hooks
   # Create item's directory after create
@@ -73,6 +73,11 @@ class Item
 
   def generate
     Item.generate(self)
+  end
+
+  # Return as an array
+  def items
+    [self]
   end
 
   def prepared?

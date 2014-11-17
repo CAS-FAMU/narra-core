@@ -19,26 +19,10 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Collection
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  include Narra::Extensions::Thumbnail
-
-  # Fields
-  field :name, type: String
-  field :title, type: String
-  field :description, type: String
-
-  # User Relations
-  belongs_to :owner, class_name: "User", autosave: true, inverse_of: :collections
-
-  # Project Relations
-  has_and_belongs_to_many :projects, class_name: "Project", autosave: true, inverse_of: :collections
-
-  # Item Relations
-  has_and_belongs_to_many :items, class_name: "Item", autosave: true, inverse_of: :collections
-
-  # Validations
-  validate :name, presence: true, uniqueness: true
-  validate :title, presence: true
+FactoryGirl.define do
+  factory :library do
+    sequence(:name) {|n| "test_library_#{n}" }
+    sequence(:title) {|n| "Test Library #{n}" }
+    sequence(:description) {|n| "Description for the Test Library #{n}" }
+  end
 end

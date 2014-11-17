@@ -28,5 +28,5 @@ class Cache
   field :data, type: Hash, default: Hash.new
 
   # Validations
-  validates :name, presence: true
+  validates_uniqueness_of :name
 end

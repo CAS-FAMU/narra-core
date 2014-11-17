@@ -25,10 +25,10 @@ describe Narra::SPI::Synthesizer do
   before(:each) do
     # create project
     @project = FactoryGirl.create(:project, owner: @author_user)
-    # create collection
-    @collection = FactoryGirl.create(:collection, owner: @author_user, projects: [@project])
+    # create library
+    @library = FactoryGirl.create(:library, owner: @author_user, projects: [@project])
     # create item
-    @item = FactoryGirl.create(:item, collections: [@collection], owner: @author_user)
+    @item = FactoryGirl.create(:item, library: @library, owner: @author_user)
     # create event
     @event = FactoryGirl.create(:event, project: @project)
   end

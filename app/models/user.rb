@@ -30,14 +30,14 @@ class User
   field :roles, type: Array, default: []
 
   # Project Relations
-  has_many :projects, class_name: "Project", autosave: true, dependent: :destroy, inverse_of: :owner
-  has_and_belongs_to_many :contributions, class_name: "Project", autosave: true, inverse_of: :authors
+  has_many :projects, autosave: true, dependent: :destroy, inverse_of: :owner
+  has_and_belongs_to_many :contributions, class_name: 'Project', autosave: true, inverse_of: :authors
 
   # Collection Relations
-  has_many :collections, class_name: "Collection", autosave: true, inverse_of: :owner
+  has_many :libraries, autosave: true, inverse_of: :owner
 
   # Collection Items
-  has_many :items, class_name: "Item", autosave: true, inverse_of: :owner
+  has_many :items, autosave: true, inverse_of: :owner
 
   # Identity Relations
   has_many :identities, dependent: :destroy

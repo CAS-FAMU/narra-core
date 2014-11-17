@@ -27,19 +27,19 @@ describe Item do
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:item)).to be_persisted
+    expect(FactoryGirl.create(:item, owner: @author_user)).to be_persisted
   end
 
   it "should have storage available" do
     # Temporary item
-    item = FactoryGirl.create(:item)
+    item = FactoryGirl.create(:item, owner: @author_user)
     # Check storage
     expect(item.storage).to be_a_kind_of(Fog::Model)
   end
 
   it "should destroy storage after destroy" do
     # Temporary item
-    item = FactoryGirl.create(:item)
+    item = FactoryGirl.create(:item, owner: @author_user)
     # Store id
     id = item._id.to_s
     # Destroy item

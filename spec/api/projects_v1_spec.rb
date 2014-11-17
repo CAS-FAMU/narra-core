@@ -26,16 +26,19 @@ describe Narra::API::Modules::ProjectsV1 do
   before(:each) do
     # create item
     @item_01 = FactoryGirl.create(:item, owner: @author_user)
+    @item_02 = FactoryGirl.create(:item, owner: @author_user)
+    @item_03 = FactoryGirl.create(:item, owner: @author_user)
+    @item_04 = FactoryGirl.create(:item, owner: @author_user)
 
-    # create collection
-    @collection_01 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
-    @collection_02 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
-    @collection_03 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
-    @collection_04 = FactoryGirl.create(:collection, owner: @author_user, items: [@item_01])
+    # create libraries
+    @library_01 = FactoryGirl.create(:library, owner: @author_user, items: [@item_01])
+    @library_02 = FactoryGirl.create(:library, owner: @author_user, items: [@item_02])
+    @library_03 = FactoryGirl.create(:library, owner: @author_user, items: [@item_03])
+    @library_04 = FactoryGirl.create(:library, owner: @author_user, items: [@item_04])
 
     # create projects for testing purpose
-    @project = FactoryGirl.create(:project, owner: @author_user, collections: [@collection_01, @collection_02])
-    @project_admin = FactoryGirl.create(:project, owner: @admin_user, collections: [@collection_03, @collection_04])
+    @project = FactoryGirl.create(:project, owner: @author_user, libraries: [@library_01, @library_02])
+    @project_admin = FactoryGirl.create(:project, owner: @admin_user, libraries: [@library_03, @library_04])
 
     # create sequences for testing purpose
     @sequence = FactoryGirl.create(:sequence, project: @project)
@@ -127,9 +130,9 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/collections/add' do
-      it 'adds specific collections' do
-        post '/v1/projects/' + @project.name + '/collections/add', {collections: [@collection_03.name]}
+    describe 'POST /v1/projects/[:name]/libraries/add' do
+      it 'adds specific libraries' do
+        post '/v1/projects/' + @project.name + '/libraries/add', {libraries: [@library_03.name]}
 
         # check response status
         expect(response.status).to match(401)
@@ -143,9 +146,9 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/collections/remove' do
-      it 'removes specific collections' do
-        post '/v1/projects/' + @project.name + '/collections/remove', {collections: [@collection_01.name]}
+    describe 'POST /v1/projects/[:name]/libraries/remove' do
+      it 'removes specific libraries' do
+        post '/v1/projects/' + @project.name + '/libraries/remove', {libraries: [@library_01.name]}
 
         # check response status
         expect(response.status).to match(401)
@@ -289,9 +292,9 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/collections/add' do
-      it 'adds specific collections' do
-        post '/v1/projects/' + @project_admin.name + '/collections/add' + '?token=' + @author_token, {collections: [@collection_01.name]}
+    describe 'POST /v1/projects/[:name]/libraries/add' do
+      it 'adds specific libraries' do
+        post '/v1/projects/' + @project_admin.name + '/libraries/add' + '?token=' + @author_token, {libraries: [@library_01.name]}
 
         # check response status
         expect(response.status).to match(403)
@@ -305,9 +308,9 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/collections/remove' do
-      it 'removes specific collections' do
-        post '/v1/projects/' + @project_admin.name + '/collections/remove' + '?token=' + @author_token, {collections: [@collection_03.name]}
+    describe 'POST /v1/projects/[:name]/libraries/remove' do
+      it 'removes specific libraries' do
+        post '/v1/projects/' + @project_admin.name + '/libraries/remove' + '?token=' + @author_token, {libraries: [@library_03.name]}
 
         # check response status
         expect(response.status).to match(403)
@@ -479,10 +482,10 @@ describe Narra::API::Modules::ProjectsV1 do
       end
     end
 
-    describe 'POST /v1/projects/[:name]/collections/add' do
-      it 'adds specific collections' do
+    describe 'POST /v1/projects/[:name]/libraries/add' do
+      it 'adds specific libraries' do
         # send request
-        post '/v1/projects/' + @project.name + '/collections/add' + '?token=' + @author_token, {collections: [@collection_03.name, @collection_04.name]}
+        post '/v1/projects/' + @project.name + '/libraries/add' + '?token=' + @author_token, {libraries: [@library_03.name, @library_04.name]}
 
         # check response status
         expect(response.status).to match(201)
@@ -497,14 +500,14 @@ describe Narra::API::Modules::ProjectsV1 do
         # check received data
         expect(data['status']).to match('OK')
         expect(data['project']['name']).to match(@project.name)
-        expect(data['project']['collections'].count).to match(4)
+        expect(data['project']['libraries'].count).to match(4)
       end
     end
 
-    describe 'POST /v1/projects/[:name]/collections/remove' do
-      it 'removes specific collections' do
+    describe 'POST /v1/projects/[:name]/libraries/remove' do
+      it 'removes specific libraries' do
         # send request
-        post '/v1/projects/' + @project.name + '/collections/remove' + '?token=' + @author_token, {collections: [@collection_01.name, @collection_02.name]}
+        post '/v1/projects/' + @project.name + '/libraries/remove' + '?token=' + @author_token, {libraries: [@library_01.name, @library_02.name]}
 
         # check response status
         expect(response.status).to match(201)
@@ -519,7 +522,7 @@ describe Narra::API::Modules::ProjectsV1 do
         # check received data
         expect(data['status']).to match('OK')
         expect(data['project']['name']).to match(@project.name)
-        expect(data['project']['collections'].count).to match(0)
+        expect(data['project']['libraries'].count).to match(0)
       end
     end
 
@@ -539,7 +542,7 @@ describe Narra::API::Modules::ProjectsV1 do
 
         # check received data
         expect(data['status']).to match('OK')
-        expect(data['items'].count).to match(1)
+        expect(data['items'].count).to match(2)
       end
     end
 

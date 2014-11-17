@@ -19,22 +19,14 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-class Meta
-  include Mongoid::Document
-  include Mongoid::Timestamps
+require 'spec_helper'
 
-  # Fields
-  field :name, type: String
-  field :content, type: String
-  field :generator, type: Symbol
+describe Library do
+  it "can be instantiated" do
+    expect(FactoryGirl.build(:library)).to be_an_instance_of(Library)
+  end
 
-  # Relations
-  belongs_to :item, autosave: true, inverse_of: :meta
-
-  # Validations
-  validates_uniqueness_of :name, :scope => [:generator, :item_id]
-  validates_presence_of :name, :content, :generator
-
-  # Scopes
-  scope :generators, ->(generators, source = true) {any_in(generator: source ? (generators | [:source]) : generators)}
+  it "can be saved successfully" do
+    expect(FactoryGirl.create(:library, owner: @author_user)).to be_persisted
+  end
 end
