@@ -19,19 +19,6 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-module Narra
-  module API
-    module Entities
-      class Item < Narra::API::Entities::Item
-
-        expose :video_proxy_hq, :if => {:type => :detail_video} do |model, options|
-          model.url_proxy_lq
-        end
-
-        expose :video_proxy_lq, :if => {:type => :detail_video} do |model, options|
-          model.url_proxy_hq
-        end
-      end
-    end
-  end
-end
+:concurrency: 4
+:queues:
+  - synthesizers

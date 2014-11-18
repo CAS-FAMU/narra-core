@@ -21,7 +21,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.7'
+gem 'rails', '4.1.8'
 gem 'jquery-rails'
 gem 'thin'
 gem 'mongoid'
@@ -36,7 +36,7 @@ gem 'sinatra', :require => false
 gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
-gem 'fog'
+gem 'fog', '1.24.0'
 gem 'wisper'
 
 # SYNTESIZERS

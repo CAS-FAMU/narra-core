@@ -24,6 +24,7 @@ module Narra
     # Generic template for generators
     class Generator
       include Narra::Extensions::Class
+      include Narra::Extensions::Meta
 
       # Attributes for human readable format
       # These have to be imlemented in descendants
@@ -42,20 +43,8 @@ module Narra
         @event = event
       end
 
-      def add_meta(options)
-        # input check
-        return if options[:name].nil? || options[:content].nil?
-        # push new meta entry
-        @item.meta << Meta.new({generator: self.class.identifier}.merge(options))
-        # save item
-        @item.save
-      end
-
-      def get_meta(options)
-        # do a query
-        result = @item.meta.where(options)
-        # check and return
-        result.empty? ? nil : (result.count > 1 ? result : result.first)
+      def item
+        @item
       end
 
       #

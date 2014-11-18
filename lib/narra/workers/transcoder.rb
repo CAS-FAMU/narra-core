@@ -27,6 +27,7 @@ module Narra
     class Transcoder
       include Sidekiq::Worker
       include Narra::Extensions::Progress
+      include Narra::Extensions::Meta
 
       sidekiq_options :queue => :transcodes
 
@@ -34,17 +35,16 @@ module Narra
         # check
         return if options['item'].nil? || options['identifier'].nil? || options['event'].nil?
         # get event
-        event = Event.find(options['event'])
-        # set event id for Progress extension
-        @event_id = options['event']
+        @event = Event.find(options['event'])
         # get item
-        item = Item.find(options['item'])
+        @item = Item.find(options['item'])
+        @item_id = options['item']
         # fire event
-        event.run!
+        @event.run!
         # transcode
         begin
           # temp path
-          raw = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_raw'
+          raw = Narra::Tools::Settings.storage_temp + '/' + @item_id + '_raw'
           # download
           File.open(raw, 'wb') do |file|
             file.write open(options['identifier']).read
@@ -55,70 +55,87 @@ module Narra
           if video.valid?
             # TRANSCODING
             # set up transcode options
-            options_lq = {video_bitrate: Narra::Tools::Settings.video_proxy_lq_bitrate, video_bitrate_tolerance: 100, resolution: Narra::Tools::Settings.video_proxy_lq_resolution}
-            options_hq = {video_bitrate: Narra::Tools::Settings.video_proxy_hq_bitrate, video_bitrate_tolerance: 100, resolution: Narra::Tools::Settings.video_proxy_hq_resolution}
-            # prepare output temp files
-            proxy_lq = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_video_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension
-            proxy_hq = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_video_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension
+            proxy_lq = transcode_object('lq')
+            proxy_hq = transcode_object('hq')
             # start transcode process
-            video.transcode(proxy_lq, options_lq) { |progress| set_progress(Float(progress / 3)) }
-            video.transcode(proxy_hq, options_hq) { |progress| set_progress(Float(0.35 + (progress / 2))) }
+            video.transcode(proxy_lq[:file], proxy_lq[:options]) { |progress| set_progress(Float(progress / 3)) }
+            video.transcode(proxy_hq[:file], proxy_hq[:options]) { |progress| set_progress(Float(0.35 + (progress / 2))) }
             # save into storage
-            item.storage.files.create(key: item._id.to_s + '_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension, body: File.open(proxy_lq), public: true)
-            item.storage.files.create(key: item._id.to_s + '_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension, body: File.open(proxy_hq), public: true)
+            @item.storage.files.create(key: proxy_lq[:key], body: File.open(proxy_lq[:file]), public: true)
+            @item.storage.files.create(key: proxy_hq[:key], body: File.open(proxy_hq[:file]), public: true)
             # clean temp transcodes
-            FileUtils.rm_f(proxy_lq)
-            FileUtils.rm_f(proxy_hq)
+            FileUtils.rm_f([proxy_lq[:file], proxy_hq[:file]])
 
             # THUMBNAILS
-            # create temp files
-            thumb01 = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_thumbnail_01'
-            thumb02 = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_thumbnail_02'
-            thumb03 = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_thumbnail_03'
-            # create screenshots
-            video.screenshot(thumb01, {seek_time: 1.0, resolution: Narra::Tools::Settings.thumbnail_resolution}, preserve_aspect_ratio: :height, validate: false)
-            video.screenshot(thumb02, {seek_time: (video.duration / 2), resolution: Narra::Tools::Settings.thumbnail_resolution}, preserve_aspect_ratio: :height, validate: false)
-            video.screenshot(thumb03, {seek_time: (video.duration - 1), resolution: Narra::Tools::Settings.thumbnail_resolution}, preserve_aspect_ratio: :height, validate: false)
-            # uplad thumbnails to storages
-            thumb01_storage = item.storage.files.create(key: item._id.to_s + '_thumbnail_01.png', body: File.open(thumb01), public: true)
-            thumb02_storage = item.storage.files.create(key: item._id.to_s + '_thumbnail_02.png', body: File.open(thumb02), public: true)
-            thumb03_storage = item.storage.files.create(key: item._id.to_s + '_thumbnail_03.png', body: File.open(thumb03), public: true)
-            # store meta
-            item.meta << Meta.new({generator: :source, name: 'thumbnail_01', content: thumb01_storage.public_url})
-            item.meta << Meta.new({generator: :source, name: 'thumbnail_02', content: thumb02_storage.public_url})
-            item.meta << Meta.new({generator: :source, name: 'thumbnail_03', content: thumb03_storage.public_url})
-            # clean temp
-            FileUtils.rm_f(thumb01)
-            FileUtils.rm_f(thumb02)
-            FileUtils.rm_f(thumb03)
+            # get seek ration
+            ratio = Integer(video.duration / Integer(Narra::Tools::Settings.thumbnail_count))
+            # generate all thumbnails
+            (1..Integer(Narra::Tools::Settings.thumbnail_count)).each do |count|
+              # get thumbnail object
+              thumbnail = thumbnail_object(count * ratio)
+              # generate
+              video.screenshot(thumbnail[:file], thumbnail[:options], preserve_aspect_ratio: :height, validate: false)
+              # copy to storage
+              @item.storage.files.create(key: thumbnail[:key], body: File.open(thumbnail[:file]), public: true)
+              # delete
+              FileUtils.rm_f(thumbnail[:file])
+            end
             # set progress
             set_progress(0.95)
 
             # VIDEOINFO
             # add videoinfo metadata
-            item.meta << Meta.new({generator: :source, name: 'duration', content: video.duration})
-            item.meta << Meta.new({generator: :source, name: 'bitrate', content: video.bitrate})
-            item.meta << Meta.new({generator: :source, name: 'size', content: video.size})
-            item.meta << Meta.new({generator: :source, name: 'video_codec', content: video.video_codec})
-            item.meta << Meta.new({generator: :source, name: 'colorspace', content: video.colorspace})
-            item.meta << Meta.new({generator: :source, name: 'resolution', content: video.resolution})
-            item.meta << Meta.new({generator: :source, name: 'width', content: video.width})
-            item.meta << Meta.new({generator: :source, name: 'height', content: video.height})
-            item.meta << Meta.new({generator: :source, name: 'frame_rate', content: video.frame_rate})
-            item.meta << Meta.new({generator: :source, name: 'audio_codec', content: video.audio_codec})
-            item.meta << Meta.new({generator: :source, name: 'audio_sample_rate', content: video.audio_sample_rate})
-            item.meta << Meta.new({generator: :source, name: 'audio_channels', content: video.audio_channels})
+            add_meta(generator: :source, name: 'duration', content: video.duration)
+            add_meta(generator: :source, name: 'bitrate', content: video.bitrate)
+            add_meta(generator: :source, name: 'size', content: video.size)
+            add_meta(generator: :source, name: 'video_codec', content: video.video_codec)
+            add_meta(generator: :source, name: 'colorspace', content: video.colorspace)
+            add_meta(generator: :source, name: 'resolution', content: video.resolution)
+            add_meta(generator: :source, name: 'width', content: video.width)
+            add_meta(generator: :source, name: 'height', content: video.height)
+            add_meta(generator: :source, name: 'frame_rate', content: video.frame_rate)
+            add_meta(generator: :source, name: 'audio_codec', content: video.audio_codec)
+            add_meta(generator: :source, name: 'audio_sample_rate', content: video.audio_sample_rate)
+            add_meta(generator: :source, name: 'audio_channels', content: video.audio_channels)
             # set progress
             set_progress(1.0)
           end
           # clean temp file provided by connector
           FileUtils.rm_f(raw)
-        rescue
+        rescue => e
           # nothing to do
           # TODO logging system
+          puts e.backtrace
         end
         # event done
-        event.done!
+        @event.done!
+      end
+
+      def item
+        @item
+      end
+
+      def event
+        @event
+      end
+
+      def transcode_object(type)
+        {
+            file: Narra::Tools::Settings.storage_temp + '/' + @item_id + '_video_proxy_' + type + '.' + Narra::Tools::Settings.video_proxy_extension,
+            key: @item_id + '_proxy_' + type + '.' + Narra::Tools::Settings.video_proxy_extension,
+            options: {video_bitrate: Narra::Tools::Settings.get('video_proxy_' + type + '_bitrate'), video_bitrate_tolerance: 100, resolution: Narra::Tools::Settings.get('video_proxy_' + type + '_resolution')}
+        }
+      end
+
+      def thumbnail_object(seek)
+        # convert seek into right format
+        seek_f = '%02d' % seek
+        # return object
+        {
+            file: Narra::Tools::Settings.storage_temp + '/' + @item_id + '_video_thumbnail_' + seek_f,
+            key: @item_id + '_thumbnail_' + seek_f + '.' + Narra::Tools::Settings.thumbnail_extension,
+            options: {seek_time: seek, resolution: Narra::Tools::Settings.thumbnail_resolution}
+        }
       end
     end
   end

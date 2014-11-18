@@ -27,21 +27,36 @@ module Narra
         expose :id do |model, options|
           model._id.to_s
         end
-        expose :name, :url, :thumbnails
+
+        expose :name, :url, :type
+
         expose :prepared do |model, options|
           model.prepared?
         end
+
         expose :owner do |model, options|
           { username: model.owner.username, name: model.owner.name}
         end
 
-        expose :library, format_with: :library, :if => {:type => :detail_item}
+        expose :library, format_with: :library, if: {type: :detail_item}
 
         format_with :library do |library|
           {id: library._id.to_s, name: library.name}
         end
 
-        expose :meta, as: :metadata, :if => {:type => :detail_item} do |item, options|
+        expose :thumbnails, if: lambda { |model, options| !model.thumbnails.nil? && !model.thumbnails.empty? } do |model, options|
+          model.url_thumbnails
+        end
+
+        expose :proxy_hq, if: lambda { |model, options| model.type == :video && model.prepared? } do |model, options|
+          model.url_proxy_lq
+        end
+
+        expose :proxy_lq, if: lambda { |model, options| model.type == :video && model.prepared? } do |model, options|
+          model.url_proxy_hq
+        end
+
+        expose :meta, as: :metadata, if: {type: :detail_item} do |item, options|
           # get scoped metadata for item
           meta = options[:project].nil? ? item.meta : ::Meta.where(item: item).generators(options[:project].generators)
           # format them

@@ -21,22 +21,34 @@
 
 module Narra
   module Extensions
-    module Progress
+    module Meta
 
-      def event
-        # This has to be overridden to return event
+      def item
+        # This has to be overridden to return item
       end
 
-      def set_progress(progress)
-        # cache progress locally
-        @progress ||= 0.0
-        # if changed more than 5% push it
-        if (progress - @progress) >= 0.05
-          # update event
-          event.set_progress(progress)
-          # update cache
-          @progress = progress
+      def add_meta(options)
+        # input check
+        return if options[:name].nil? || options[:content].nil?
+        # check generator
+        if options[:generator].nil?
+          if self.kind_of?(Narra::SPI::Generator)
+            options[:generator] = self.class.identifier
+          else
+            return
+          end
         end
+        # push new meta entry
+        item.meta << ::Meta.new(options)
+        # save item
+        item.save
+      end
+
+      def get_meta(options)
+        # do a query
+        result = item.meta.where(options)
+        # check and return
+        result.empty? ? nil : (result.count > 1 ? result : result.first)
       end
     end
   end

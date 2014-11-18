@@ -23,8 +23,16 @@ module Narra
   module Extensions
     module Thumbnail
 
+      def items
+        # This has to be overridden to return item
+      end
+
       def thumbnail
         thumbnails.first unless thumbnails.nil?
+      end
+
+      def url_thumbnail
+        thumbnail.public_url
       end
 
       def thumbnails
@@ -32,13 +40,15 @@ module Narra
         if @thumbnails.nil?
           # get the first item available
           item = self.items.first
-          # get the first thumbnail if available
-          thumbnails = item.meta.where(name: /thumbnail/i) unless item.nil?
-          # get the content if available
-          @thumbnails = thumbnails.collect { |thumbnail| thumbnail.content } unless thumbnails.nil? || thumbnails.empty?
+          # get all files
+          @thumbnails = item.storage.files.select { |file| file.key.include?('thumbnail') } unless item.nil?
         end
         # return thumbnail
         @thumbnails
+      end
+
+      def url_thumbnails
+        thumbnails.collect { |thumbnail| thumbnail.public_url }
       end
     end
   end

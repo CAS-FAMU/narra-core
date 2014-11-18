@@ -80,6 +80,10 @@ class Item
     [self]
   end
 
+  def type
+    _type.downcase.to_sym
+  end
+
   def prepared?
     # This has to be overridden in descendants
     return false

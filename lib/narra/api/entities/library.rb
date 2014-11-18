@@ -27,10 +27,17 @@ module Narra
         expose :id do |model, options|
           model._id.to_s
         end
-        expose :name, :title, :description, :thumbnails
+
+        expose :name, :title, :description
+
         expose :owner do |model, options|
           { username: model.owner.username, name: model.owner.name}
         end
+
+        expose :thumbnails, if: lambda { |model, options| !model.thumbnails.nil? && !model.thumbnails.empty? } do |model, options|
+          model.url_thumbnails
+        end
+
         expose :projects, format_with: :projects, :if => {:type => :detail_library}
 
         format_with :projects do |projects|
