@@ -24,6 +24,7 @@ module Narra
     module Modules
       class Generic < Grape::API
         include Narra::Extensions::Class
+        use Rack::Session::Cookie
 
         # Generic API module to be implemented
       end

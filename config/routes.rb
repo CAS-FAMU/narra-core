@@ -23,8 +23,12 @@ require 'sidekiq/web'
 
 Narra::Application.routes.draw do
 
-  # Sidekiq monitoring
-  mount Sidekiq::Web => '/sidekiq'
+  constraints(AdminConstraint) do
+    namespace 'service' do
+      # sidekiq monitoring
+      mount Sidekiq::Web => '/workers'
+    end
+  end
 
   # Mount the API root mounter
   mount Narra::API::Mounter => '/'

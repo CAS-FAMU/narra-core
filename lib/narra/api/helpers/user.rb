@@ -23,6 +23,7 @@ module Narra
   module API
     module Helpers
       module User
+
         def authenticate!
           error_not_authenticated! unless current_user
         end
@@ -39,20 +40,22 @@ module Narra
 
         def current_user
           # check for token presence
-          return nil if params[:token].nil?
+          return nil if params[:token].nil? && env['rack.session'][:token].nil?
 
           begin
+            # set token to session
+            env['rack.session'][:token] = params[:token] unless params[:token].nil?
+
             # get uid
-            token = params[:token]
-            uid = Base64::urlsafe_decode64(token)
+            uid = Base64::urlsafe_decode64(env['rack.session'][:token])
 
             # get identity for token
             identity = Identity.where(uid: uid).first
 
             # signout in case non existing identity
-            return nil && signout if identity.nil?
+            raise && signout if identity.nil?
 
-            # get user from token
+            # return user
             @current_user ||= identity.user
           rescue
             return nil
@@ -62,6 +65,8 @@ module Narra
         def signout
           # clean current user
           @current_user = nil
+          # delete session token
+          env['rack.session'][:token] = nil
         end
       end
     end
