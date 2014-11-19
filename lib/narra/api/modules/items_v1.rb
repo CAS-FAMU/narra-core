@@ -74,7 +74,7 @@ module Narra
           desc 'Return item events.'
           get ':id/events' do
             return_one_custom(Item, :id, [:admin, :author]) do |item|
-              present_ok(item.events, Event, Narra::API::Entities::Event)
+              present_ok(item.events, Event, Narra::API::Entities::Event, 'item')
             end
           end
         end

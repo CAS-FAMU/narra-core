@@ -130,8 +130,13 @@ module Narra
     private
 
     def self.process(options)
+      # setup message
+      message = 'narra::' + options[:type].to_s + '::'
+      message += options[:item] unless options[:item].nil?
+      message += options[:project] unless options[:project].nil?
+      message += '::' + options[:identifier].to_s unless options[:type] == :transcoder
       # create an event
-      event = Event.create(message: 'Narra::' + options[:type].to_s + '::' + options[:identifier].to_s,
+      event = Event.create(message: message,
                            item: options[:item].nil? ? nil : Item.find(options[:item]),
                            project: options[:project].nil? ? nil : Project.find(options[:project]),
                            broadcasts: ['narra_' + options[:type].to_s + '_done'])

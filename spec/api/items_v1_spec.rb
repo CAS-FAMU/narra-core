@@ -313,6 +313,7 @@ describe Narra::API::Modules::ItemsV1 do
         expect(data['status']).to match('OK')
         expect(data['events'].count).to match(1)
         expect(data['events'][0]['status']).to match('pending')
+        expect(data['events'][0]).not_to have_key('item')
       end
     end
   end

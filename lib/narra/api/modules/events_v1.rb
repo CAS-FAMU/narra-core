@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2013 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -21,19 +21,24 @@
 
 module Narra
   module API
-    module Entities
-      class Event < Grape::Entity
+    module Modules
+      class EventsV1 < Narra::API::Modules::Generic
 
-        expose :message
-        expose :progress
-        expose :status
+        version 'v1', :using => :path
+        format :json
 
-        expose :item, if: lambda { |model, options| options[:type] == :_event && !model.item.nil? } do |model, options|
-          { id: model.item._id.to_s, name: model.item.name, type: model.item.type }
-        end
+        helpers Narra::API::Helpers::User
+        helpers Narra::API::Helpers::Error
+        helpers Narra::API::Helpers::Present
+        helpers Narra::API::Helpers::Generic
+        helpers Narra::API::Helpers::Attributes
 
-        expose :project, if: lambda { |model, options| options[:type] == :_event && !model.project.nil? } do |model, options|
-          { id: model.project._id.to_s, name: model.project.name }
+        resource :events do
+
+          desc 'Return all events.'
+          get do
+            return_many(Event, Narra::API::Entities::Event, [:admin])
+          end
         end
       end
     end

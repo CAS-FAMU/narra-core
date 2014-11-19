@@ -27,8 +27,8 @@ class Event
 
   # fields
   field :message, type: String
-  field :progress, type: Float
   field :status, type: Symbol
+  field :progress, type: Float, default: 0.0
   field :broadcasts, type: Array, default: []
 
   # item relation
