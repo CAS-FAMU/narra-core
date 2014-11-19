@@ -36,7 +36,7 @@ gem 'sinatra', :require => false
 gem 'eventmachine'
 gem 'omniauth'
 gem 'omniauth-openid'
-gem 'fog', '1.24.0'
+gem 'fog'
 gem 'wisper'
 
 # SYNTESIZERS
