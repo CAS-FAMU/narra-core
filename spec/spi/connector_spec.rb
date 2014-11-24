@@ -19,5 +19,21 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'sidekiq'
-require 'sidekiq/testing/inline'
+require 'spec_helper'
+
+describe Narra::SPI::Connector do
+  before(:each) do
+    # test url
+    @url = 'http://test'
+  end
+
+  it 'can be instantiated' do
+    expect(Narra::SPI::Connector.new(@url)).to be_an_instance_of(Narra::SPI::Connector)
+  end
+
+  it 'should have accessible fields' do
+    expect(Narra::SPI::Connector.identifier).to match(:generic)
+    expect(Narra::SPI::Connector.title).to match('Generic')
+    expect(Narra::SPI::Connector.description).to match('Generic Connector')
+  end
+end

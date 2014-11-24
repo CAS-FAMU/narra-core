@@ -19,5 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'sidekiq'
-require 'sidekiq/testing/inline'
+require 'database_cleaner'
+
+RSpec.configure do |config|
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.orm = "mongoid"
+  end
+
+  config.before(:each) do
+    # clean database
+    DatabaseCleaner.clean
+  end
+end
