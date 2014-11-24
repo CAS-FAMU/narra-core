@@ -31,14 +31,7 @@ describe Narra::Identity do
   end
 
   it "creates from hash" do
-    # clean all temp
-    Narra::User.destroy_all
-    Narra::Identity.destroy_all
-    # testing hashes
-    admin_hash = ActiveSupport::JSON.decode('{"provider":"test","uid":"admin@narra.eu","info":{"name":"Admin","email":"admin@narra.eu"},"credentials":{},"extra":{}}')
-    # create user and its identity
-    Narra::Identity.create_from_hash(admin_hash)
     # expect identity
-    expect(Narra::Identity.all.count).to match(1)
+    expect(Narra::Identity.all.count).to match(3)
   end
 end
