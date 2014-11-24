@@ -19,5 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'wisper'
+
 # Transcode listener fires generation process on the item
 Wisper.subscribe(Narra::Listeners::Transcoder.new, on: :narra_transcoder_done)

@@ -19,38 +19,17 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'rails', '4.1.8'
-gem 'jquery-rails'
-gem 'thin'
-gem 'mongoid'
-gem 'aasm'
-gem 'grape'
-gem 'grape-entity'
-gem 'rack-cors', :require => 'rack/cors'
-gem 'rufus-scheduler'
-gem 'sidekiq'
-gem 'slim'
-gem 'sinatra', :require => false
-gem 'eventmachine'
-gem 'omniauth'
-gem 'omniauth-openid'
-gem 'fog'
-gem 'wisper'
+# Declare your gem's dependencies in narra_core.gemspec.
+# Bundler will treat runtime dependencies like base dependencies, and
+# development dependencies will be added by default to the :development group.
+gemspec
 
-# SYNTESIZERS
-# EDL Synthesizer Modules dependencies
-gem 'edl'
+# Declare any dependencies that are still in development here instead of in
+# your gemspec. These might include edge Rails or gems from your path or
+# Git. Remember to move these dependencies to your gemspec before releasing
+# your gem to rubygems.org.
 
-# GENERATORS
-# Video Info Generator Module dependencies
-gem 'streamio-ffmpeg'
-
-# TESTS
-gem 'rspec-rails', :group => [:test, :development]
-gem 'rspec-mocks', :group => [:test, :development]
-gem 'database_cleaner', :group => :test
-gem 'mongoid-rspec', :group => :test
-gem 'factory_girl_rails', :group => :test
-gem 'codeclimate-test-reporter', :group => :test, :require => nil
+# To use debugger
+# gem 'debugger'

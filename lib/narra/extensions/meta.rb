@@ -39,7 +39,7 @@ module Narra
           end
         end
         # push new meta entry
-        item.meta << ::Meta.new(options)
+        item.meta << Narra::Meta.new(options)
         # save item
         item.save
       end

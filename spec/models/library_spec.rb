@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe Library do
+describe Narra::Library do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:library)).to be_an_instance_of(Library)
+    expect(FactoryGirl.build(:library)).to be_an_instance_of(Narra::Library)
   end
 
   it "can be saved successfully" do

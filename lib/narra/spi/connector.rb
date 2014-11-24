@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'narra/extensions'
+
 module Narra
   module SPI
     # Generic template for generators

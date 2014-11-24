@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe Junction do
+describe Narra::Junction do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:junction)).to be_an_instance_of(Junction)
+    expect(FactoryGirl.build(:junction)).to be_an_instance_of(Narra::Junction)
   end
 
   it "can be saved successfully" do

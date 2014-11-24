@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'sidekiq'
+
 Sidekiq.configure_server do |config|
   config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
 end

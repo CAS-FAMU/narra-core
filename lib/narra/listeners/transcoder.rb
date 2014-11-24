@@ -25,7 +25,7 @@ module Narra
 
       def narra_transcoder_done(options)
         # get item
-        item = Item.find(options[:item])
+        item = Narra::Item.find(options[:item])
         # run generators
         item.generate
       end

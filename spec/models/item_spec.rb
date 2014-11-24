@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe Item do
+describe Narra::Item do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:item)).to be_an_instance_of(Item)
+    expect(FactoryGirl.build(:item)).to be_an_instance_of(Narra::Item)
   end
 
   it "can be saved successfully" do

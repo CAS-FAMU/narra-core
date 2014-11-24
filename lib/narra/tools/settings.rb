@@ -51,7 +51,7 @@ module Narra
         # empty arrya
         results = []
         # iterate and remove prefix
-        Cache.where(name: /#{PREFIX}/i).each do |item|
+        Narra::Cache.where(name: /#{PREFIX}/i).each do |item|
           results << {name: item.name.gsub(/#{PREFIX}/, ''), value: item.data['value']}
         end
 
@@ -90,7 +90,7 @@ module Narra
         # check for cache
         if cached.nil?
           # receive value
-          item = Cache.find_by(name: prefixed)
+          item = Narra::Cache.find_by(name: prefixed)
           # check for existence
           if item.nil?
             defaults[name]
@@ -111,7 +111,7 @@ module Narra
         # add prefix
         prefixed = PREFIX + name
         # receive scope content in case it exists otherwise create a new entry
-        item = Cache.find_or_create_by(name: prefixed)
+        item = Narra::Cache.find_or_create_by(name: prefixed)
         # check if the value is same or not
         if item.data['value'] != value
           # modify hash

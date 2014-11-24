@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe Cache do
+describe Narra::Cache do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:cache)).to be_an_instance_of(Cache)
+    expect(FactoryGirl.build(:cache)).to be_an_instance_of(Narra::Cache)
   end
 
   it "can be saved successfully" do

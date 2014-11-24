@@ -46,7 +46,7 @@ module Narra
         # input check
         return if options[:out].nil? || options[:weight].nil? || !options[:weight].instance_of?(Float)
         # push new junction entry
-        @project.junctions << Junction.new({synthesizer: self.class.identifier, in: @item}.merge(options))
+        @project.junctions << Narra::Junction.new({synthesizer: self.class.identifier, in: @item}.merge(options))
         # save project
         @project.save
       end

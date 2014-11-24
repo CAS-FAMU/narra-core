@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe Event do
+describe Narra::Event do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:event)).to be_an_instance_of(Event)
+    expect(FactoryGirl.build(:event)).to be_an_instance_of(Narra::Event)
   end
 
   it "can be saved successfully" do
@@ -34,29 +34,29 @@ describe Event do
     # create an event
     expect(FactoryGirl.create(:event)).to be_persisted
     # check state
-    expect(Event.first.pending?).to be_truthy
+    expect(Narra::Event.first.pending?).to be_truthy
   end
 
   it "can be run successfully" do
     # create an event
     expect(FactoryGirl.create(:event)).to be_persisted
     # check state
-    expect(Event.first.pending?).to be_truthy
+    expect(Narra::Event.first.pending?).to be_truthy
     # run
-    Event.first.run!
+    Narra::Event.first.run!
     # check state
-    expect(Event.first.running?).to be_truthy
+    expect(Narra::Event.first.running?).to be_truthy
   end
 
   it "can be successfully finished" do
     # create an event
     expect(FactoryGirl.create(:event)).to be_persisted
     # check state
-    expect(Event.first.pending?).to be_truthy
+    expect(Narra::Event.first.pending?).to be_truthy
     # run
-    Event.first.run!
-    Event.first.done!
+    Narra::Event.first.run!
+    Narra::Event.first.done!
     # check event existence
-    expect(Event.all.count).to match(0)
+    expect(Narra::Event.all.count).to match(0)
   end
 end

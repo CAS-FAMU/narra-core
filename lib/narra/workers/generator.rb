@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'sidekiq'
+
 module Narra
   module Workers
     class Generator
@@ -29,9 +31,9 @@ module Narra
         # check
         return if options['item'].nil? || options['identifier'].nil? || options['event'].nil?
         # get event
-        event = Event.find(options['event'])
+        event = Narra::Event.find(options['event'])
         # get item
-        item = Item.find(options['item'])
+        item = Narra::Item.find(options['item'])
         # fire event
         event.run!
         # get generator

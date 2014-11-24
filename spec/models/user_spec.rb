@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe User do
+describe Narra::User do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:user)).to be_an_instance_of(User)
+    expect(FactoryGirl.build(:user)).to be_an_instance_of(Narra::User)
   end
 
   it "can be saved successfully" do
@@ -32,6 +32,6 @@ describe User do
 
   it "creates from hash" do
     # expect 3 users as far as we are using create_from_hash in the spec_helper
-    expect(User.all.count).to match(3)
+    expect(Narra::User.all.count).to match(3)
   end
 end

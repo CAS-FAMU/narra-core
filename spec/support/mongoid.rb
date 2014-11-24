@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'mongoid-rspec'
+
 RSpec.configure do |config|
   config.include Mongoid::Matchers
 end

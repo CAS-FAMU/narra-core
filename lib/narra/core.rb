@@ -19,8 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'narra/extensions'
+require 'narra/spi'
+require 'narra/tools'
+require 'narra/workers'
+
+require 'narra/core/engine'
+require 'narra/core/version'
+
 module Narra
-  class Core
+  module Core
 
     # Add item into the NARRA
     def self.add_item(url, user, library, metadata = [])
@@ -49,25 +57,25 @@ module Narra
       case connector.type
         when :video
           # create specific item
-          item = Video.new(name: connector.name, url: url, owner: user, library: library)
+          item = Narra::Video.new(name: connector.name, url: url, owner: user, library: library)
           # push specific metadata
-          item.meta << Meta.new(name: 'type', content: :video, generator: :source)
+          item.meta << Narra::Meta.new(name: 'type', content: :video, generator: :source)
       end
 
       # create source metadata from essential fields
-      item.meta << Meta.new(name: 'name', content: connector.name, generator: :source)
-      item.meta << Meta.new(name: 'url', content: url, generator: :source)
-      item.meta << Meta.new(name: 'library', content: library.name, generator: :source)
-      item.meta << Meta.new(name: 'owner', content: user.name, generator: :source)
+      item.meta << Narra::Meta.new(name: 'name', content: connector.name, generator: :source)
+      item.meta << Narra::Meta.new(name: 'url', content: url, generator: :source)
+      item.meta << Narra::Meta.new(name: 'library', content: library.name, generator: :source)
+      item.meta << Narra::Meta.new(name: 'owner', content: user.name, generator: :source)
 
       # parse metadata from connector if exists
       connector.metadata.each do |meta|
-        item.meta << Meta.new(name: meta[:name], content: meta[:content], generator: :source)
+        item.meta << Narra::Meta.new(name: meta[:name], content: meta[:content], generator: :source)
       end
 
       # parse metadata form the user input if exists
       metadata.each do |meta|
-        item.meta << Meta.new(name: meta[:name], content: meta[:content], generator: user.username.to_sym)
+        item.meta << Narra::Meta.new(name: meta[:name], content: meta[:content], generator: user.username.to_sym)
       end
 
       # save item
@@ -136,9 +144,9 @@ module Narra
       message += options[:project] unless options[:project].nil?
       message += '::' + options[:identifier].to_s unless options[:type] == :transcoder
       # create an event
-      event = Event.create(message: message,
-                           item: options[:item].nil? ? nil : Item.find(options[:item]),
-                           project: options[:project].nil? ? nil : Project.find(options[:project]),
+      event = Narra::Event.create(message: message,
+                           item: options[:item].nil? ? nil : Narra::Item.find(options[:item]),
+                           project: options[:project].nil? ? nil : Narra::Project.find(options[:project]),
                            broadcasts: ['narra_' + options[:type].to_s + '_done'])
 
       # process

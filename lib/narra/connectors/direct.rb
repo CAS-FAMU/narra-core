@@ -20,6 +20,7 @@
 #
 
 require 'uri'
+require 'narra/spi'
 
 module Narra
   module Connectors

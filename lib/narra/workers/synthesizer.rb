@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'sidekiq'
+
 module Narra
   module Workers
     class Synthesizer
@@ -29,9 +31,9 @@ module Narra
         # check
         return if options['project'].nil? || options['identifier'].nil? || options['event'].nil?
         # get event
-        event = Event.find(options['event'])
+        event = Narra::Event.find(options['event'])
         # get project
-        project = Project.find(options['project']) unless options['project'].nil?
+        project = Narra::Project.find(options['project']) unless options['project'].nil?
         # fire event
         event.run!
         # get synthesizer

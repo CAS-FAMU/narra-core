@@ -24,8 +24,8 @@ module Narra
     class DefaultsHash < ActiveSupport::HashWithIndifferentAccess
       def []=(key, val)
         # persist if there is no already
-        if Tools::Settings.get(convert_key(key)).nil?
-          Tools::Settings.set(convert_key(key), convert_value(val))
+        if Narra::Tools::Settings.get(convert_key(key)).nil?
+          Narra::Tools::Settings.set(convert_key(key), convert_value(val))
         end
 
         # call parent

@@ -19,19 +19,6 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'fog'
-
 # Recreating temp
 FileUtils.rm_rf(Narra::Tools::Settings.storage_temp)
 FileUtils.mkdir_p(Narra::Tools::Settings.storage_temp)
-
-# Setup Default Storage
-module Narra
-  module Storage
-    # Items folder
-    ITEMS ||= Fog::Storage.new({ local_root: Narra::Tools::Settings.storage_local_path + '/items',
-                                   endpoint: Narra::Tools::Settings.storage_local_endpoint + '/items',
-                                   provider: 'Local' })
-  end
-end
-

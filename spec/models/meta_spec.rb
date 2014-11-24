@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe Meta do
+describe Narra::Meta do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:meta)).to be_an_instance_of(Meta)
+    expect(FactoryGirl.build(:meta)).to be_an_instance_of(Narra::Meta)
   end
 
   it "can be saved successfully" do

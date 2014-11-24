@@ -21,9 +21,9 @@
 
 require 'spec_helper'
 
-describe Sequence do
+describe Narra::Sequence do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:sequence)).to be_an_instance_of(Sequence)
+    expect(FactoryGirl.build(:sequence)).to be_an_instance_of(Narra::Sequence)
   end
 
   it "can be saved successfully" do
