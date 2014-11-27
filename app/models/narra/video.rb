@@ -24,23 +24,23 @@ module Narra
 
     # Helper methods
     def proxy_lq
-      @proxy_lq_file ||= storage.files.get(_id.to_s + '_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension)
+      @proxy_lq ||= get_file('proxy_lq.' + Narra::Tools::Settings.video_proxy_extension)
     end
 
     def proxy_hq
-      @proxy_hq_file ||= storage.files.get(_id.to_s + '_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension)
+      @proxy_hq ||= get_file('proxy_hq.' + Narra::Tools::Settings.video_proxy_extension)
     end
 
     def url_proxy_lq
-      proxy_lq.public_url
+      @url_proxy_lq ||= meta.where(generator: :transcoder, name: 'proxy_lq').collect { |meta| meta.content }.first
     end
 
     def url_proxy_hq
-      proxy_hq.public_url
+      @url_proxy_hq ||= meta.where(generator: :transcoder, name: 'proxy_hq').collect { |meta| meta.content }.first
     end
 
     def prepared?
-      !proxy_hq.nil? && !proxy_lq.nil?
+      !url_proxy_lq.nil? && !url_proxy_hq.nil?
     end
   end
 end

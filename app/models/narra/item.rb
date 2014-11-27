@@ -28,6 +28,7 @@ module Narra
     # Fields
     field :name, type: String
     field :url, type: String
+    field :files, type: Array, default: []
 
     # User Relations
     belongs_to :owner, autosave: true, inverse_of: :items, class_name: 'Narra::User'
@@ -50,26 +51,27 @@ module Narra
     validates_presence_of :name, :url, :owner_id
 
     # Hooks
-    # Create item's directory after create
-    after_create do |item|
-      # create item's storage
-      Narra::Storage::ITEMS.directories.create(key: item._id.to_s, public: true)
-    end
-
     # Destroy item's directory after destroy
     after_destroy do |item|
       # destroy item's storage content
-      item.storage.files.each do |file|
-        file.destroy
+      item.files.each do |file|
+        Narra::Storage.items.files.get(item._id.to_s + '/' + file).destroy
       end
-      # destroy item's storage
-      item.storage.destroy
     end
 
     # Helper methods
     # Return item's storage
-    def storage
-      Narra::Storage::ITEMS.directories.get(self._id.to_s)
+    def get_file(name)
+      Narra::Storage.items.files.get(self._id.to_s + '/' + name)
+    end
+
+    def create_file(name, body = nil)
+      # create a new file
+      file = Narra::Storage.items.files.create(key: self._id.to_s + '/' + name, body: body, public: true)
+      # cache it
+      files << name
+      # return file
+      return file
     end
 
     def generate

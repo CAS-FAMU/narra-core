@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/marigan/streamio-ffmpeg.git
+  revision: 90470da0eaecb71df0ca6ae90f3d27f76cdb3ca2
+  specs:
+    streamio-ffmpeg (1.0.0)
+
 PATH
   remote: .
   specs:
@@ -8,7 +14,6 @@ PATH
       rails (~> 4.1.8)
       sidekiq
       sinatra
-      streamio-ffmpeg
       wisper
 
 GEM
@@ -225,7 +230,6 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    streamio-ffmpeg (1.0.0)
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
@@ -247,3 +251,4 @@ DEPENDENCIES
   narra-core!
   rspec-mocks
   rspec-rails
+  streamio-ffmpeg!

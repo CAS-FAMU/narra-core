@@ -21,23 +21,13 @@
 
 require 'spec_helper'
 
-describe Narra::Item do
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:item)).to be_an_instance_of(Narra::Item)
+describe Narra::Storage do
+  it 'should have items storage available' do
+    expect(Narra::Storage.items).to be_a_kind_of(Fog::Model)
   end
 
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:item, owner: @author_user)).to be_persisted
-  end
-
-  it "should have storage available" do
-    # Temporary item
-    item = FactoryGirl.create(:item, owner: @author_user)
-    # Create a file
-    item.create_file('test')
-    # Check storage
-    expect(item.get_file('test')).to be_a_kind_of(Fog::Model)
-    expect(item.files.count).to match(1)
+  it 'should list files' do
+    # expect to list them
     expect(Narra::Storage.items.files.count).to match(1)
   end
 end

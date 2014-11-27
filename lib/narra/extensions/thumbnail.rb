@@ -32,23 +32,17 @@ module Narra
       end
 
       def url_thumbnail
-        thumbnail.public_url
+        @url_thumbnails.first unless thumbnails.nil?
       end
 
       def thumbnails
         # get thumbnail if not resolved yet
-        if @thumbnails.nil?
-          # get the first item available
-          item = self.items.first
-          # get all files
-          @thumbnails = item.storage.files.select { |file| file.key.include?('thumbnail') } unless item.nil?
-        end
-        # return thumbnail
-        @thumbnails
+        @thumbnails ||= self.items.first.files.select { |file| file.include?('thumbnail') }.collect { |file| self.items.first.get_file(file) } unless self.items.first.nil?
       end
 
       def url_thumbnails
-        thumbnails.collect { |thumbnail| thumbnail.public_url }
+        # get thumbnail if not resolved yet
+        @url_thumbnails ||= self.items.first.meta.generators([:thumbnail], false).collect { |thumbnail| thumbnail.content } unless self.items.first.nil?
       end
     end
   end

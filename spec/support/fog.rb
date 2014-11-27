@@ -27,11 +27,10 @@ RSpec.configure do |config|
     # Fog
     Fog.mock!
     # Setup mock storage
-    module Narra
-      module Storage
-        ITEMS = Fog::Storage.new({aws_access_key_id: 'test', aws_secret_access_key: 'test', provider: 'AWS'})
-      end
-    end
+    ENV['NARRA_INSTANCE_NAME'] = 'test'
+    ENV['NARRA_AWS_ACCESS_KEY'] = 'test'
+    ENV['NARRA_AWS_SECRET'] = 'test'
+    ENV['NARRA_AWS_REGION'] = 'test'
   end
 
   config.after(:suite) do

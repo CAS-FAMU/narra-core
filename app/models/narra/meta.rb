@@ -28,6 +28,8 @@ module Narra
     field :name, type: String
     field :content, type: String
     field :generator, type: Symbol
+    field :in, type: Float
+    field :out, type: Float
 
     # Relations
     belongs_to :item, autosave: true, inverse_of: :meta, class_name: 'Narra::Item'

@@ -24,9 +24,31 @@ require 'fog'
 # Setup Default Storage
 module Narra
   module Storage
-    # Items folder
-    ITEMS ||= Fog::Storage.new({ local_root: Narra::Tools::Settings.storage_local_path + '/items',
-                                 endpoint: Narra::Tools::Settings.storage_local_endpoint + '/items',
-                                 provider: 'Local' })
+
+    def self.items
+      # get items property
+      @items_property ||= ENV['NARRA_INSTANCE_NAME'].downcase + '-' + Narra::Tools::Settings.storage_s3_items
+      # get items storage
+      @items ||= storage.directories.get(@items_property).nil? ? storage.directories.create(key: @items_property, public: true) : storage.directories.get(@items_property)
+    end
+
+    private
+
+    def self.storage
+      # if we are in development mode use local storage
+      return @storage ||= Fog::Storage.new({
+                                               provider: 'Local',
+                                               local_root: Narra::Tools::Settings.storage_local_path,
+                                               endpoint: Narra::Tools::Settings.storage_local_endpoint
+                                           }) if Rails.env.development?
+
+      # in production use Amazon S3
+      return @storage ||= Fog::Storage.new({
+                                               provider: 'AWS',
+                                               aws_access_key_id: ENV['NARRA_AWS_ACCESS_KEY'],
+                                               aws_secret_access_key: ENV['NARRA_AWS_SECRET'],
+                                               region: ENV['NARRA_AWS_REGION']
+                                           })
+    end
   end
 end

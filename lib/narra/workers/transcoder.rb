@@ -59,25 +59,32 @@ module Narra
             proxy_lq = transcode_object('lq')
             proxy_hq = transcode_object('hq')
             # start transcode process
-            video.transcode(proxy_lq[:file], proxy_lq[:options]) { |progress| set_progress(Float(progress / 3)) }
-            video.transcode(proxy_hq[:file], proxy_hq[:options]) { |progress| set_progress(Float(0.35 + (progress / 2))) }
+            video.transcode(proxy_lq[:file], proxy_lq[:options]) { |progress| set_progress((progress / 3).to_f) }
+            video.transcode(proxy_hq[:file], proxy_hq[:options]) { |progress| set_progress((0.35 + (progress / 2)).to_f) }
             # save into storage
-            @item.storage.files.create(key: proxy_lq[:key], body: File.open(proxy_lq[:file]), public: true)
-            @item.storage.files.create(key: proxy_hq[:key], body: File.open(proxy_hq[:file]), public: true)
+            proxy_lq_url = @item.create_file(proxy_lq[:key], File.open(proxy_lq[:file])).public_url
+            proxy_hq_url = @item.create_file(proxy_hq[:key], File.open(proxy_hq[:file])).public_url
+            # add proxy files metadata
+            add_meta(generator: :transcoder, name: 'proxy_lq', content: proxy_lq_url)
+            add_meta(generator: :transcoder, name: 'proxy_hq', content: proxy_hq_url)
             # clean temp transcodes
             FileUtils.rm_f([proxy_lq[:file], proxy_hq[:file]])
 
             # THUMBNAILS
             # get seek ration
-            ratio = Integer(video.duration / Integer(Narra::Tools::Settings.thumbnail_count))
+            ratio = (video.duration / Integer(Narra::Tools::Settings.thumbnail_count)).to_i
             # generate all thumbnails
-            (1..Integer(Narra::Tools::Settings.thumbnail_count)).each do |count|
+            (1..Narra::Tools::Settings.thumbnail_count.to_i).each do |count|
+              # seek
+              seek = '%05d' % (count * ratio)
               # get thumbnail object
-              thumbnail = thumbnail_object(count * ratio)
+              thumbnail = thumbnail_object(seek)
               # generate
               video.screenshot(thumbnail[:file], thumbnail[:options], preserve_aspect_ratio: :height, validate: false)
               # copy to storage
-              @item.storage.files.create(key: thumbnail[:key], body: File.open(thumbnail[:file]), public: true)
+              url = @item.create_file(thumbnail[:key], File.open(thumbnail[:file])).public_url
+              # create meta
+              add_meta(generator: :thumbnail, name: 'thumbnail_' + seek, content: url, in: seek.to_f)
               # delete
               FileUtils.rm_f(thumbnail[:file])
             end
@@ -87,6 +94,7 @@ module Narra
             # VIDEOINFO
             # add videoinfo metadata
             add_meta(generator: :source, name: 'duration', content: video.duration)
+            add_meta(generator: :source, name: 'timecode', content: video.timecode) unless video.timecode.nil?
             add_meta(generator: :source, name: 'bitrate', content: video.bitrate)
             add_meta(generator: :source, name: 'size', content: video.size)
             add_meta(generator: :source, name: 'video_codec', content: video.video_codec)
@@ -123,19 +131,16 @@ module Narra
       def transcode_object(type)
         {
             file: Narra::Tools::Settings.storage_temp + '/' + @item_id + '_video_proxy_' + type + '.' + Narra::Tools::Settings.video_proxy_extension,
-            key: @item_id + '_proxy_' + type + '.' + Narra::Tools::Settings.video_proxy_extension,
+            key: 'proxy_' + type + '.' + Narra::Tools::Settings.video_proxy_extension,
             options: {video_bitrate: Narra::Tools::Settings.get('video_proxy_' + type + '_bitrate'), video_bitrate_tolerance: 100, resolution: Narra::Tools::Settings.get('video_proxy_' + type + '_resolution')}
         }
       end
 
       def thumbnail_object(seek)
-        # convert seek into right format
-        seek_f = '%02d' % seek
-        # return object
         {
-            file: Narra::Tools::Settings.storage_temp + '/' + @item_id + '_video_thumbnail_' + seek_f,
-            key: @item_id + '_thumbnail_' + seek_f + '.' + Narra::Tools::Settings.thumbnail_extension,
-            options: {seek_time: seek, resolution: Narra::Tools::Settings.thumbnail_resolution}
+            file: Narra::Tools::Settings.storage_temp + '/' + @item_id + '_video_thumbnail_' + seek,
+            key: 'thumbnail_' + seek + '.' + Narra::Tools::Settings.thumbnail_extension,
+            options: {seek_time: seek.to_i, resolution: Narra::Tools::Settings.thumbnail_resolution}
         }
       end
     end

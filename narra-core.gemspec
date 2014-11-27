@@ -31,8 +31,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Michal Mocnak", "Krystof Pesek"]
   spec.email       = ["info@narra.eu"]
   spec.homepage    = "http://www.narra.eu"
-  spec.summary     = "NARRA Core functionality "
-  spec.description = "NARRA Core functionality "
+  spec.summary     = "NARRA Core functionality"
+  spec.description = "NARRA Core functionality"
   spec.license     = "GPL-3.0"
 
   spec.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
@@ -44,7 +44,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sidekiq"
   spec.add_dependency "fog"
   spec.add_dependency "wisper"
-  spec.add_dependency "streamio-ffmpeg"
   spec.add_dependency "sinatra"
 
   spec.add_development_dependency "rspec-rails"
