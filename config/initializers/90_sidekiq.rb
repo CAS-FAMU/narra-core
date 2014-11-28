@@ -21,7 +21,7 @@
 
 require 'sidekiq'
 
-if Rails.env.development?
+if Rails.env.development? || Rails.env.test?
   ENV['NARRA_REDIS_HOST'] = 'localhost'
   ENV['NARRA_REDIS_PORT'] = '6379'
 end
