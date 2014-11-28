@@ -21,10 +21,15 @@
 
 require 'sidekiq'
 
+if Rails.env.development?
+  ENV['NARRA_REDIS_HOST'] = 'localhost'
+  ENV['NARRA_REDIS_PORT'] = '6379'
+end
+
 Sidekiq.configure_server do |config|
-  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
+  config.redis = { :url => 'redis://' + ENV['NARRA_REDIS_HOST'] + ':' + ENV['NARRA_REDIS_PORT'] + '/0', :namespace => 'narra' }
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { :url => 'redis://localhost:6379/0', :namespace => 'narra' }
+  config.redis = { :url => 'redis://' + ENV['NARRA_REDIS_HOST'] + ':' + ENV['NARRA_REDIS_PORT'] + '/0', :namespace => 'narra' }
 end
