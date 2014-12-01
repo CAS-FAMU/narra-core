@@ -76,7 +76,7 @@ module Narra
             # generate all thumbnails
             (1..Narra::Tools::Settings.thumbnail_count.to_i).each do |count|
               # seek
-              seek = '%05d' % (count * ratio)
+              seek = '%05d' % (((count * ratio) == video.duration) ? (count * ratio) - 1 : count * ratio)
               # get thumbnail object
               thumbnail = thumbnail_object(seek)
               # generate
