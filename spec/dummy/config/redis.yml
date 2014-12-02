@@ -16,18 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'sidekiq'
-
-# load redis config
-redis_config = YAML.load(ERB.new(File.new(Rails.root + 'config/redis.yml').read).result)
-
-Sidekiq.configure_server do |config|
-  config.redis = { :url => "redis://#{redis_config['hostname']}:#{redis_config['port']}/0", :namespace => 'narra' }
-end
-
-Sidekiq.configure_client do |config|
-  config.redis = { :url => "redis://#{redis_config['hostname']}:#{redis_config['port']}/0", :namespace => 'narra' }
-end
+hostname: localhost
+port: 6379
