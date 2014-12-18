@@ -65,6 +65,11 @@ module Narra
           item = Narra::Image.new(name: connector.name, url: url, owner: user, library: library)
           # push specific metadata
           item.meta << Narra::Meta.new(name: 'type', content: :image, generator: :source)
+        when :audio
+          # create specific item
+          item = Narra::Audio.new(name: connector.name, url: url, owner: user, library: library)
+          # push specific metadata
+          item.meta << Narra::Meta.new(name: 'type', content: :audio, generator: :source)
       end
 
       # create source metadata from essential fields

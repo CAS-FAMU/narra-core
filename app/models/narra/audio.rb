@@ -20,27 +20,11 @@
 #
 
 module Narra
-  class Video < Item
+  class Audio < Item
 
     # Helper methods
-    def video_proxy_lq
-      @video_proxy_lq ||= get_file('video_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension)
-    end
-
-    def video_proxy_hq
-      @video_proxy_hq ||= get_file('video_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension)
-    end
-
     def audio_proxy
       @audio_proxy ||= get_file('audio_proxy.' + Narra::Tools::Settings.audio_proxy_extension)
-    end
-
-    def url_video_proxy_lq
-      @url_video_proxy_lq ||= meta.where(generator: :transcoder, name: 'video_proxy_lq').collect { |meta| meta.content }.first
-    end
-
-    def url_video_proxy_hq
-      @url_video_proxy_hq ||= meta.where(generator: :transcoder, name: 'video_proxy_hq').collect { |meta| meta.content }.first
     end
 
     def url_audio_proxy
@@ -48,7 +32,7 @@ module Narra
     end
 
     def prepared?
-      !url_video_proxy_lq.nil? && !url_video_proxy_hq.nil? && !url_audio_proxy.nil?
+      !url_audio_proxy.nil?
     end
   end
 end

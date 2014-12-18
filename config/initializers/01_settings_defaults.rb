@@ -38,4 +38,7 @@ Narra::Tools::Settings.defaults[:image_proxy_extension] = 'png'
 Narra::Tools::Settings.defaults[:image_proxy_lq_resolution] = '320x180'
 Narra::Tools::Settings.defaults[:image_proxy_hq_resolution] = '1280x720'
 
+Narra::Tools::Settings.defaults[:audio_proxy_extension] = 'ogg'
+Narra::Tools::Settings.defaults[:audio_proxy_bitrate] = '112'
+
 Narra::Tools::Settings.defaults[:items_probe_interval] = 1.minute.to_s
