@@ -48,13 +48,13 @@ FactoryGirl.define do
     end
   end
   factory :library, class: Narra::Library do
-    sequence(:name) {|n| "test_library_#{n}" }
-    sequence(:title) {|n| "Test Library #{n}" }
-    sequence(:description) {|n| "Description for the Test Library #{n}" }
+    sequence(:name) { |n| "test_library_#{n}" }
+    sequence(:title) { |n| "Test Library #{n}" }
+    sequence(:description) { |n| "Description for the Test Library #{n}" }
   end
   factory :meta, class: Narra::Meta do
-    sequence(:name) {|n| "test_meta_#{n}" }
-    sequence(:content) {|n| "Test Meta Content #{n}" }
+    sequence(:name) { |n| "test_meta_#{n}" }
+    sequence(:content) { |n| "Test Meta Content #{n}" }
 
     trait :source do
       sequence(:generator) { :source }
@@ -65,16 +65,21 @@ FactoryGirl.define do
     end
   end
   factory :project, class: Narra::Project do
-    sequence(:name) {|n| "test_project_#{n}" }
-    sequence(:title) {|n| "Test Project #{n}" }
-    sequence(:description) {|n| "Description for the Test Project #{n}" }
+    sequence(:name) { |n| "test_project_#{n}" }
+    sequence(:title) { |n| "Test Project #{n}" }
+    sequence(:description) { |n| "Description for the Test Project #{n}" }
   end
   factory :sequence, class: Narra::Sequence do
-    sequence(:name) {|n| "test_sequence_#{n}" }
+    sequence(:name) { |n| "test_sequence_#{n}" }
+  end
+  factory :mark, class: Narra::Mark do
+    sequence(:in) { |n| n.to_f }
+    sequence(:out) { |n| (n+1).to_f }
+    sequence(:index) { |n| n }
   end
   factory :user, class: Narra::User do
-    sequence(:name) {|n| "tester#{n}" }
-    sequence(:username) {|n| "tester#{n}" }
-    sequence(:email) {|n| "tester#{n}@narra.eu" }
+    sequence(:name) { |n| "tester#{n}" }
+    sequence(:username) { |n| "tester#{n}" }
+    sequence(:email) { |n| "tester#{n}@narra.eu" }
   end
 end

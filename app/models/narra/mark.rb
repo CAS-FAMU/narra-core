@@ -20,27 +20,19 @@
 #
 
 module Narra
-  class Video < Item
+  class Mark
+    include Mongoid::Document
+    include Mongoid::Timestamps
 
-    # Helper methods
-    def video_proxy_lq
-      @video_proxy_lq ||= get_file('video_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension)
-    end
+    # Fields
+    field :index, type: Integer
+    field :in, type: Float
+    field :out, type: Float
 
-    def video_proxy_hq
-      @video_proxy_hq ||= get_file('video_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension)
-    end
+    # Relations
+    belongs_to :meta, autosave: true, inverse_of: :marks, class_name: 'Narra::Meta'
+    belongs_to :sequence, autosave: true, inverse_of: :playlist, class_name: 'Narra::Sequence'
 
-    def url_video_proxy_lq
-      @url_video_proxy_lq ||= meta.where(generator: :transcoder, name: 'video_proxy_lq').collect { |meta| meta.content }.first
-    end
-
-    def url_video_proxy_hq
-      @url_video_proxy_hq ||= meta.where(generator: :transcoder, name: 'video_proxy_hq').collect { |meta| meta.content }.first
-    end
-
-    def prepared?
-      !url_video_proxy_lq.nil? && !url_video_proxy_hq.nil?
-    end
+    validates_presence_of :in
   end
 end

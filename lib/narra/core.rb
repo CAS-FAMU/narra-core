@@ -60,6 +60,11 @@ module Narra
           item = Narra::Video.new(name: connector.name, url: url, owner: user, library: library)
           # push specific metadata
           item.meta << Narra::Meta.new(name: 'type', content: :video, generator: :source)
+        when :image
+          # create specific item
+          item = Narra::Image.new(name: connector.name, url: url, owner: user, library: library)
+          # push specific metadata
+          item.meta << Narra::Meta.new(name: 'type', content: :image, generator: :source)
       end
 
       # create source metadata from essential fields
@@ -81,10 +86,8 @@ module Narra
       # save item
       item.save!
 
-      # start transcode process if video
-      if connector.type.equal? :video
-        process(type: :transcoder, item: item._id.to_s, identifier: connector.download_url)
-      end
+      # start transcode process
+      process(type: :transcoder, item: item._id.to_s, identifier: connector.download_url)
 
       # return item
       return item
@@ -121,6 +124,12 @@ module Narra
     def self.connectors
       # Get all descendants of the Generic generator
       @connectors ||= Narra::SPI::Connector.descendants
+    end
+
+    # Return all active transcoders
+    def self.transcoders
+      # Get all descendants of the Generic generator
+      @transcoders ||= Narra::SPI::Transcoder.descendants
     end
 
     # Return all active generators
@@ -166,6 +175,12 @@ module Narra
     def self.connectors_identifiers
       # Get array of synthesizers identifiers
       @connectors_identifiers ||= connectors.collect { |connector| connector.identifier }
+    end
+
+    # Return all active transcoders
+    def self.transcoders_identifiers
+      # Get array of synthesizers identifiers
+      @transcoders_identifiers ||= transcoders.collect { |transcoder| transcoder.identifier }
     end
 
     # Return all active generators

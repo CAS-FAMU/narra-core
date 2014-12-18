@@ -19,19 +19,14 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-module Narra
-  class Sequence
-    include Mongoid::Document
-    include Mongoid::Timestamps
+require 'spec_helper'
 
-    # Fields
-    field :name, type: String
+describe Narra::Mark do
+  it "can be instantiated" do
+    expect(FactoryGirl.build(:mark)).to be_an_instance_of(Narra::Mark)
+  end
 
-    # Relations
-    belongs_to :project, autosave: true, inverse_of: :sequences, class_name: 'Narra::Project'
-    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::Mark'
-
-    # Validations
-    validates_presence_of :name
+  it "can be saved successfully" do
+    expect(FactoryGirl.create(:mark)).to be_persisted
   end
 end

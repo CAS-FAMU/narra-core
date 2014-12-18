@@ -38,6 +38,10 @@ module Narra
       Dir["#{config.root}/lib/narra/connectors/**/*.rb"].each do |file|
         require file
       end
+
+      Dir["#{config.root}/lib/narra/transcoders/**/*.rb"].each do |file|
+        require file
+      end
     end
   end
 end

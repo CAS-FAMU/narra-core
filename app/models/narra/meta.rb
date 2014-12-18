@@ -28,11 +28,10 @@ module Narra
     field :name, type: String
     field :content, type: String
     field :generator, type: Symbol
-    field :in, type: Float
-    field :out, type: Float
 
     # Relations
     belongs_to :item, autosave: true, inverse_of: :meta, class_name: 'Narra::Item'
+    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :meta, class_name: 'Narra::Mark'
 
     # Validations
     validates_uniqueness_of :name, :scope => [:generator, :item_id]

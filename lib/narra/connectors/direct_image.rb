@@ -24,15 +24,15 @@ require 'narra/spi'
 
 module Narra
   module Connectors
-    class Direct < Narra::SPI::Connector
+    class DirectImage < Narra::SPI::Connector
 
       # Set title and description fields
-      @identifier = :direct
-      @title = 'Direct Connector'
-      @description = 'Direct connector uses direct http links to files'
+      @identifier = :direct_image
+      @title = 'Direct Image Connector'
+      @description = 'Direct Image Connector uses direct http links to files'
 
       def self.valid?(url)
-        url.start_with?('http://') and (url.end_with?('.webm') or url.end_with?('.mp4') or url.end_with?('.mov'))
+        url.start_with?('http://') and (url.end_with?('.jpg') or url.end_with?('.png') or url.end_with?('.gif'))
       end
 
       def initialization
@@ -45,7 +45,7 @@ module Narra
       end
 
       def type
-        :video
+        :image
       end
 
       def metadata

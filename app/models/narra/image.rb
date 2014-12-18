@@ -20,27 +20,27 @@
 #
 
 module Narra
-  class Video < Item
+  class Image < Item
 
     # Helper methods
-    def video_proxy_lq
-      @video_proxy_lq ||= get_file('video_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension)
+    def image_proxy_lq
+      @image_proxy_lq ||= get_file('image_proxy_lq.' + Narra::Tools::Settings.image_proxy_extension)
     end
 
-    def video_proxy_hq
-      @video_proxy_hq ||= get_file('video_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension)
+    def image_proxy_hq
+      @image_proxy_hq ||= get_file('image_proxy_hq.' + Narra::Tools::Settings.image_proxy_extension)
     end
 
-    def url_video_proxy_lq
-      @url_video_proxy_lq ||= meta.where(generator: :transcoder, name: 'video_proxy_lq').collect { |meta| meta.content }.first
+    def url_image_proxy_lq
+      @url_image_proxy_lq ||= meta.where(generator: :transcoder, name: 'image_proxy_lq').collect { |meta| meta.content }.first
     end
 
-    def url_video_proxy_hq
-      @url_video_proxy_hq ||= meta.where(generator: :transcoder, name: 'video_proxy_hq').collect { |meta| meta.content }.first
+    def url_image_proxy_hq
+      @url_image_proxy_hq ||= meta.where(generator: :transcoder, name: 'image_proxy_hq').collect { |meta| meta.content }.first
     end
 
     def prepared?
-      !url_video_proxy_lq.nil? && !url_video_proxy_hq.nil?
+      !url_image_proxy_lq.nil? && !url_image_proxy_hq.nil?
     end
   end
 end

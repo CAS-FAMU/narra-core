@@ -19,19 +19,42 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'uri'
+require 'narra/spi'
+
 module Narra
-  class Sequence
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  module Connectors
+    class DirectVideo < Narra::SPI::Connector
 
-    # Fields
-    field :name, type: String
+      # Set title and description fields
+      @identifier = :direct_video
+      @title = 'Direct Video Connector'
+      @description = 'Direct Video Connector uses direct http links to files'
 
-    # Relations
-    belongs_to :project, autosave: true, inverse_of: :sequences, class_name: 'Narra::Project'
-    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::Mark'
+      def self.valid?(url)
+        url.start_with?('http://') and (url.end_with?('.webm') or url.end_with?('.mp4') or url.end_with?('.mov'))
+      end
 
-    # Validations
-    validates_presence_of :name
+      def initialization
+        @uri = URI.parse(@url)
+        @name = File.basename(@uri.path).split('.').first
+      end
+
+      def name
+        @name
+      end
+
+      def type
+        :video
+      end
+
+      def metadata
+        []
+      end
+
+      def download_url
+        @url
+      end
+    end
   end
 end

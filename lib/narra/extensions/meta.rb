@@ -38,8 +38,16 @@ module Narra
             return
           end
         end
+        # get marks
+        marks = options[:marks].nil? ? [] : options.delete(:marks)
         # push new meta entry
-        item.meta << Narra::Meta.new(options)
+        meta = Narra::Meta.new(options)
+        # push marks
+        marks.each do |mark|
+          meta.marks << Narra::Mark.new(mark)
+        end
+        # push meta into an item
+        item.meta << meta
         # save item
         item.save
       end
