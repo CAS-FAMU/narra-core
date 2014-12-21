@@ -49,7 +49,6 @@ FactoryGirl.define do
   end
   factory :library, class: Narra::Library do
     sequence(:name) { |n| "test_library_#{n}" }
-    sequence(:title) { |n| "Test Library #{n}" }
     sequence(:description) { |n| "Description for the Test Library #{n}" }
   end
   factory :meta, class: Narra::Meta do

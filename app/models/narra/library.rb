@@ -27,7 +27,6 @@ module Narra
 
     # Fields
     field :name, type: String
-    field :title, type: String
     field :description, type: String
 
     # User Relations
@@ -42,6 +41,6 @@ module Narra
 
     # Validations
     validates_uniqueness_of :name
-    validates_presence_of :name, :title, :author_id
+    validates_presence_of :name, :author_id
   end
 end

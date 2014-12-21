@@ -33,7 +33,7 @@ module Narra
     # Add item into the NARRA
     def self.add_item(url, author, user, library, metadata = [])
       # input check
-      return if url.nil? || author.nil? || library.nil?
+      return if url.nil? || author.nil? || user.nil? || library.nil?
 
       # connector container
       connector = nil
