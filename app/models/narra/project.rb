@@ -33,8 +33,8 @@ module Narra
     field :synthesizers, type: Array, default: []
 
     # User Relations
-    belongs_to :owner, autosave: true, inverse_of: :projects, class_name: 'Narra::User'
-    has_and_belongs_to_many :authors, autosave: true, inverse_of: :contributions, class_name: 'Narra::User'
+    belongs_to :author, autosave: true, inverse_of: :projects, class_name: 'Narra::User'
+    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :projects_contributions, class_name: 'Narra::User'
 
     # Collection Relations
     has_and_belongs_to_many :libraries, autosave: true, inverse_of: :projects, class_name: 'Narra::Library'
@@ -48,7 +48,7 @@ module Narra
 
     # Validations
     validates_uniqueness_of :name
-    validates_presence_of :name, :title, :owner_id
+    validates_presence_of :name, :title, :author_id
 
     # Return all project items
     def items

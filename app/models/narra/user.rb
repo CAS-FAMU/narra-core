@@ -31,11 +31,12 @@ module Narra
     field :roles, type: Array, default: []
 
     # Project Relations
-    has_many :projects, autosave: true, dependent: :destroy, inverse_of: :owner, class_name: 'Narra::Project'
-    has_and_belongs_to_many :contributions, autosave: true, inverse_of: :authors, class_name: 'Narra::Project'
+    has_many :projects, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Project'
+    has_and_belongs_to_many :projects_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Collection Relations
-    has_many :libraries, autosave: true, inverse_of: :owner, class_name: 'Narra::Library'
+    has_many :libraries, autosave: true, inverse_of: :author, class_name: 'Narra::Library'
+    has_and_belongs_to_many :libraries_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Collection Items
     has_many :items, autosave: true, inverse_of: :owner, class_name: 'Narra::Item'

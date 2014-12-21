@@ -24,11 +24,11 @@ require 'spec_helper'
 describe Narra::SPI::Synthesizer do
   before(:each) do
     # create project
-    @project = FactoryGirl.create(:project, owner: @author_user)
+    @project = FactoryGirl.create(:project, author: @author_user)
     # create library
-    @library = FactoryGirl.create(:library, owner: @author_user, projects: [@project])
+    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
     # create item
-    @item = FactoryGirl.create(:item, library: @library, owner: @author_user)
+    @item = FactoryGirl.create(:item, library: @library)
     # create event
     @event = FactoryGirl.create(:event, project: @project)
   end

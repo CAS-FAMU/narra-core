@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.email       = ["info@narra.eu"]
   spec.homepage    = "http://www.narra.eu"
   spec.summary     = "NARRA Core functionality"
-  spec.description = "NARRA Core functionality"
+  spec.description = "NARRA Core functionality which covers all the NARRA data model, logic and SPI."
   spec.license     = "GPL-3.0"
 
   spec.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]

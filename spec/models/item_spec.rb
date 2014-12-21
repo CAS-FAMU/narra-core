@@ -27,12 +27,12 @@ describe Narra::Item do
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:item, owner: @author_user)).to be_persisted
+    expect(FactoryGirl.create(:item)).to be_persisted
   end
 
   it "should have storage available" do
     # Temporary item
-    item = FactoryGirl.create(:item, owner: @author_user)
+    item = FactoryGirl.create(:item)
     # Create a file
     item.create_file('test')
     # Check storage

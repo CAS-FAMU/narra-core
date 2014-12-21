@@ -24,7 +24,7 @@ require 'spec_helper'
 describe Narra::SPI::Generator do
   before(:each) do
     # create item
-    @item = FactoryGirl.create(:item, owner: @author_user)
+    @item = FactoryGirl.create(:item)
     # create event
     @event = FactoryGirl.create(:event, item: @item)
   end

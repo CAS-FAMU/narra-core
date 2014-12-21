@@ -30,9 +30,6 @@ module Narra
     field :url, type: String
     field :files, type: Array, default: []
 
-    # User Relations
-    belongs_to :owner, autosave: true, inverse_of: :items, class_name: 'Narra::User'
-
     # Library Relations
     belongs_to :library, autosave: true, inverse_of: :items, class_name: 'Narra::Library'
 
@@ -48,7 +45,7 @@ module Narra
 
     # Validations
     validates_uniqueness_of :name, scope: :library_id
-    validates_presence_of :name, :url, :owner_id
+    validates_presence_of :name, :url
 
     # Hooks
     # Destroy item's directory after destroy

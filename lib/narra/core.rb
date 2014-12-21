@@ -31,9 +31,9 @@ module Narra
   module Core
 
     # Add item into the NARRA
-    def self.add_item(url, user, library, metadata = [])
+    def self.add_item(url, author, library, metadata = [])
       # input check
-      return if url.nil? || user.nil? || library.nil?
+      return if url.nil? || author.nil? || library.nil?
 
       # connector container
       connector = nil
@@ -57,17 +57,17 @@ module Narra
       case connector.type
         when :video
           # create specific item
-          item = Narra::Video.new(name: connector.name, url: url, owner: user, library: library)
+          item = Narra::Video.new(name: connector.name, url: url, library: library)
           # push specific metadata
           item.meta << Narra::Meta.new(name: 'type', content: :video, generator: :source)
         when :image
           # create specific item
-          item = Narra::Image.new(name: connector.name, url: url, owner: user, library: library)
+          item = Narra::Image.new(name: connector.name, url: url, library: library)
           # push specific metadata
           item.meta << Narra::Meta.new(name: 'type', content: :image, generator: :source)
         when :audio
           # create specific item
-          item = Narra::Audio.new(name: connector.name, url: url, owner: user, library: library)
+          item = Narra::Audio.new(name: connector.name, url: url, library: library)
           # push specific metadata
           item.meta << Narra::Meta.new(name: 'type', content: :audio, generator: :source)
       end
@@ -76,7 +76,7 @@ module Narra
       item.meta << Narra::Meta.new(name: 'name', content: connector.name, generator: :source)
       item.meta << Narra::Meta.new(name: 'url', content: url, generator: :source)
       item.meta << Narra::Meta.new(name: 'library', content: library.name, generator: :source)
-      item.meta << Narra::Meta.new(name: 'owner', content: user.name, generator: :source)
+      item.meta << Narra::Meta.new(name: 'author', content: author.name, generator: :source)
 
       # parse metadata from connector if exists
       connector.metadata.each do |meta|

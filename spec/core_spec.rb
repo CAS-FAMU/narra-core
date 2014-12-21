@@ -24,13 +24,13 @@ require 'spec_helper'
 describe Narra::Core do
   before(:each) do
     # create project
-    @project = FactoryGirl.create(:project, owner: @author_user)
+    @project = FactoryGirl.create(:project, author: @author_user)
     # create library
-    @library = FactoryGirl.create(:library, owner: @author_user, projects: [@project])
+    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
     # create item
-    @item = FactoryGirl.create(:item, library: @library, owner: @author_user)
+    @item = FactoryGirl.create(:item, library: @library)
     # create item prepared
-    @item_prepared= FactoryGirl.create(:item_prepared, library: @library, owner: @author_user)
+    @item_prepared= FactoryGirl.create(:item_prepared, library: @library)
   end
 
   it 'should return all active generators' do

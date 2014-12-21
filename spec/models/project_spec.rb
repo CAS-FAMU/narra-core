@@ -27,6 +27,6 @@ describe Narra::Project do
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:project, owner: @author_user)).to be_persisted
+    expect(FactoryGirl.create(:project, author: @author_user)).to be_persisted
   end
 end
