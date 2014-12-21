@@ -31,7 +31,7 @@ module Narra
   module Core
 
     # Add item into the NARRA
-    def self.add_item(url, author, library, metadata = [])
+    def self.add_item(url, author, user, library, metadata = [])
       # input check
       return if url.nil? || author.nil? || library.nil?
 
@@ -76,7 +76,7 @@ module Narra
       item.meta << Narra::Meta.new(name: 'name', content: connector.name, generator: :source)
       item.meta << Narra::Meta.new(name: 'url', content: url, generator: :source)
       item.meta << Narra::Meta.new(name: 'library', content: library.name, generator: :source)
-      item.meta << Narra::Meta.new(name: 'author', content: author.name, generator: :source)
+      item.meta << Narra::Meta.new(name: 'author', content: author, generator: :source)
 
       # parse metadata from connector if exists
       connector.metadata.each do |meta|
