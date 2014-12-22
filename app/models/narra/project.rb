@@ -46,6 +46,9 @@ module Narra
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Event'
 
+    # Scopes
+    scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }
+
     # Validations
     validates_uniqueness_of :name
     validates_presence_of :name, :title, :author_id

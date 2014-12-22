@@ -40,6 +40,9 @@ module Narra
     # project relation
     belongs_to :project, autosave: true, inverse_of: :events, class_name: 'Narra::Project'
 
+    # Scopes
+    scope :user, ->(user) { any_in(item_id: Item.user(user).pluck(:id)) }
+
     # callbacks
     before_destroy :broadcast_events
 

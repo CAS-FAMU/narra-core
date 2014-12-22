@@ -39,6 +39,9 @@ module Narra
     # Project Relations
     has_and_belongs_to_many :projects, autosave: true, inverse_of: :libraries, class_name: 'Narra::Project'
 
+    # Scopes
+    scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }
+
     # Validations
     validates_uniqueness_of :name
     validates_presence_of :name, :author_id

@@ -47,6 +47,9 @@ module Narra
     validates_uniqueness_of :name, scope: :library_id
     validates_presence_of :name, :url
 
+    # Scopes
+    scope :user, ->(user) { any_in(library_id: Library.user(user).pluck(:id)) }
+
     # Hooks
     # Destroy item's directory after destroy
     after_destroy do |item|
