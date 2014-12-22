@@ -27,22 +27,13 @@ module Narra
         # This has to be overridden to return item
       end
 
-      def thumbnail
-        thumbnails.first unless thumbnails.nil?
-      end
-
       def url_thumbnail
         @url_thumbnails.first unless thumbnails.nil?
       end
 
-      def thumbnails
-        # get thumbnail if not resolved yet
-        @thumbnails ||= self.items.first.files.select { |file| file.include?('thumbnail') }.collect { |file| self.items.first.get_file(file) } unless self.items.first.nil?
-      end
-
       def url_thumbnails
         # get thumbnail if not resolved yet
-        @url_thumbnails ||= self.items.first.meta.generators([:thumbnail], false).collect { |thumbnail| thumbnail.content } unless self.items.first.nil?
+        @url_thumbnails ||= Narra::Meta.any_in(item_id: self.items.collect { |item| item._id }).where(generator: :thumbnail).sample(Narra::Tools::Settings.thumbnail_count.to_i).collect { |meta| meta.content }
       end
     end
   end
