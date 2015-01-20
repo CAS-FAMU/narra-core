@@ -55,6 +55,10 @@ module Narra
         transitions :to => :running, :from => [:pending]
       end
 
+      event :reset do
+        transitions :to => :pending, :from => [:running]
+      end
+
       event :done, after: Proc.new { self.destroy } do
         transitions :to => :done, :from => [:running]
       end

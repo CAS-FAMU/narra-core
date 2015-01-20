@@ -21,7 +21,7 @@
 
 Narra::Tools::Settings.defaults[:storage_temp] = '/tmp/narra'
 Narra::Tools::Settings.defaults[:storage_local_path] = '/opt/narra/storage'
-Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://storage.narra.dev'
+Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://narra-storage'
 Narra::Tools::Settings.defaults[:storage_s3_items] = 'narra-items'
 
 Narra::Tools::Settings.defaults[:thumbnail_extension] = 'png'
