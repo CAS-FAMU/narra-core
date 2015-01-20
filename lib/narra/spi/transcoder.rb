@@ -43,6 +43,7 @@ module Narra
         @item = item
         @event = event
         @raw = raw
+        @retries = 0
       end
 
       def item
@@ -65,6 +66,24 @@ module Narra
       def transcode(progress_from, progress_to)
         # Nothing to do
         # This has to be overridden in descendants
+      end
+
+      def _transcode(progress_from, progress_to)
+        # transcode
+        begin
+          transcode(progress_from, progress_to)
+        rescue => e
+          # retries increment
+          @retries += 1
+          # retry
+          if @retries < 5
+            # reset event
+            set_progress(progress_from)
+            # transcode
+            _transcode(progress_from, progress_to)
+          end
+          # TODO logging system
+        end
       end
     end
   end

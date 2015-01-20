@@ -44,49 +44,43 @@ module Narra
         # fire event
         @event.run!
 
-        # transcode
-        begin
-          # temp path
-          temporary = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_raw'
-          # download
-          File.open(temporary, 'wb') do |file|
-            file.write open(options['identifier']).read
-          end
-
-          # get ffmpeg object
-          raw = FFMPEG::Movie.new(temporary)
-
-          # process results if valid
-          if raw.valid?
-            # transcoders to run over
-            transcoders = []
-
-            # parse url for proper connector
-            Narra::Core.transcoders.each do |transcoder|
-              if transcoder.valid?(item)
-                transcoders << transcoder.new(item, @event, raw)
-              end
-            end
-
-            # calculate progress
-            progress = 0.0
-
-            # start transcoding process
-            transcoders.each do |transcoder|
-              transcoder.transcode(progress, progress += 1.0 / transcoders.count)
-            end
-
-            # finish progress
-            set_progress(1.0)
-          end
-
-          # clean temp file provided by connector
-          FileUtils.rm_f(temporary)
-        rescue => e
-          # nothing to do
-          # TODO logging system
-          puts e.backtrace
+        # temp path
+        temporary = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_raw'
+        # download
+        File.open(temporary, 'wb') do |file|
+          file.write open(options['identifier']).read
         end
+
+        # get ffmpeg object
+        raw = FFMPEG::Movie.new(temporary)
+
+        # process results if valid
+        if raw.valid?
+          # transcoders to run over
+          transcoders = []
+
+          # parse url for proper connector
+          Narra::Core.transcoders.each do |transcoder|
+            if transcoder.valid?(item)
+              transcoders << transcoder.new(item, @event, raw)
+            end
+          end
+
+          # calculate progress
+          progress = 0.0
+
+          # start transcoding process
+          transcoders.each do |transcoder|
+            transcoder._transcode(progress, progress += 1.0 / transcoders.count)
+          end
+
+          # finish progress
+          set_progress(1.0)
+        end
+
+        # clean temp file provided by connector
+        FileUtils.rm_f(temporary)
+
         # event done
         @event.done!
       end
