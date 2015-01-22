@@ -28,7 +28,7 @@ module Narra
     field :username, type: String
     field :name, type: String
     field :email, type: String
-    field :images, type: String
+    field :image, type: String
     field :roles, type: Array, default: []
 
     # Project Relations
@@ -58,7 +58,7 @@ module Narra
     # Create a new user from the omniauth hash
     def self.create_from_hash!(hash)
       # create new user
-      user = Narra::User.new(username: hash['info']['name'].downcase.tr(' ', '_'), name: hash['info']['name'], email: hash['info']['email'], name: hash['info']['image'])
+      user = Narra::User.new(username: hash['info']['name'].downcase.tr(' ', '_'), name: hash['info']['name'], email: hash['info']['email'], image: hash['info']['image'])
 
       # assign default roles
       user.roles = (Narra::User.empty?) ? [:admin] : [:author]
