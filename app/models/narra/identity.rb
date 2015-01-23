@@ -37,13 +37,13 @@ module Narra
 
     # Find identity from the omniauth hash
     def self.find_from_hash(hash)
-      where(provider: hash.provider, uid: hash.uid).first
+      where(provider: hash[:provider], uid: hash[:uid]).first
     end
 
     # Create a new identity from the omniauth hash
     def self.create_from_hash(hash, user = nil)
       user ||= Narra::User.create_from_hash!(hash)
-      Narra::Identity.create(:user => user, :uid => hash['uid'], :provider => hash['provider'])
+      Narra::Identity.create(:user => user, :uid => hash[:uid], :provider => hash[:provider])
     end
   end
 end
