@@ -63,6 +63,14 @@ FactoryGirl.define do
       sequence(:generator) { :generated }
     end
   end
+  factory :meta_library, class: Narra::MetaLibrary do
+    sequence(:name) { |n| "test_meta_#{n}" }
+    sequence(:value) { |n| "Test Meta Value #{n}" }
+  end
+  factory :meta_project, class: Narra::MetaProject do
+    sequence(:name) { |n| "test_meta_#{n}" }
+    sequence(:value) { |n| "Test Meta Value #{n}" }
+  end
   factory :project, class: Narra::Project do
     sequence(:name) { |n| "test_project_#{n}" }
     sequence(:title) { |n| "Test Project #{n}" }
