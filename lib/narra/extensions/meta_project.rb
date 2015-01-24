@@ -36,6 +36,17 @@ module Narra
         project.save
       end
 
+      def update_meta(options)
+        # input check
+        return if options[:name].nil? || options[:value].nil?
+        # retrieve meta
+        meta = get_meta(name: options[:name])
+        # if not null update
+        meta.update_attributes(value: options[:value])
+        # return meta
+        meta
+      end
+
       def get_meta(options)
         # do a query
         result = project.meta.where(options)

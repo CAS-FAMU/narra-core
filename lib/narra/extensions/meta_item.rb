@@ -50,6 +50,19 @@ module Narra
         item.meta << meta
         # save item
         item.save
+        # return new meta
+        meta
+      end
+
+      def update_meta(options)
+        # input check
+        return if options[:name].nil? || options[:value].nil? || options[:generator].nil?
+        # retrieve meta
+        meta = get_meta(name: options[:name], generator: options[:generator])
+        # if not null update
+        meta.update_attributes(value: options[:value])
+        # return meta
+        meta
       end
 
       def get_meta(options)
