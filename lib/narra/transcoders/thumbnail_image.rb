@@ -36,26 +36,37 @@ module Narra
       end
 
       def transcode(progress_from, progress_to)
-        # set start progress
-        set_progress(progress_from)
+        begin
+          # set start progress
+          set_progress(progress_from)
 
-        # get thumbnail object
-        thumbnail = thumbnail_object
+          # get thumbnail object
+          @thumbnail = thumbnail_object
 
-        # generate
-        @raw.screenshot(thumbnail[:file], thumbnail[:options], preserve_aspect_ratio: :height, validate: false)
+          # generate
+          @raw.screenshot(@thumbnail[:file], @thumbnail[:options], preserve_aspect_ratio: :height, validate: false)
 
-        # copy to storage
-        url = @item.create_file(thumbnail[:key], File.open(thumbnail[:file])).public_url
+          # copy to storage
+          url = @item.create_file(@thumbnail[:key], File.open(@thumbnail[:file])).public_url
 
-        # create meta
-        add_meta(generator: :thumbnail, name: 'thumbnail', content: url)
+          # create meta
+          add_meta(generator: :thumbnail, name: 'thumbnail', content: url)
+        rescue => e
+          #clean
+          clean
+          # raise exception
+          raise e
+        else
+          # set end progress
+          set_progress(progress_to)
+          #clean
+          clean
+        end
+      end
 
+      def clean
         # delete
-        FileUtils.rm_f(thumbnail[:file])
-
-        # set end progress
-        set_progress(progress_to)
+        FileUtils.rm_f(@thumbnail[:file])
       end
 
       def thumbnail_object

@@ -10,10 +10,12 @@ PATH
     narra-core (0.0.1)
       aasm
       fog
+      logger-better
       mongoid
       rails (~> 4.2.0)
       sidekiq
       sinatra
+      streamio-ffmpeg
       wisper
 
 GEM
@@ -61,9 +63,9 @@ GEM
     builder (3.2.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    codeclimate-test-reporter (0.4.5)
+    codeclimate-test-reporter (0.4.6)
       simplecov (>= 0.7.1, < 1.0.0)
-    connection_pool (2.1.0)
+    connection_pool (2.1.1)
     database_cleaner (1.4.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
@@ -98,7 +100,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.0.6)
+    fog-aws (0.0.7)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -127,7 +129,7 @@ GEM
       fog-core (>= 1.21.0)
       fog-json
       fog-xml (>= 0.0.1)
-    fog-sakuracloud (0.1.2)
+    fog-sakuracloud (1.0.0)
       fog-core
       fog-json
     fog-serverlove (0.1.1)
@@ -160,6 +162,7 @@ GEM
     inflecto (0.0.2)
     ipaddress (0.8.0)
     json (1.8.2)
+    logger-better (0.1.2)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -167,7 +170,7 @@ GEM
     mime-types (2.4.3)
     mini_portile (0.6.2)
     minitest (5.5.1)
-    mongoid (4.0.0)
+    mongoid (4.0.1)
       activemodel (~> 4.0)
       moped (~> 2.0.0)
       origin (~> 2.1)
@@ -186,7 +189,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
-    nokogiri (1.6.5)
+    nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     optionable (0.2.0)
     origin (2.1.1)
@@ -263,7 +266,7 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sprockets-rails (2.2.2)
+    sprockets-rails (2.2.4)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)

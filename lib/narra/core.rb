@@ -20,8 +20,8 @@
 #
 
 require 'narra/extensions'
-require 'narra/spi'
 require 'narra/tools'
+require 'narra/spi'
 require 'narra/workers'
 
 require 'narra/core/engine'

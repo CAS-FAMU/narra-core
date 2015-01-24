@@ -36,30 +36,41 @@ module Narra
       end
 
       def transcode(progress_from, progress_to)
-        # set start progress
-        set_progress(progress_from)
+        begin
+          # set start progress
+          set_progress(progress_from)
 
-        # set up transcode options
-        proxy_lq = transcode_object('lq')
-        proxy_hq = transcode_object('hq')
+          # set up transcode options
+          @proxy_lq = transcode_object('lq')
+          @proxy_hq = transcode_object('hq')
 
-        # start transcode process
-        @raw.screenshot(proxy_lq[:file], proxy_lq[:options], preserve_aspect_ratio: :height, validate: false)
-        @raw.screenshot(proxy_hq[:file], proxy_hq[:options], preserve_aspect_ratio: :height, validate: false)
+          # start transcode process
+          @raw.screenshot(@proxy_lq[:file], @proxy_lq[:options], preserve_aspect_ratio: :height, validate: false)
+          @raw.screenshot(@proxy_hq[:file], @proxy_hq[:options], preserve_aspect_ratio: :height, validate: false)
 
-        # save into storage
-        proxy_lq_url = @item.create_file(proxy_lq[:key], File.open(proxy_lq[:file])).public_url
-        proxy_hq_url = @item.create_file(proxy_hq[:key], File.open(proxy_hq[:file])).public_url
+          # save into storage
+          proxy_lq_url = @item.create_file(@proxy_lq[:key], File.open(@proxy_lq[:file])).public_url
+          proxy_hq_url = @item.create_file(@proxy_hq[:key], File.open(@proxy_hq[:file])).public_url
 
-        # add proxy files metadata
-        add_meta(generator: :transcoder, name: 'image_proxy_lq', content: proxy_lq_url)
-        add_meta(generator: :transcoder, name: 'image_proxy_hq', content: proxy_hq_url)
+          # add proxy files metadata
+          add_meta(generator: :transcoder, name: 'image_proxy_lq', content: proxy_lq_url)
+          add_meta(generator: :transcoder, name: 'image_proxy_hq', content: proxy_hq_url)
+        rescue => e
+          #clean
+          clean
+          # raise exception
+          raise e
+        else
+          # set end progress
+          set_progress(progress_to)
+          #clean
+          clean
+        end
+      end
 
+      def clean
         # clean temp transcodes
-        FileUtils.rm_f([proxy_lq[:file], proxy_hq[:file]])
-
-        # set end progress
-        set_progress(progress_to)
+        FileUtils.rm_f([@proxy_lq[:file], @proxy_hq[:file]])
       end
 
       def transcode_object(type)

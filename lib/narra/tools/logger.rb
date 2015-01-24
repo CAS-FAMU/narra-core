@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,23 +19,26 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'narra/audio'
-require 'narra/cache'
-require 'narra/event'
-require 'narra/identity'
-require 'narra/image'
-require 'narra/item'
-require 'narra/junction'
-require 'narra/library'
-require 'narra/mark'
-require 'narra/meta'
-require 'narra/project'
-require 'narra/sequence'
-require 'narra/user'
-require 'narra/video'
-
 module Narra
-  module Models
+  module Tools
+    module Logger
 
+      # return default logger
+      def self.logger
+        @logger ||= ::Logger.new STDOUT
+      end
+
+      def self.log_info(progname = nil, &block)
+        logger.info(progname, &block)
+      end
+
+      def self.log_error(progname = nil, &block)
+        logger.error(progname, &block)
+      end
+
+      def self.log_debug(progname = nil, &block)
+        logger.debug(progname, &block)
+      end
+    end
   end
 end

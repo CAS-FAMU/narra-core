@@ -34,27 +34,27 @@ module Narra
       def perform(options)
         # check
         return if options['item'].nil? || options['identifier'].nil? || options['event'].nil?
-
-        # get event
-        @event = Narra::Event.find(options['event'])
-
-        # get item
-        item = Narra::Item.find(options['item'])
-
-        # fire event
-        @event.run!
-
         # transcode
         begin
+          # get event
+          @event = Narra::Event.find(options['event'])
+
+          # get item
+          item = Narra::Item.find(options['item'])
+
+          # fire event
+          @event.run!
+
           # temp path
-          temporary = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_raw'
+          @temporary = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_raw'
+
           # download
-          File.open(temporary, 'wb') do |file|
+          File.open(@temporary, 'wb') do |file|
             file.write open(options['identifier']).read
           end
 
           # get ffmpeg object
-          raw = FFMPEG::Movie.new(temporary)
+          raw = FFMPEG::Movie.new(@temporary)
 
           # process results if valid
           if raw.valid?
@@ -73,24 +73,34 @@ module Narra
 
             # start transcoding process
             transcoders.each do |transcoder|
-              transcoder._transcode(progress, progress += 1.0 / transcoders.count)
+              transcoder.transcode(progress, progress += 1.0 / transcoders.count)
             end
 
             # finish progress
             set_progress(1.0)
           end
-
-          # clean temp file provided by connector
-          FileUtils.rm_f(temporary)
         rescue => e
           # reset event
           @event.reset!
+          # clean
+          clean
+          # log
+          logger.error('transcoder#' + options['identifier']) { e.to_s }
           # throw
-          raise
-          # TODO logging system
+          raise e
+        else
+          # clean
+          clean
+          # log
+          logger.info('transcoder#' + options['identifier']) { 'Item ' + item.name + '#' + options['item'] + ' successfully transcoded.' }
+          # event done
+          @event.done!
         end
-        # event done
-        @event.done!
+      end
+
+      def clean
+        # clean temp file provided by connector
+        FileUtils.rm_f(@temporary)
       end
 
       def event

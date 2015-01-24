@@ -36,34 +36,45 @@ module Narra
       end
 
       def transcode(progress_from, progress_to)
-        # set start progress
-        set_progress(progress_from)
+        begin
+          # set start progress
+          set_progress(progress_from)
 
-        # set up transcode options
-        proxy_lq = transcode_object('lq')
-        proxy_hq = transcode_object('hq')
+          # set up transcode options
+          @proxy_lq = transcode_object('lq')
+          @proxy_hq = transcode_object('hq')
 
-        # calculate progress portion
-        progress_lq = (progress_to - progress_from) / 3
-        progress_hq = progress_lq * 2
+          # calculate progress portion
+          progress_lq = (progress_to - progress_from) / 3
+          progress_hq = progress_lq * 2
 
-        # start transcode process
-        @raw.transcode(proxy_lq[:file], proxy_lq[:options]) { |progress| set_progress(progress_from + (progress * progress_lq).to_f) }
-        @raw.transcode(proxy_hq[:file], proxy_hq[:options]) { |progress| set_progress(progress_from + progress_lq + (progress * progress_hq).to_f) }
+          # start transcode process
+          @raw.transcode(@proxy_lq[:file], @proxy_lq[:options]) { |progress| set_progress(progress_from + (progress * progress_lq).to_f) }
+          @raw.transcode(@proxy_hq[:file], @proxy_hq[:options]) { |progress| set_progress(progress_from + progress_lq + (progress * progress_hq).to_f) }
 
-        # save into storage
-        proxy_lq_url = @item.create_file(proxy_lq[:key], File.open(proxy_lq[:file])).public_url
-        proxy_hq_url = @item.create_file(proxy_hq[:key], File.open(proxy_hq[:file])).public_url
+          # save into storage
+          proxy_lq_url = @item.create_file(@proxy_lq[:key], File.open(@proxy_lq[:file])).public_url
+          proxy_hq_url = @item.create_file(@proxy_hq[:key], File.open(@proxy_hq[:file])).public_url
 
-        # add proxy files metadata
-        add_meta(generator: :transcoder, name: 'video_proxy_lq', content: proxy_lq_url)
-        add_meta(generator: :transcoder, name: 'video_proxy_hq', content: proxy_hq_url)
+          # add proxy files metadata
+          add_meta(generator: :transcoder, name: 'video_proxy_lq', content: proxy_lq_url)
+          add_meta(generator: :transcoder, name: 'video_proxy_hq', content: proxy_hq_url)
+        rescue => e
+          #clean
+          clean
+          # raise exception
+          raise e
+        else
+          # set end progress
+          set_progress(progress_to)
+          #clean
+          clean
+        end
+      end
 
+      def clean
         # clean temp transcodes
-        FileUtils.rm_f([proxy_lq[:file], proxy_hq[:file]])
-
-        # set end progress
-        set_progress(progress_to)
+        FileUtils.rm_f([@proxy_lq[:file], @proxy_hq[:file]])
       end
 
       def transcode_object(type)

@@ -19,13 +19,12 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'narra/extensions'
-
 module Narra
   module SPI
     # Generic template for generators
     class Connector
       include Narra::Extensions::Class
+      include Narra::Tools::Logger
 
       # Attributes for human readable format
       # These have to be imlemented in descendants

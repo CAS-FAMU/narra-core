@@ -55,7 +55,7 @@ module Narra
         transitions :to => :running, :from => [:pending]
       end
 
-      event :reset do
+      event :reset, after: Proc.new { set_progress(0.0) } do
         transitions :to => :pending, :from => [:running]
       end
 

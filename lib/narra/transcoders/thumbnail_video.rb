@@ -44,18 +44,25 @@ module Narra
 
         # generate all thumbnails
         (1..Narra::Tools::Settings.thumbnail_count.to_i).each do |count|
-          # seek
-          seek = '%05d' % (((count * ratio) == @raw.duration) ? (count * ratio) - 1 : count * ratio)
-          # get thumbnail object
-          thumbnail = thumbnail_object(seek)
-          # generate
-          @raw.screenshot(thumbnail[:file], thumbnail[:options], preserve_aspect_ratio: :height, validate: false)
-          # copy to storage
-          url = @item.create_file(thumbnail[:key], File.open(thumbnail[:file])).public_url
-          # create meta
-          add_meta(generator: :thumbnail, name: 'thumbnail_' + seek, content: url, marks: [{in: seek.to_f}])
-          # delete
-          FileUtils.rm_f(thumbnail[:file])
+          begin
+            # seek
+            seek = '%05d' % (((count * ratio) == @raw.duration) ? (count * ratio) - 1 : count * ratio)
+            # get thumbnail object
+            thumbnail = thumbnail_object(seek)
+            # generate
+            @raw.screenshot(thumbnail[:file], thumbnail[:options], preserve_aspect_ratio: :height, validate: false)
+            # copy to storage
+            url = @item.create_file(thumbnail[:key], File.open(thumbnail[:file])).public_url
+            # create meta
+            add_meta(generator: :thumbnail, name: 'thumbnail_' + seek, content: url, marks: [{in: seek.to_f}])
+            # delete
+            FileUtils.rm_f(thumbnail[:file])
+          rescue => e
+            # delete
+            FileUtils.rm_f(thumbnail[:file])
+            # raise exception
+            raise e
+          end
         end
 
         # set end progress

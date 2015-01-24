@@ -32,7 +32,7 @@ Narra::Tools::Settings.defaults[:video_proxy_extension] = 'webm'
 Narra::Tools::Settings.defaults[:video_proxy_lq_resolution] = '320x180'
 Narra::Tools::Settings.defaults[:video_proxy_lq_bitrate] = '300'
 Narra::Tools::Settings.defaults[:video_proxy_hq_resolution] = '1280x720'
-Narra::Tools::Settings.defaults[:video_proxy_hq_bitrate] = '1200'
+Narra::Tools::Settings.defaults[:video_proxy_hq_bitrate] = '1000'
 
 Narra::Tools::Settings.defaults[:image_proxy_extension] = 'png'
 Narra::Tools::Settings.defaults[:image_proxy_lq_resolution] = '320x180'

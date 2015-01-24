@@ -22,6 +22,7 @@
 require 'narra/tools/defaults_hash'
 require 'narra/tools/probeable'
 require 'narra/tools/settings'
+require 'narra/tools/logger'
 
 module Narra
   module Tools

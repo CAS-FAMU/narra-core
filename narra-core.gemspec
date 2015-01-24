@@ -45,6 +45,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "fog"
   spec.add_dependency "wisper"
   spec.add_dependency "sinatra"
+  spec.add_dependency "streamio-ffmpeg"
+  spec.add_dependency "logger-better"
 
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rspec-mocks"

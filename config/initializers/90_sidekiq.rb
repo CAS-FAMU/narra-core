@@ -21,6 +21,9 @@
 
 require 'sidekiq'
 
+# default logger
+Sidekiq::Logging.logger = Narra::Tools::Logger.logger
+
 # load redis config
 redis_config = YAML.load(ERB.new(File.new(Rails.root + 'config/redis.yml').read).result)
 

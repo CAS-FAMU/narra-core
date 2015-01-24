@@ -19,12 +19,17 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'narra/extensions'
+require 'narra/tools'
+
 module Narra
   module SPI
     # Generic template for generators
     class Generator
       include Narra::Extensions::Class
       include Narra::Extensions::Meta
+      include Narra::Extensions::Progress
+      include Narra::Tools::Logger
 
       # Attributes for human readable format
       # These have to be imlemented in descendants
@@ -45,6 +50,10 @@ module Narra
 
       def item
         @item
+      end
+
+      def event
+        @event
       end
 
       #

@@ -36,26 +36,37 @@ module Narra
       end
 
       def transcode(progress_from, progress_to)
-        # set start progress
-        set_progress(progress_from)
+        begin
+          # set start progress
+          set_progress(progress_from)
 
-        # set up transcode options
-        proxy = transcode_object
+          # set up transcode options
+          @proxy = transcode_object
 
-        # start transcode process
-        @raw.transcode(proxy[:file], proxy[:options]) { |progress| set_progress(progress_from + (progress * (progress_to - progress_from)).to_f) }
+          # start transcode process
+          @raw.transcode(@proxy[:file], @proxy[:options]) { |progress| set_progress(progress_from + (progress * (progress_to - progress_from)).to_f) }
 
-        # save into storage
-        proxy_url = @item.create_file(proxy[:key], File.open(proxy[:file])).public_url
+          # save into storage
+          proxy_url = @item.create_file(@proxy[:key], File.open(@proxy[:file])).public_url
 
-        # add proxy files metadata
-        add_meta(generator: :transcoder, name: 'audio_proxy', content: proxy_url)
+          # add proxy files metadata
+          add_meta(generator: :transcoder, name: 'audio_proxy', content: proxy_url)
+        rescue => e
+          #clean
+          clean
+          # raise exception
+          raise e
+        else
+          # set end progress
+          set_progress(progress_to)
+          #clean
+          clean
+        end
+      end
 
+      def clean
         # clean temp transcodes
-        FileUtils.rm_f([proxy[:file], proxy[:file]])
-
-        # set end progress
-        set_progress(progress_to)
+        FileUtils.rm_f([@proxy[:file], @proxy[:file]])
       end
 
       def transcode_object

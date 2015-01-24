@@ -19,11 +19,15 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'narra/extensions'
+require 'narra/tools'
+
 module Narra
   module SPI
     # Generic template for synthesizers
     class Synthesizer
       include Narra::Extensions::Class
+      include Narra::Tools::Logger
 
       # Attributes for human readable format
       # These have to be imlemented in descendants

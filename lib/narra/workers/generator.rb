@@ -25,29 +25,48 @@ module Narra
   module Workers
     class Generator
       include Sidekiq::Worker
+      include Narra::Extensions::Progress
+
       sidekiq_options :queue => :generators
 
       def perform(options)
         # check
         return if options['item'].nil? || options['identifier'].nil? || options['event'].nil?
-        # get event
-        event = Narra::Event.find(options['event'])
-        # get item
-        item = Narra::Item.find(options['item'])
-        # fire event
-        event.run!
-        # get generator
-        generator = Narra::Core.generators.detect { |g| g.identifier == options['identifier'].to_sym }
-        # execute
+        # perform
         begin
+          # get event
+          @event = Narra::Event.find(options['event'])
+
+          # get item
+          item = Narra::Item.find(options['item'])
+
+          # fire event
+          @event.run!
+
+          # get generator
+          generator = Narra::Core.generators.detect { |g| g.identifier == options['identifier'].to_sym }
+
           # perform generate if generator is available
-          generator.new(item, event).generate unless item.nil? || !item.prepared?
-        rescue
-          # nothing to do
-          # TODO logging system
+          generator.new(item, @event).generate unless item.nil? || !item.prepared?
+        rescue => e
+          # reset event
+          @event.reset!
+          # log
+          logger.error('generator#' + options['identifier']) { e.to_s }
+          # throw
+          raise e
+        else
+          # finish progress
+          set_progress(1.0)
+          # log
+          logger.info('generator#' + options['identifier']) { 'Item ' + item.name + '#' + options['item'] + ' successfully generated.' }
+          # event done
+          @event.done!
         end
-        # event done
-        event.done!
+      end
+
+      def event
+        @event
       end
     end
   end
