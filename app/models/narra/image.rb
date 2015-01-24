@@ -32,11 +32,11 @@ module Narra
     end
 
     def url_image_proxy_lq
-      @url_image_proxy_lq ||= meta.where(generator: :transcoder, name: 'image_proxy_lq').collect { |meta| meta.content }.first
+      @url_image_proxy_lq ||= meta.where(generator: :transcoder, name: 'image_proxy_lq').collect { |meta| meta.value }.first
     end
 
     def url_image_proxy_hq
-      @url_image_proxy_hq ||= meta.where(generator: :transcoder, name: 'image_proxy_hq').collect { |meta| meta.content }.first
+      @url_image_proxy_hq ||= meta.where(generator: :transcoder, name: 'image_proxy_hq').collect { |meta| meta.value }.first
     end
 
     def prepared?

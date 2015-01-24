@@ -50,7 +50,7 @@ module Narra
           proxy_url = @item.create_file(@proxy[:key], File.open(@proxy[:file])).public_url
 
           # add proxy files metadata
-          add_meta(generator: :transcoder, name: 'audio_proxy', content: proxy_url)
+          add_meta(generator: :transcoder, name: 'audio_proxy', value: proxy_url)
         rescue => e
           #clean
           clean

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2013 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,16 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>
+# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-module Narra
-  class Mark
-    include Mongoid::Document
-    include Mongoid::Timestamps
+require 'spec_helper'
 
-    # Fields
-    field :in, type: Float
-    field :out, type: Float
+describe Narra::MetaItem do
+  it "can be instantiated" do
+    expect(FactoryGirl.build(:meta_item)).to be_an_instance_of(Narra::MetaItem)
+  end
+
+  it "can be saved successfully" do
+    expect(FactoryGirl.create(:meta_item, generator: :source)).to be_persisted
   end
 end

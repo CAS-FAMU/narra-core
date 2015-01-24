@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,17 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
+module Narra
+  class MarkSequence < Mark
+    # Fields
+    field :index, type: Integer
 
-describe Narra::Mark do
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:mark)).to be_an_instance_of(Narra::Mark)
-  end
+    # Relations
+    belongs_to :sequence, autosave: true, inverse_of: :playlist, class_name: 'Narra::Sequence'
 
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:mark)).to be_persisted
+    # Validations
+    validates_presence_of :index, :in, :out
   end
 end

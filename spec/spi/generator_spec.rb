@@ -41,7 +41,7 @@ describe Narra::SPI::Generator do
 
   it 'can add metadata to the item' do
     # add meta
-    Narra::SPI::Generator.new(@item, @event).add_meta(name: 'test', content: 'test')
+    Narra::SPI::Generator.new(@item, @event).add_meta(name: 'test', value: 'test')
     # validation
     expect(@item.meta.count).to match(1)
   end

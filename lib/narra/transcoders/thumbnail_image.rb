@@ -50,7 +50,7 @@ module Narra
           url = @item.create_file(@thumbnail[:key], File.open(@thumbnail[:file])).public_url
 
           # create meta
-          add_meta(generator: :thumbnail, name: 'thumbnail', content: url)
+          add_meta(generator: :thumbnail, name: 'thumbnail', value: url)
         rescue => e
           #clean
           clean

@@ -59,33 +59,33 @@ module Narra
           # create specific item
           item = Narra::Video.new(name: connector.name, url: url, library: library)
           # push specific metadata
-          item.meta << Narra::Meta.new(name: 'type', content: :video, generator: :source)
+          item.meta << Narra::MetaItem.new(name: 'type', value: :video, generator: :source)
         when :image
           # create specific item
           item = Narra::Image.new(name: connector.name, url: url, library: library)
           # push specific metadata
-          item.meta << Narra::Meta.new(name: 'type', content: :image, generator: :source)
+          item.meta << Narra::MetaItem.new(name: 'type', value: :image, generator: :source)
         when :audio
           # create specific item
           item = Narra::Audio.new(name: connector.name, url: url, library: library)
           # push specific metadata
-          item.meta << Narra::Meta.new(name: 'type', content: :audio, generator: :source)
+          item.meta << Narra::MetaItem.new(name: 'type', value: :audio, generator: :source)
       end
 
       # create source metadata from essential fields
-      item.meta << Narra::Meta.new(name: 'name', content: connector.name, generator: :source)
-      item.meta << Narra::Meta.new(name: 'url', content: url, generator: :source)
-      item.meta << Narra::Meta.new(name: 'library', content: library.name, generator: :source)
-      item.meta << Narra::Meta.new(name: 'author', content: author, generator: :source)
+      item.meta << Narra::MetaItem.new(name: 'name', value: connector.name, generator: :source)
+      item.meta << Narra::MetaItem.new(name: 'url', value: url, generator: :source)
+      item.meta << Narra::MetaItem.new(name: 'library', value: library.name, generator: :source)
+      item.meta << Narra::MetaItem.new(name: 'author', value: author, generator: :source)
 
       # parse metadata from connector if exists
       connector.metadata.each do |meta|
-        item.meta << Narra::Meta.new(name: meta[:name], content: meta[:content], generator: :source)
+        item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: :source)
       end
 
       # parse metadata form the user input if exists
       metadata.each do |meta|
-        item.meta << Narra::Meta.new(name: meta[:name], content: meta[:content], generator: user.username.to_sym)
+        item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: user.username.to_sym)
       end
 
       # save item

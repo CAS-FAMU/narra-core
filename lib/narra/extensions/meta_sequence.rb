@@ -20,12 +20,28 @@
 #
 
 module Narra
-  class Mark
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  module Extensions
+    module MetaSequence
 
-    # Fields
-    field :in, type: Float
-    field :out, type: Float
+      def sequence
+        # This has to be overridden to return project
+      end
+
+      def add_meta(options)
+        # input check
+        return if options[:name].nil? || options[:value].nil?
+        # push meta into a project
+        sequence.meta << Narra::MetaSequence.new(options)
+        # save item
+        sequence.save
+      end
+
+      def get_meta(options)
+        # do a query
+        result = sequence.meta.where(options)
+        # check and return
+        result.empty? ? nil : (result.count > 1 ? result : result.first)
+      end
+    end
   end
 end

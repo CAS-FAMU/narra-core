@@ -21,40 +21,24 @@
 
 module Narra
   module Extensions
-    module Meta
+    module MetaProject
 
-      def item
-        # This has to be overridden to return item
+      def project
+        # This has to be overridden to return project
       end
 
       def add_meta(options)
         # input check
-        return if options[:name].nil? || options[:content].nil?
-        # check generator
-        if options[:generator].nil?
-          if self.kind_of?(Narra::SPI::Generator)
-            options[:generator] = self.class.identifier
-          else
-            return
-          end
-        end
-        # get marks
-        marks = options[:marks].nil? ? [] : options.delete(:marks)
-        # push new meta entry
-        meta = Narra::Meta.new(options)
-        # push marks
-        marks.each do |mark|
-          meta.marks << Narra::Mark.new(mark)
-        end
-        # push meta into an item
-        item.meta << meta
+        return if options[:name].nil? || options[:value].nil?
+        # push meta into a project
+        project.meta << Narra::MetaProject.new(options)
         # save item
-        item.save
+        project.save
       end
 
       def get_meta(options)
         # do a query
-        result = item.meta.where(options)
+        result = project.meta.where(options)
         # check and return
         result.empty? ? nil : (result.count > 1 ? result : result.first)
       end

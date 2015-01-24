@@ -20,7 +20,7 @@
 #
 
 require 'narra/extensions/class'
-require 'narra/extensions/meta'
+require 'narra/extensions/meta_item'
 require 'narra/extensions/progress'
 require 'narra/extensions/thumbnail'
 

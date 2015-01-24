@@ -26,18 +26,9 @@ module Narra
 
     # Fields
     field :name, type: String
-    field :content, type: String
-    field :generator, type: Symbol
-
-    # Relations
-    belongs_to :item, autosave: true, inverse_of: :meta, class_name: 'Narra::Item'
-    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :meta, class_name: 'Narra::Mark'
+    field :value, type: String
 
     # Validations
-    validates_uniqueness_of :name, :scope => [:generator, :item_id]
-    validates_presence_of :name, :content, :generator
-
-    # Scopes
-    scope :generators, ->(generators, source = true) { any_in(generator: source ? (generators | [:source]) : generators) }
+    validates_presence_of :name, :value
   end
 end

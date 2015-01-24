@@ -44,8 +44,8 @@ RSpec.configure do |config|
 
           def metadata
             [
-                {name: 'meta_03', content: 'Meta 03'},
-                {name: 'meta_04', content: 'Meta 04'}
+                {name: 'meta_03', value: 'Meta 03'},
+                {name: 'meta_04', value: 'Meta 04'}
             ]
           end
         end

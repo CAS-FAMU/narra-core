@@ -40,13 +40,13 @@ module Narra
         set_progress(progress_from)
 
         # Default for all
-        add_meta(generator: :source, name: 'size', content: @raw.size)
-        add_meta(generator: :source, name: 'duration', content: @raw.duration)
-        add_meta(generator: :source, name: 'timecode', content: @raw.timecode) unless @raw.timecode.nil?
-        add_meta(generator: :source, name: 'bitrate', content: @raw.bitrate)
-        add_meta(generator: :source, name: 'audio_codec', content: @raw.audio_codec)
-        add_meta(generator: :source, name: 'audio_sample_rate', content: @raw.audio_sample_rate)
-        add_meta(generator: :source, name: 'audio_channels', content: @raw.audio_channels)
+        add_meta(generator: :source, name: 'size', value: @raw.size)
+        add_meta(generator: :source, name: 'duration', value: @raw.duration)
+        add_meta(generator: :source, name: 'timecode', value: @raw.timecode) unless @raw.timecode.nil?
+        add_meta(generator: :source, name: 'bitrate', value: @raw.bitrate)
+        add_meta(generator: :source, name: 'audio_codec', value: @raw.audio_codec)
+        add_meta(generator: :source, name: 'audio_sample_rate', value: @raw.audio_sample_rate)
+        add_meta(generator: :source, name: 'audio_channels', value: @raw.audio_channels)
 
         # set end progress
         set_progress(progress_to)

@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -20,12 +19,19 @@
 #
 
 module Narra
-  class Mark
-    include Mongoid::Document
-    include Mongoid::Timestamps
-
+  class MetaItem < Meta
     # Fields
-    field :in, type: Float
-    field :out, type: Float
+    field :generator, type: Symbol
+
+    # Relations
+    belongs_to :item, autosave: true, inverse_of: :meta, class_name: 'Narra::Item'
+    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :meta, class_name: 'Narra::MarkMeta'
+
+    # Validations
+    validates_uniqueness_of :name, :scope => [:generator, :item_id]
+    validates_presence_of :generator
+
+    # Scopes
+    scope :generators, ->(generators, source = true) { any_in(generator: source ? (generators | [:source]) : generators) }
   end
 end

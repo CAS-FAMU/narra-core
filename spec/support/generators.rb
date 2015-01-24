@@ -35,7 +35,7 @@ RSpec.configure do |config|
           end
 
           def generate
-            add_meta(name: 'test', content: 'test')
+            add_meta(name: 'test', value: 'test')
           end
         end
       end

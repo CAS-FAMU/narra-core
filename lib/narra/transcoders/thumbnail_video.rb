@@ -54,7 +54,7 @@ module Narra
             # copy to storage
             url = @item.create_file(thumbnail[:key], File.open(thumbnail[:file])).public_url
             # create meta
-            add_meta(generator: :thumbnail, name: 'thumbnail_' + seek, content: url, marks: [{in: seek.to_f}])
+            add_meta(generator: :thumbnail, name: 'thumbnail_' + seek, value: url, marks: [{in: seek.to_f}])
             # delete
             FileUtils.rm_f(thumbnail[:file])
           rescue => e

@@ -23,15 +23,24 @@ module Narra
   class Sequence
     include Mongoid::Document
     include Mongoid::Timestamps
+    include Narra::Extensions::MetaSequence
 
     # Fields
     field :name, type: String
 
+    # Meta Relations
+    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::MetaSequence'
+
     # Relations
     belongs_to :project, autosave: true, inverse_of: :sequences, class_name: 'Narra::Project'
-    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::Mark'
+    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::MarkSequence'
 
     # Validations
     validates_presence_of :name
+
+    # Return this sequence for MetaSequence extension
+    def sequence
+      self
+    end
   end
 end

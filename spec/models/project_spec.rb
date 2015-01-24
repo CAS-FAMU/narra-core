@@ -29,4 +29,11 @@ describe Narra::Project do
   it "can be saved successfully" do
     expect(FactoryGirl.create(:project, author: @author_user)).to be_persisted
   end
+
+  it "has public tag set to false" do
+    # create project
+    project = FactoryGirl.create(:project, author: @author_user)
+    # check for meta public tag
+    expect(project.get_meta(name: 'public').value).to match('false')
+  end
 end

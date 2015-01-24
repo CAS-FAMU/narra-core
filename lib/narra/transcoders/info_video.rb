@@ -40,19 +40,19 @@ module Narra
         set_progress(progress_from)
 
         # Default for all
-        add_meta(generator: :source, name: 'size', content: @raw.size)
-        add_meta(generator: :source, name: 'duration', content: @raw.duration)
-        add_meta(generator: :source, name: 'timecode', content: @raw.timecode) unless @raw.timecode.nil?
-        add_meta(generator: :source, name: 'bitrate', content: @raw.bitrate)
-        add_meta(generator: :source, name: 'video_codec', content: @raw.video_codec)
-        add_meta(generator: :source, name: 'colorspace', content: @raw.colorspace)
-        add_meta(generator: :source, name: 'resolution', content: @raw.resolution)
-        add_meta(generator: :source, name: 'width', content: @raw.width)
-        add_meta(generator: :source, name: 'height', content: @raw.height)
-        add_meta(generator: :source, name: 'frame_rate', content: @raw.frame_rate)
-        add_meta(generator: :source, name: 'audio_codec', content: @raw.audio_codec)
-        add_meta(generator: :source, name: 'audio_sample_rate', content: @raw.audio_sample_rate)
-        add_meta(generator: :source, name: 'audio_channels', content: @raw.audio_channels)
+        add_meta(generator: :source, name: 'size', value: @raw.size)
+        add_meta(generator: :source, name: 'duration', value: @raw.duration)
+        add_meta(generator: :source, name: 'timecode', value: @raw.timecode) unless @raw.timecode.nil?
+        add_meta(generator: :source, name: 'bitrate', value: @raw.bitrate)
+        add_meta(generator: :source, name: 'video_codec', value: @raw.video_codec)
+        add_meta(generator: :source, name: 'colorspace', value: @raw.colorspace)
+        add_meta(generator: :source, name: 'resolution', value: @raw.resolution)
+        add_meta(generator: :source, name: 'width', value: @raw.width)
+        add_meta(generator: :source, name: 'height', value: @raw.height)
+        add_meta(generator: :source, name: 'frame_rate', value: @raw.frame_rate)
+        add_meta(generator: :source, name: 'audio_codec', value: @raw.audio_codec)
+        add_meta(generator: :source, name: 'audio_sample_rate', value: @raw.audio_sample_rate)
+        add_meta(generator: :source, name: 'audio_channels', value: @raw.audio_channels)
 
         # set end progress
         set_progress(progress_to)

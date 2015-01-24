@@ -27,7 +27,7 @@ module Narra
     # Generic template for generators
     class Generator
       include Narra::Extensions::Class
-      include Narra::Extensions::Meta
+      include Narra::Extensions::MetaItem
       include Narra::Extensions::Progress
       include Narra::Tools::Logger
 

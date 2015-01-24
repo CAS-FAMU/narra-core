@@ -24,10 +24,14 @@ module Narra
     include Mongoid::Document
     include Mongoid::Timestamps
     include Narra::Extensions::Thumbnail
+    include Narra::Extensions::MetaLibrary
 
     # Fields
     field :name, type: String
     field :description, type: String
+
+    # Meta Relations
+    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::MetaLibrary'
 
     # User Relations
     belongs_to :author, autosave: true, inverse_of: :projects, class_name: 'Narra::User'
@@ -45,5 +49,10 @@ module Narra
     # Validations
     validates_uniqueness_of :name
     validates_presence_of :name, :author_id
+
+    # Return this library for MetaLibrary extension
+    def library
+      self
+    end
   end
 end

@@ -51,9 +51,9 @@ FactoryGirl.define do
     sequence(:name) { |n| "test_library_#{n}" }
     sequence(:description) { |n| "Description for the Test Library #{n}" }
   end
-  factory :meta, class: Narra::Meta do
+  factory :meta_item, class: Narra::MetaItem do
     sequence(:name) { |n| "test_meta_#{n}" }
-    sequence(:content) { |n| "Test Meta Content #{n}" }
+    sequence(:value) { |n| "Test Meta Value #{n}" }
 
     trait :source do
       sequence(:generator) { :source }
@@ -71,10 +71,9 @@ FactoryGirl.define do
   factory :sequence, class: Narra::Sequence do
     sequence(:name) { |n| "test_sequence_#{n}" }
   end
-  factory :mark, class: Narra::Mark do
+  factory :mark_meta, class: Narra::MarkMeta do
     sequence(:in) { |n| n.to_f }
     sequence(:out) { |n| (n+1).to_f }
-    sequence(:index) { |n| n }
   end
   factory :user, class: Narra::User do
     sequence(:name) { |n| "tester#{n}" }

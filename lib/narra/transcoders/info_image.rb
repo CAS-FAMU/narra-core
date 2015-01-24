@@ -40,11 +40,11 @@ module Narra
         set_progress(progress_from)
 
         # Default for all
-        add_meta(generator: :source, name: 'size', content: @raw.size)
-        add_meta(generator: :source, name: 'colorspace', content: @raw.colorspace)
-        add_meta(generator: :source, name: 'resolution', content: @raw.resolution)
-        add_meta(generator: :source, name: 'width', content: @raw.width)
-        add_meta(generator: :source, name: 'height', content: @raw.height)
+        add_meta(generator: :source, name: 'size', value: @raw.size)
+        add_meta(generator: :source, name: 'colorspace', value: @raw.colorspace)
+        add_meta(generator: :source, name: 'resolution', value: @raw.resolution)
+        add_meta(generator: :source, name: 'width', value: @raw.width)
+        add_meta(generator: :source, name: 'height', value: @raw.height)
 
         # set end progress
         set_progress(progress_to)

@@ -53,8 +53,8 @@ module Narra
           proxy_hq_url = @item.create_file(@proxy_hq[:key], File.open(@proxy_hq[:file])).public_url
 
           # add proxy files metadata
-          add_meta(generator: :transcoder, name: 'image_proxy_lq', content: proxy_lq_url)
-          add_meta(generator: :transcoder, name: 'image_proxy_hq', content: proxy_hq_url)
+          add_meta(generator: :transcoder, name: 'image_proxy_lq', value: proxy_lq_url)
+          add_meta(generator: :transcoder, name: 'image_proxy_hq', value: proxy_hq_url)
         rescue => e
           #clean
           clean

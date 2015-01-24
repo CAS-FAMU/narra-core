@@ -24,6 +24,7 @@ module Narra
     include Mongoid::Document
     include Mongoid::Timestamps
     include Narra::Extensions::Thumbnail
+    include Narra::Extensions::MetaItem
 
     # Fields
     field :name, type: String
@@ -34,7 +35,7 @@ module Narra
     belongs_to :library, autosave: true, inverse_of: :items, class_name: 'Narra::Library'
 
     # Meta Relations
-    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Meta'
+    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::MetaItem'
 
     # Junction Relations
     has_many :in, autosave: true, dependent: :destroy, inverse_of: :out, class_name: 'Narra::Junction'
@@ -83,6 +84,10 @@ module Narra
       [self]
     end
 
+    def item
+      self
+    end
+
     def type
       _type.split('::').last.downcase.to_sym
     end
@@ -101,7 +106,7 @@ module Narra
       # run generator process for those where exact generator wasn't executed
       items.each do |item|
         Narra::Core.generators_identifiers.each do |generator|
-          Narra::Core.generate(item, [generator]) if Narra::Meta.where(item: item).generators([generator], false).empty?
+          Narra::Core.generate(item, [generator]) if Narra::MetaItem.where(item: item).generators([generator], false).empty?
         end
       end
     end

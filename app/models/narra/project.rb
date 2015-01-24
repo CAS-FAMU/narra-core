@@ -24,6 +24,7 @@ module Narra
     include Mongoid::Document
     include Mongoid::Timestamps
     include Narra::Extensions::Thumbnail
+    include Narra::Extensions::MetaProject
 
     # Fields
     field :name, type: String
@@ -31,6 +32,9 @@ module Narra
     field :description, type: String
     field :generators, type: Array, default: []
     field :synthesizers, type: Array, default: []
+
+    # Meta Relations
+    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::MetaProject'
 
     # User Relations
     belongs_to :author, autosave: true, inverse_of: :projects, class_name: 'Narra::User'
@@ -53,9 +57,20 @@ module Narra
     validates_uniqueness_of :name
     validates_presence_of :name, :title, :author_id
 
+    # Hooks
+    # Create default public mark
+    after_create do |project|
+      project.add_meta(name: :public, value: false)
+    end
+
     # Return all project items
     def items
       Narra::Item.any_in(library_id: self.library_ids)
+    end
+
+    # Return this project for MetaProject extension
+    def project
+      self
     end
   end
 end

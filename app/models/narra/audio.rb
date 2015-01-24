@@ -28,7 +28,7 @@ module Narra
     end
 
     def url_audio_proxy
-      @url_audio_proxy ||= meta.where(generator: :transcoder, name: 'audio_proxy').collect { |meta| meta.content }.first
+      @url_audio_proxy ||= meta.where(generator: :transcoder, name: 'audio_proxy').collect { |meta| meta.value }.first
     end
 
     def prepared?

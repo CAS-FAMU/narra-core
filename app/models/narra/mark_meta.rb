@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -20,12 +19,11 @@
 #
 
 module Narra
-  class Mark
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  class MarkMeta < Mark
+    # Relations
+    belongs_to :meta, autosave: true, inverse_of: :marks, class_name: 'Narra::MetaItem'
 
-    # Fields
-    field :in, type: Float
-    field :out, type: Float
+    # Validations
+    validates_presence_of :in
   end
 end

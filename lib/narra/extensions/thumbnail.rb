@@ -33,7 +33,7 @@ module Narra
 
       def url_thumbnails
         # get thumbnail if not resolved yet
-        @url_thumbnails ||= Narra::Meta.any_in(item_id: self.items.collect { |item| item._id }).where(generator: :thumbnail).sample(Narra::Tools::Settings.thumbnail_count.to_i).collect { |meta| meta.content }
+        @url_thumbnails ||= Narra::MetaItem.any_in(item_id: self.items.collect { |item| item._id }).where(generator: :thumbnail).sample(Narra::Tools::Settings.thumbnail_count.to_i).collect { |meta| meta.value }
       end
     end
   end

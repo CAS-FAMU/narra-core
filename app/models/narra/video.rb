@@ -36,15 +36,15 @@ module Narra
     end
 
     def url_video_proxy_lq
-      @url_video_proxy_lq ||= meta.where(generator: :transcoder, name: 'video_proxy_lq').collect { |meta| meta.content }.first
+      @url_video_proxy_lq ||= meta.where(generator: :transcoder, name: 'video_proxy_lq').collect { |meta| meta.value }.first
     end
 
     def url_video_proxy_hq
-      @url_video_proxy_hq ||= meta.where(generator: :transcoder, name: 'video_proxy_hq').collect { |meta| meta.content }.first
+      @url_video_proxy_hq ||= meta.where(generator: :transcoder, name: 'video_proxy_hq').collect { |meta| meta.value }.first
     end
 
     def url_audio_proxy
-      @url_audio_proxy ||= meta.where(generator: :transcoder, name: 'audio_proxy').collect { |meta| meta.content }.first
+      @url_audio_proxy ||= meta.where(generator: :transcoder, name: 'audio_proxy').collect { |meta| meta.value }.first
     end
 
     def prepared?
