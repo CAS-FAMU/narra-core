@@ -30,10 +30,14 @@ module Narra
       def add_meta(options)
         # input check
         return if options[:name].nil? || options[:value].nil?
+        # create meta
+        meta = Narra::MetaProject.new(options)
         # push meta into a project
-        project.meta << Narra::MetaProject.new(options)
+        project.meta << meta
         # save item
         project.save
+        # return
+        meta
       end
 
       def update_meta(options)
