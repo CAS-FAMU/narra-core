@@ -44,7 +44,7 @@ module Narra
         meta = Narra::MetaItem.new(options)
         # push marks
         marks.each do |mark|
-          meta.marks << Narra::MarkItem.new(mark)
+          meta.marks << Narra::MarkMeta.new(mark)
         end
         # push meta into an item
         item.meta << meta
