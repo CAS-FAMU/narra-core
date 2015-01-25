@@ -100,10 +100,10 @@ module Narra
 
     # Generate process invoker
     def self.generate(item, selected_generators = nil)
-      # check generators for nil
-      selected_generators ||= generators_identifiers
+      # check generators for nil and assign only possible generators
+      selected_generators ||= item.library.generators
       # select them
-      selected_generators.select! { |g| generators_identifiers.include?(g.to_sym) }
+      selected_generators.select! { |g| item.library.generators.include?(g.to_s) && generators_identifiers.include?(g.to_sym)}
       # process item
       selected_generators.each do |generator|
         # get generator class

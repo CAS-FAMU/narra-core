@@ -75,10 +75,6 @@ module Narra
       return file
     end
 
-    def generate
-      Narra::Item.generate(self)
-    end
-
     # Return as an array
     def items
       [self]
@@ -97,6 +93,10 @@ module Narra
       return false
     end
 
+    def generate
+      Narra::Item.generate(self)
+    end
+
     # Static methods
     # Check items for generated metadata
     def self.generate(input_item = nil)
@@ -105,7 +105,7 @@ module Narra
 
       # run generator process for those where exact generator wasn't executed
       items.each do |item|
-        Narra::Core.generators_identifiers.each do |generator|
+        item.library.generators.each do |generator|
           Narra::Core.generate(item, [generator]) if Narra::MetaItem.where(item: item).generators([generator], false).empty?
         end
       end

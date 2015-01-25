@@ -22,15 +22,15 @@
 require 'spec_helper'
 
 describe Narra::Item do
-  it "can be instantiated" do
+  it 'can be instantiated' do
     expect(FactoryGirl.build(:item)).to be_an_instance_of(Narra::Item)
   end
 
-  it "can be saved successfully" do
+  it 'can be saved successfully' do
     expect(FactoryGirl.create(:item)).to be_persisted
   end
 
-  it "should have storage available" do
+  it 'should have storage available' do
     # Temporary item
     item = FactoryGirl.create(:item)
     # Create a file
@@ -39,5 +39,16 @@ describe Narra::Item do
     expect(item.get_file('test')).to be_a_kind_of(Fog::Model)
     expect(item.files.count).to match(1)
     expect(Narra::Storage.items.files.count).to match(1)
+  end
+
+  it 'should process item to generate new metadata' do
+    # create library
+    @library = FactoryGirl.create(:library, author: @author_user, generators: ['testing'], projects: [])
+    # create item prepared
+    @item_prepared= FactoryGirl.create(:item_prepared, library: @library)
+    # generate
+    @item_prepared.generate
+    # validation
+    expect(@item_prepared.meta.count).to match(1)
   end
 end

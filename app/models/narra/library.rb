@@ -29,6 +29,7 @@ module Narra
     # Fields
     field :name, type: String
     field :description, type: String
+    field :generators, type: Array, default: []
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::MetaLibrary'

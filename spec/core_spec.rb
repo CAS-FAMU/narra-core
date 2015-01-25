@@ -48,6 +48,14 @@ describe Narra::Core do
     Narra::Core.generate(@item_prepared, [:testing])
     # validation
     expect(@item.meta.count).to match(0)
+    expect(@item_prepared.meta.count).to match(0)
+    # assign testing generator to library
+    @library.generators << 'testing'
+    # regenerate
+    Narra::Core.generate(@item, [:testing])
+    Narra::Core.generate(@item_prepared, [:testing])
+    # validation
+    expect(@item.meta.count).to match(0)
     expect(@item_prepared.meta.count).to match(1)
   end
 

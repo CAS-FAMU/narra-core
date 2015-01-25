@@ -30,7 +30,6 @@ module Narra
     field :name, type: String
     field :title, type: String
     field :description, type: String
-    field :generators, type: Array, default: []
     field :synthesizers, type: Array, default: []
 
     # Meta Relations
