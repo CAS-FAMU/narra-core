@@ -22,12 +22,15 @@
 module Narra
   module Listeners
     class Transcoder
+      include Narra::Tools::Logger
 
       def narra_transcoder_done(options)
         # get item
         item = Narra::Item.find(options[:item])
         # run generators
         item.generate
+        # log
+        log_info('listener#transcoder') { 'Item ' + item.name + '#' + item._id.to_s + 'transcoded successfully.'}
       end
     end
   end

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -20,30 +20,17 @@
 #
 
 module Narra
-  module Tools
-    module Logger
+  module Listeners
+    class Library
+      include Narra::Tools::Logger
 
-      # return default logger
-      def self.default_logger
-        @logger ||= ::Logger.new STDOUT
-      end
-
-      protected
-
-      def logger
-        Narra::Tools::Logger.default_logger
-      end
-
-      def log_info(progname = nil, &block)
-        logger.info(progname, &block)
-      end
-
-      def log_error(progname = nil, &block)
-        logger.error(progname, &block)
-      end
-
-      def log_debug(progname = nil, &block)
-        logger.debug(progname, &block)
+      def narra_library_generators_updated(options)
+        # get library
+        library = Narra::Library.find(options[:library])
+        # run new generators over all items from the library
+        Narra::Item.generate(library.items)
+        # log
+        log_info('listener#library') { 'Library ' + library.name + '#' + library._id.to_s + 'generators updated.'}
       end
     end
   end

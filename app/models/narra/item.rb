@@ -94,14 +94,14 @@ module Narra
     end
 
     def generate
-      Narra::Item.generate(self)
+      Narra::Item.generate([self])
     end
 
     # Static methods
     # Check items for generated metadata
-    def self.generate(input_item = nil)
+    def self.generate(input_items = nil)
       # resolve items
-      items = input_item.nil? ? Narra::Item.all : [input_item]
+      items = input_items.nil? ? Narra::Item.all : input_items
 
       # run generator process for those where exact generator wasn't executed
       items.each do |item|

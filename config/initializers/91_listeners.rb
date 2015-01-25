@@ -23,3 +23,5 @@ require 'wisper'
 
 # Transcode listener fires generation process on the item
 Wisper.subscribe(Narra::Listeners::Transcoder.new, on: :narra_transcoder_done)
+# Library listener fires generation process on all items from the library
+Wisper.subscribe(Narra::Listeners::Library.new, on: :narra_library_generators_updated)

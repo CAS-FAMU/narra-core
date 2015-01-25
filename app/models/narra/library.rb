@@ -23,6 +23,7 @@ module Narra
   class Library
     include Mongoid::Document
     include Mongoid::Timestamps
+    include Wisper::Publisher
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::MetaLibrary
 
@@ -51,9 +52,18 @@ module Narra
     validates_uniqueness_of :name
     validates_presence_of :name, :author_id
 
+    # Callbacks
+    after_update :broadcast_events
+
     # Return this library for MetaLibrary extension
     def library
       self
+    end
+
+    protected
+
+    def broadcast_events
+      broadcast(:narra_library_generators_updated, { library: self._id.to_s }) if self.generators_changed?
     end
   end
 end

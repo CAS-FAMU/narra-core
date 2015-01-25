@@ -29,7 +29,6 @@ require 'narra/core/version'
 
 module Narra
   module Core
-
     # Add item into the NARRA
     def self.add_item(url, author, user, library, metadata = [])
       # input check
