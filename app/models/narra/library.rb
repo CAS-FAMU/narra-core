@@ -60,6 +60,11 @@ module Narra
       self
     end
 
+    # Check items for generated metadata
+    def generate
+      Narra::Item.generate(items)
+    end
+
     protected
 
     def broadcast_events
