@@ -59,8 +59,18 @@ module Narra
         return if options[:name].nil? || options[:value].nil? || options[:generator].nil?
         # retrieve meta
         meta = get_meta(name: options[:name], generator: options[:generator])
-        # if not null update
+        # update value
         meta.update_attributes(value: options[:value])
+        # update marks
+        if !options[:marks].nil?
+          marks = []
+          # prepare marks
+          options[:marks].each do |mark|
+            marks << Narra::MarkMeta.new(mark)
+          end
+          # update
+          meta.update_attributes(marks: marks)
+        end
         # return meta
         meta
       end
