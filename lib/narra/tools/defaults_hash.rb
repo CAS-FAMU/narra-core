@@ -21,7 +21,7 @@
 
 module Narra
   module Tools
-    class DefaultsHash < ActiveSupport::HashWithIndifferentAccess
+    class DefaultsHash < ::ActiveSupport::HashWithIndifferentAccess
       def []=(key, val)
         # persist if there is no already
         if Narra::Tools::Settings.get(convert_key(key)).nil?
