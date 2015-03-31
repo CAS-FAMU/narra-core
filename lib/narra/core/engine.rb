@@ -20,6 +20,7 @@
 #
 
 require 'narra/core'
+require 'rails'
 
 module Narra
   module Core
