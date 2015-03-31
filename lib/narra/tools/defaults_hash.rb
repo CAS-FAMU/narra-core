@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'active_support/all'
+
 module Narra
   module Tools
     class DefaultsHash < ::ActiveSupport::HashWithIndifferentAccess
