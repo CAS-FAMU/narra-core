@@ -26,11 +26,13 @@ module Narra
 
       # Add sequence into the NARRA
       def Core.add_sequence(project, author, params = {})
+        # input check
+        return if params[:sequence_name].nil? || params[:sequence_type].nil? || params[:sequence_content].nil?
         # get type of the sequence
         case params[:type]
           when :edl
             # input check
-            return if params[:edl_name].nil? || params[:edl_content].nil? || params[:edl_fps].nil?
+            return if params[:edl_fps].nil?
             # process edl
             process(type: :sequence, project: project.name, identifier: :edl, params: params.merge({author: author._id.to_s}))
         end

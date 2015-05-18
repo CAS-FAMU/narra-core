@@ -27,10 +27,10 @@ module Narra
 
       def process_edl(options)
         # parse
-        parsed = ::EDL::Parser.new(fps=options['edl_fps'].to_i).parse(options['edl_content'])
+        parsed = ::EDL::Parser.new(fps=options['edl_fps'].to_i).parse(options['sequence_content'])
 
         # options and marks
-        sequence = {name: options['edl_name'], author: options['author'], marks: []}
+        sequence = {name: options['sequence_name'], author: options['author'], marks: []}
 
         # iterate through and resolve
         parsed.each do |clip|
