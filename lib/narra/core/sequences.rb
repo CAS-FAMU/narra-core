@@ -29,7 +29,7 @@ module Narra
         # input check
         return if params[:sequence_name].nil? || params[:sequence_type].nil? || params[:sequence_content].nil?
         # get type of the sequence
-        case params[:type]
+        case params[:sequence_type]
           when :edl
             # input check
             return if params[:edl_fps].nil?
