@@ -28,6 +28,6 @@ module Narra
     belongs_to :sequence, autosave: true, inverse_of: :marks, class_name: 'Narra::Sequence'
 
     # Validations
-    validates_presence_of :row, :in, :out
+    validates_presence_of :row, :clip, :sequence, :in, :out
   end
 end

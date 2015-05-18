@@ -42,10 +42,7 @@ FactoryGirl.define do
   end
   factory :junction, class: Narra::Junction do
     sequence(:weight) { 1.00 }
-
-    trait :generic do
-      sequence(:synthesizer) { :generic }
-    end
+    sequence(:direction) { {none: true} }
   end
   factory :library, class: Narra::Library do
     sequence(:name) { |n| "test_library_#{n}" }
@@ -82,6 +79,11 @@ FactoryGirl.define do
   factory :mark_meta, class: Narra::MarkMeta do
     sequence(:in) { |n| n.to_f }
     sequence(:out) { |n| (n+1).to_f }
+  end
+  factory :mark_sequence, class: Narra::MarkSequence do
+    sequence(:in) { |n| n.to_f }
+    sequence(:out) { |n| (n+1).to_f }
+    sequence(:row) { |n| (n+1) }
   end
   factory :user, class: Narra::User do
     sequence(:name) { |n| "tester#{n}" }

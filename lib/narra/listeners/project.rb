@@ -30,21 +30,23 @@ module Narra
         changes = options[:changes]
 
         # process changes
-        removed = changes - project.synthesizers
-        created = project.synthesizers - changes
+        unless changes.nil?
+          removed = changes - project.synthesizers
+          created = project.synthesizers - changes
 
-        # delete all junctions for appropriate synthesizer
-        removed.each do |synthesizer|
-          project.junctions.where(synthesizer: synthesizer).destroy_all
+          # delete all junctions for appropriate synthesizer
+          removed.each do |synthesizer|
+            project.junctions.where(synthesizer: synthesizer).destroy_all
+          end
+
+          # run synthesize process for appropriate synthesizer
+          created.each do |synthesizer|
+            Narra::Project.synthesize(project, synthesizer)
+          end
+
+          # log
+          log_info('listener#project') { 'Project ' + project.name + ' synthesizers updated.'}
         end
-
-        # run synthesize process for appropriate synthesizer
-        created.each do |synthesizer|
-          Narra::Project.synthesize(project, synthesizer)
-        end
-
-        # log
-        log_info('listener#project') { 'Project ' + project.name + ' synthesizers updated.'}
       end
     end
   end

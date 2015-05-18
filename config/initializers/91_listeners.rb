@@ -29,7 +29,8 @@ Wisper.subscribe(Narra::Listeners::Library.new, on: :narra_library_generators_up
 Wisper.subscribe(Narra::Listeners::Project.new, on: :narra_project_synthesizers_updated)
 
 # Register all synthesizer listeners
-Narra::Core.synthesizers.each do |synthesizer|
+# Not calling Narra::Core directly due to workarounf for spec testing
+Narra::SPI::Synthesizer.descendants.each do |synthesizer|
   synthesizer.listeners.each do |listener|
     Wisper.subscribe(listener[:instance], on: listener[:event])
   end

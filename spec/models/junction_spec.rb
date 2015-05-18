@@ -22,11 +22,22 @@
 require 'spec_helper'
 
 describe Narra::Junction do
+  before(:each) do
+    # create project
+    @project = FactoryGirl.create(:project, author: @author_user)
+    # create library
+    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
+    # create item
+    @item0 = FactoryGirl.create(:item, library: @library)
+    # create item prepared
+    @item1 = FactoryGirl.create(:item, library: @library)
+  end
+
   it "can be instantiated" do
     expect(FactoryGirl.build(:junction)).to be_an_instance_of(Narra::Junction)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:junction, synthesizer: :generic)).to be_persisted
+    expect(FactoryGirl.create(:junction, synthesizer: :generic, project: @project, items: [@item0, @item1])).to be_persisted
   end
 end

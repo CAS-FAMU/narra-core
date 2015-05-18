@@ -38,7 +38,7 @@ describe Narra::Core do
   end
 
   it 'should return all active synthesizers' do
-    expect(Narra::Core.synthesizers.count).to match(1)
+    expect(Narra::Core.synthesizers.count).to match(2)
   end
 
   it 'should process item to generate new metadata' do

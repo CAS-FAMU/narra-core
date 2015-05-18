@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -30,8 +30,8 @@ RSpec.configure do |config|
           @title = 'Testing'
           @description = 'Testing Metadata Synthesizer'
 
-          def synthesize
-            add_junction(weight: 1.0, out: @project.items.last)
+          def synthesize(options = {})
+            add_junction([@project.items.first, @project.items.last], weight: 1.0, synthesizer: :testing, direction: {none: true}, source: 'testing')
           end
         end
       end

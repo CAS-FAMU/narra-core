@@ -22,11 +22,22 @@
 require 'spec_helper'
 
 describe Narra::Sequence do
+  before(:each) do
+    # create project
+    @project = FactoryGirl.create(:project, author: @author_user)
+    # create library
+    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
+    # create item
+    @item0 = FactoryGirl.create(:item, library: @library)
+    # create item prepared
+    @mark = FactoryGirl.build(:mark_sequence, clip: @item0)
+  end
+
   it "can be instantiated" do
     expect(FactoryGirl.build(:sequence)).to be_an_instance_of(Narra::Sequence)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:sequence)).to be_persisted
+    expect(FactoryGirl.create(:sequence, marks: [@mark], author: @author_user, project: @project)).to be_persisted
   end
 end

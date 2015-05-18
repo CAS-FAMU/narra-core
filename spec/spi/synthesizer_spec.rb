@@ -27,8 +27,9 @@ describe Narra::SPI::Synthesizer do
     @project = FactoryGirl.create(:project, author: @author_user)
     # create library
     @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
-    # create item
-    @item = FactoryGirl.create(:item, library: @library)
+    # create items
+    @item0 = FactoryGirl.create(:item, library: @library)
+    @item1 = FactoryGirl.create(:item, library: @library)
     # create event
     @event = FactoryGirl.create(:event, project: @project)
   end
@@ -45,7 +46,7 @@ describe Narra::SPI::Synthesizer do
 
   it 'can add junction to the project' do
     # add meta
-    Narra::SPI::Synthesizer.new(@project, @event).add_junction(weight: 1.0, out: @item)
+    Narra::SPI::Synthesizer.new(@project, @event).add_junction([@item0, @item1], weight: 1.0, synthesizer: :generic, source: 'test', direction: {none: true})
     # validation
     expect(@project.junctions.count).to match(1)
   end

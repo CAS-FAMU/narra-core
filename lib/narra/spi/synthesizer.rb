@@ -69,7 +69,7 @@ module Narra
       def self.listeners
         # Nothing to do
         # This can be overridden in descendants
-        # OPTIONAL
+        []
       end
     end
   end
