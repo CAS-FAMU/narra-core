@@ -28,7 +28,7 @@ require "narra/core/version"
 Gem::Specification.new do |spec|
   spec.name        = "narra-core"
   spec.version     = Narra::Core::VERSION
-  spec.authors     = ["Michal Mocnak", "Krystof Pesek"]
+  spec.authors     = ["Michal Mocnak", "Krystof Pesek", "Petr Pulc"]
   spec.email       = ["info@narra.eu"]
   spec.homepage    = "http://www.narra.eu"
   spec.summary     = "NARRA Core functionality"
@@ -47,6 +47,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sinatra"
   spec.add_dependency "streamio-ffmpeg"
   spec.add_dependency "logger-better"
+  spec.add_dependency "edl"
+  spec.add_dependency "timecode"
 
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rspec-mocks"

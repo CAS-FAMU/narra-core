@@ -23,6 +23,7 @@ module Narra
   class Project
     include Mongoid::Document
     include Mongoid::Timestamps
+    include Wisper::Publisher
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::MetaProject
 
@@ -62,6 +63,8 @@ module Narra
       project.add_meta(name: :public, value: false)
     end
 
+    after_update :broadcast_events
+
     # Return all project items
     def items
       Narra::Item.any_in(library_id: self.library_ids)
@@ -70,6 +73,24 @@ module Narra
     # Return this project for MetaProject extension
     def project
       self
+    end
+
+    # Static methods
+    # Synthesize
+    def self.synthesize(project, synthesizer, options = {})
+      # Input check
+      return if project.nil? || synthesizer.nil?
+
+      # Submit synthesize process only if the project has the synthesizer enabled
+      if project.synthesizers.include?(synthesizer)
+        Narra::Core.synthesize(project, [synthesizer], options)
+      end
+    end
+
+    protected
+
+    def broadcast_events
+      broadcast(:narra_project_synthesizers_updated, { project: self.name, changes: self.changed_attributes['synthesizers'] }) if self.synthesizers_changed?
     end
   end
 end

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -27,6 +27,9 @@ module Narra
     # Generic template for synthesizers
     class Synthesizer
       include Narra::Extensions::Class
+      include Narra::Extensions::Sequence
+      include Narra::Extensions::Junction
+      include Narra::Extensions::Progress
       include Narra::Tools::Logger
 
       # Attributes for human readable format
@@ -46,22 +49,27 @@ module Narra
         @event = event
       end
 
-      def add_junction(options)
-        # input check
-        return if options[:out].nil? || options[:weight].nil? || !options[:weight].instance_of?(Float)
-        # push new junction entry
-        @project.junctions << Narra::Junction.new({synthesizer: self.class.identifier, in: @item}.merge(options))
-        # save project
-        @project.save
+      def project
+        @project
+      end
+
+      def event
+        @event
       end
 
       #
       # Should be overridden and implemented
       #
 
-      def synthesize
+      def synthesize(options = {})
         # Nothing to do
         # This has to be overridden in descendants
+      end
+
+      def self.listeners
+        # Nothing to do
+        # This can be overridden in descendants
+        # OPTIONAL
       end
     end
   end

@@ -38,8 +38,7 @@ module Narra
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::MetaItem'
 
     # Junction Relations
-    has_many :in, autosave: true, dependent: :destroy, inverse_of: :out, class_name: 'Narra::Junction'
-    has_many :out, autosave: true, dependent: :destroy, inverse_of: :in, class_name: 'Narra::Junction'
+    has_and_belongs_to_many :junctions, autosave: true, dependent: :destroy, inverse_of: :items, class_name: 'Narra::Junction'
 
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Event'

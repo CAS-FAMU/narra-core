@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
@@ -18,16 +19,30 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'edl'
+
 module Narra
-  class MarkSequence < Mark
-    # Fields
-    field :row, type: Integer
+  module Extensions
+    module EDL
 
-    # Relations
-    belongs_to :clip, autosave: true, class_name: 'Narra::Item'
-    belongs_to :sequence, autosave: true, inverse_of: :marks, class_name: 'Narra::Sequence'
+      def process_edl(options)
+        # parse
+        parsed = ::EDL::Parser.new(fps=options['edl_fps'].to_i).parse(options['edl_content'])
 
-    # Validations
-    validates_presence_of :row, :in, :out
+        # options and marks
+        sequence = {name: options['edl_name'], author: options['author'], marks: []}
+
+        # iterate through and resolve
+        parsed.each do |clip|
+          # parse and check clip names
+          clip_name = clip.clip_name.split('.')[0].downcase
+          # prepare marks to create sequence
+          sequence[:marks] << {clip: clip_name, in: clip.src_start_tc.to_s, out: clip.src_end_tc.to_s}
+        end
+
+        # get back well formed hash
+        return sequence
+      end
+    end
   end
 end

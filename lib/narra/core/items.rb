@@ -50,23 +50,23 @@ module Narra
         case connector.type
           when :video
             # create specific item
-            item = Narra::Video.new(name: connector.name, url: url, library: library)
+            item = Narra::Video.new(name: connector.name.downcase, url: url, library: library)
             # push specific metadata
             item.meta << Narra::MetaItem.new(name: 'type', value: :video, generator: :source)
           when :image
             # create specific item
-            item = Narra::Image.new(name: connector.name, url: url, library: library)
+            item = Narra::Image.new(name: connector.name.downcase, url: url, library: library)
             # push specific metadata
             item.meta << Narra::MetaItem.new(name: 'type', value: :image, generator: :source)
           when :audio
             # create specific item
-            item = Narra::Audio.new(name: connector.name, url: url, library: library)
+            item = Narra::Audio.new(name: connector.name.downcase, url: url, library: library)
             # push specific metadata
             item.meta << Narra::MetaItem.new(name: 'type', value: :audio, generator: :source)
         end
 
         # create source metadata from essential fields
-        item.meta << Narra::MetaItem.new(name: 'name', value: connector.name, generator: :source)
+        item.meta << Narra::MetaItem.new(name: 'name', value: connector.name.downcase, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'url', value: url, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'library', value: library.name, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'author', value: author, generator: :source)

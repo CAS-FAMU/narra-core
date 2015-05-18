@@ -19,6 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+development:
+  sessions:
+    default:
+      database: narra_dev
+      hosts:
+        - localhost:27017
+  options:
+    preload_models: true
+    raise_not_found_error: false
+
 test:
   sessions:
     default:

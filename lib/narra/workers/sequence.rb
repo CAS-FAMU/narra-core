@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -23,46 +23,58 @@ require 'sidekiq'
 
 module Narra
   module Workers
-    class Synthesizer
+    class Sequence
       include Sidekiq::Worker
+      include Narra::Extensions::Sequence
+      include Narra::Extensions::EDL
       include Narra::Extensions::Progress
 
-      sidekiq_options :queue => :synthesizers
+      sidekiq_options :queue => :sequences
 
       def perform(options)
-        # check
-        return if options['project'].nil? || options['identifier'].nil? || options['event'].nil?
+        # input check
+        return if options['project'].nil?
         # perform
         begin
           # get event
           @event = Narra::Event.find(options['event'])
 
           # get project
-          project = Narra::Project.find(options['project'])
+          @project = Narra::Project.find_by(name: options['project'])
+
+          # get type
+          type = options['identifier'].to_sym
 
           # fire event
           @event.run!
 
-          # get generator
-          synthesizer = Narra::Core.synthesizers.detect { |s| s.identifier == options['identifier'].to_sym }
-
-          # perform generate if generator is available
-          synthesizer.new(project, @event).synthesize(options) unless project.nil?
+          # process
+          case type
+            when :edl
+              # process edl
+              sequence = process_edl(options['params'])
+              # add new sequence
+              add_sequence(sequence)
+          end
         rescue => e
           # reset event
           @event.reset!
           # log
-          logger.error('synthesizer#' + options['identifier']) { e.to_s }
+          logger.error('sequence#' + options['identifier']) { e.to_s }
           # throw
           raise e
         else
           # finish progress
           set_progress(1.0)
           # log
-          logger.info('synthesizer#' + options['identifier']) { 'Project ' + project.name + '#' + options['project'] + ' successfully generated.' }
+          logger.info('sequence#' + options['identifier']) { 'Sequence successfully created.' }
           # event done
           @event.done!
         end
+      end
+
+      def project
+        @project
       end
 
       def event

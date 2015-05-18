@@ -25,3 +25,12 @@ require 'wisper'
 Wisper.subscribe(Narra::Listeners::Transcoder.new, on: :narra_transcoder_done)
 # Library listener fires generation process on all items from the library
 Wisper.subscribe(Narra::Listeners::Library.new, on: :narra_library_generators_updated)
+# Project listener fires synthetization process
+Wisper.subscribe(Narra::Listeners::Project.new, on: :narra_project_synthesizers_updated)
+
+# Register all synthesizer listeners
+Narra::Core.synthesizers.each do |synthesizer|
+  synthesizer.listeners.each do |listener|
+    Wisper.subscribe(listener[:instance], on: listener[:event])
+  end
+end

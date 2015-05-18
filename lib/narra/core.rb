@@ -32,6 +32,7 @@ require 'narra/core/generators'
 require 'narra/core/synthesizers'
 require 'narra/core/transcoders'
 require 'narra/core/items'
+require 'narra/core/sequences'
 
 module Narra
   module Core
@@ -40,6 +41,7 @@ module Narra
     include Narra::Core::Synthesizers
     include Narra::Core::Transcoders
     include Narra::Core::Items
+    include Narra::Core::Sequences
 
     private
 
@@ -63,6 +65,8 @@ module Narra
           Narra::Workers::Generator.perform_async(options.merge({event: event._id.to_s}))
         when :synthesizer
           Narra::Workers::Synthesizer.perform_async(options.merge({event: event._id.to_s}))
+        when :sequence
+          Narra::Workers::Sequence.perform_async(options.merge({event: event._id.to_s}))
       end
       # return event
       return event

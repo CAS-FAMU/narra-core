@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -20,8 +20,14 @@
 #
 
 require 'narra/extensions/class'
+require 'narra/extensions/junction'
+require 'narra/extensions/edl'
 require 'narra/extensions/meta_item'
+require 'narra/extensions/meta_library'
+require 'narra/extensions/meta_sequence'
+require 'narra/extensions/meta_project'
 require 'narra/extensions/progress'
+require 'narra/extensions/sequence'
 require 'narra/extensions/thumbnail'
 
 module Narra

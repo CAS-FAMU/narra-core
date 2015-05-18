@@ -1,5 +1,5 @@
-  #
-# Copyright (C) 2014 CAS / FAMU
+#
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -20,27 +20,21 @@
 #
 
 module Narra
-  class Image < Item
+  module Core
+    module Sequences
+      include Narra::Extensions::Sequence
 
-    # Helper methods
-    def image_proxy_lq
-      @image_proxy_lq ||= get_file('image_proxy_lq.' + Narra::Tools::Settings.image_proxy_extension)
-    end
-
-    def image_proxy_hq
-      @image_proxy_hq ||= get_file('image_proxy_hq.' + Narra::Tools::Settings.image_proxy_extension)
-    end
-
-    def url_image_proxy_lq
-      @url_image_proxy_lq ||= meta.where(generator: :transcoder, name: 'image_proxy_lq').collect { |meta| meta.value }.first
-    end
-
-    def url_image_proxy_hq
-      @url_image_proxy_hq ||= meta.where(generator: :transcoder, name: 'image_proxy_hq').collect { |meta| meta.value }.first
-    end
-
-    def prepared?
-      !url_image_proxy_lq.nil? && !url_image_proxy_hq.nil?
+      # Add sequence into the NARRA
+      def Core.add_sequence(project, author, params = {})
+        # get type of the sequence
+        case params[:type]
+          when :edl
+            # input check
+            return if params[:edl_name].nil? || params[:edl_content].nil? || params[:edl_fps].nil?
+            # process edl
+            process(type: :sequence, project: project.name, identifier: :edl, params: params.merge({author: author._id.to_s}))
+        end
+      end
     end
   end
 end

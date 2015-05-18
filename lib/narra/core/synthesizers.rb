@@ -30,14 +30,14 @@ module Narra
       end
 
       # Synthesize process invoker
-      def Core.synthesize(project, synthesizers = nil)
+      def Core.synthesize(project, selected_synthesizers = nil, options = {})
         # check synthesizers for nil
-        synthesizers ||= synthesizers_identifiers
+        selected_synthesizers ||= synthesizers_identifiers
         # select them
-        synthesizers.select! { |s| Synthesizers.synthesizers_identifiers.include?(s.to_sym) }
+        selected_synthesizers.select! { |s| Synthesizers.synthesizers_identifiers.include?(s.to_sym) }
         # process item
-        synthesizers.each do |synthesizer|
-          process(type: :synthesizer, project: project._id.to_s, identifier: synthesizer)
+        selected_synthesizers.each do |synthesizer|
+          process({type: :synthesizer, project: project._id.to_s, identifier: synthesizer}.merge(options))
         end
       end
 

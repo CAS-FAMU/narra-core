@@ -23,6 +23,7 @@ module Narra
   class Sequence
     include Mongoid::Document
     include Mongoid::Timestamps
+    include Wisper::Publisher
     include Narra::Extensions::MetaSequence
 
     # Fields
@@ -31,16 +32,34 @@ module Narra
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::MetaSequence'
 
+    # User Relations
+    belongs_to :author, autosave: true, inverse_of: :sequences, class_name: 'Narra::User'
+
     # Relations
     belongs_to :project, autosave: true, inverse_of: :sequences, class_name: 'Narra::Project'
     has_many :marks, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::MarkSequence'
 
     # Validations
-    validates_presence_of :name
+    validates_uniqueness_of :project, scope: [:name]
+    validates_presence_of :name, :author, :project, :marks
+
+    # Callbacks
+    after_destroy :broadcast_events_destroyed
+    after_create :broadcast_events_created
 
     # Return this sequence for MetaSequence extension
     def sequence
       self
+    end
+
+    protected
+
+    def broadcast_events_destroyed
+      broadcast(:narra_sequence_destroyed, { project: self.project.name, sequence: self._id.to_s })
+    end
+
+    def broadcast_events_created
+      broadcast(:narra_sequence_created, { project: self.project.name, sequence: self._id.to_s })
     end
   end
 end

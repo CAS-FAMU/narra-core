@@ -39,6 +39,9 @@ module Narra
     has_many :libraries, autosave: true, inverse_of: :author, class_name: 'Narra::Library'
     has_and_belongs_to_many :libraries_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
+    # Sequence Relations
+    has_many :sequences, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Sequence'
+
     # Identity Relations
     has_many :identities, dependent: :destroy, class_name: 'Narra::Identity'
 

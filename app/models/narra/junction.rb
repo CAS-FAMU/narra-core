@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -27,15 +27,21 @@ module Narra
     # Fields
     field :weight, type: Float
     field :synthesizer, type: Symbol
+    field :sources, type: Array, default: []
+    field :direction, type: Hash, default: {none: true}
 
     # Project relation
     belongs_to :project, autosave: true, inverse_of: :junctions, class_name: 'Narra::Project'
 
     # Item Relations
-    belongs_to :in, autosave: true, inverse_of: :out, class_name: 'Narra::Item'
-    belongs_to :out, autosave: true, inverse_of: :in, class_name: 'Narra::Item'
+    has_and_belongs_to_many :items, autosave: true, inverse_of: :junctions, class_name: 'Narra::Item'
+
+    # Validations
+    validates_uniqueness_of :project, scope: [:synthesizer, :direction, :item_ids]
+    validates_presence_of :weight, :synthesizer, :project, :items
 
     # Scopes
     scope :project, ->(project) { where(project: project) }
+    scope :synthesizer, ->(synthesizer) { where(synthesizer: synthesizer) }
   end
 end

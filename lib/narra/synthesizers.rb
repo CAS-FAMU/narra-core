@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
@@ -18,16 +19,10 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'narra/synthesizers/sequence/synthesizer'
+
 module Narra
-  class MarkSequence < Mark
-    # Fields
-    field :row, type: Integer
+  module Synthesizers
 
-    # Relations
-    belongs_to :clip, autosave: true, class_name: 'Narra::Item'
-    belongs_to :sequence, autosave: true, inverse_of: :marks, class_name: 'Narra::Sequence'
-
-    # Validations
-    validates_presence_of :row, :in, :out
   end
 end
