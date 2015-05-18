@@ -29,6 +29,11 @@ module Narra
         @synthesizers ||= Narra::SPI::Synthesizer.descendants
       end
 
+      # Return specified synthesizer
+      def Core.synthesizer(identifier)
+        synthesizers.select { |synthesizer| synthesizer.identifier.equal?(identifier.to_sym)}.first
+      end
+
       # Synthesize process invoker
       def Core.synthesize(project, selected_synthesizers = nil, options = {})
         # check synthesizers for nil
