@@ -28,7 +28,7 @@ module Narra
       end
 
       def url_thumbnail
-        @url_thumbnails.first unless thumbnails.nil?
+        url_thumbnails.sample
       end
 
       def url_thumbnails
