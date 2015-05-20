@@ -82,7 +82,7 @@ module Narra
       return if project.nil? || synthesizer.nil?
 
       # Submit synthesize process only if the project has the synthesizer enabled
-      if project.synthesizers.include?(synthesizer)
+      if project.synthesizers.include?(synthesizer.to_s)
         Narra::Core.synthesize(project, [synthesizer], options)
       end
     end
