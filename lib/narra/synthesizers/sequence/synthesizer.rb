@@ -46,12 +46,12 @@ module Narra
               # order marks
               marks = sequence.marks.order_by(:row => 'asc')
               # iterate
-              marks.each do |mark|
+              marks.each_with_index do |mark, index|
                 # add junction
-                if mark.row+1 != marks.count
+                if index+1 != marks.count && (mark.row+1 == marks[index+1].row)
                   # get items
                   from = Narra::Item.find_by(name: mark.clip.name)
-                  to = Narra::Item.find_by(name: marks[mark.row+1].clip.name)
+                  to = Narra::Item.find_by(name: marks[index+1].clip.name)
                   direction = {from: from._id.to_s, to: to._id.to_s}
                   weight = 0.0
                   # if the connection is between same clips do not add junction
