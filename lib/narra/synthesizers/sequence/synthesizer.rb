@@ -19,7 +19,6 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'narra/spi'
 require 'narra/synthesizers/sequence/listener'
 
 module Narra

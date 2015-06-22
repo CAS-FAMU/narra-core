@@ -23,10 +23,10 @@ module Narra
   module Core
     module Items
 
-      # Add item into the NARRA
-      def Core.add_item(url, author, user, library, metadata = [])
+      # Check item for connector and return back
+      def Core.check_item(url)
         # input check
-        return if url.nil? || author.nil? || user.nil? || library.nil?
+        return nil if url.nil?
 
         # connector container
         connector = nil
@@ -40,8 +40,17 @@ module Narra
           end
         end
 
-        # check
-        return nil if connector.nil?
+        # return
+        return connector
+      end
+
+      # Add item into the NARRA
+      def Core.add_item(url, author, user, library, connector_identifier, options = {})
+        # input check
+        return nil if author.nil? || user.nil? || library.nil? || connector_identifier.nil? || connector(connector_identifier).nil?
+
+        # connector container
+        connector = connector(connector_identifier).new(url, options)
 
         # item container
         item = nil
@@ -77,8 +86,10 @@ module Narra
         end
 
         # parse metadata form the user input if exists
-        metadata.each do |meta|
-          item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: user.username.to_sym)
+        if options[:metadata]
+          options[:metadata].each do |meta|
+            item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: user.username.to_sym)
+          end
         end
 
         # save item

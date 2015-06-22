@@ -29,7 +29,6 @@ module Narra
     # Fields
     field :name, type: String
     field :url, type: String
-    field :files, type: Array, default: []
 
     # Library Relations
     belongs_to :library, autosave: true, inverse_of: :items, class_name: 'Narra::Library'
@@ -49,30 +48,6 @@ module Narra
 
     # Scopes
     scope :user, ->(user) { any_in(library_id: Library.user(user).pluck(:id)) }
-
-    # Hooks
-    # Destroy item's directory after destroy
-    after_destroy do |item|
-      # destroy item's storage content
-      item.files.each do |file|
-        Narra::Storage.items.files.get(item._id.to_s + '/' + file).destroy
-      end
-    end
-
-    # Helper methods
-    # Return item's storage
-    def get_file(name)
-      Narra::Storage.items.files.get(self._id.to_s + '/' + name)
-    end
-
-    def create_file(name, body = nil)
-      # create a new file
-      file = Narra::Storage.items.files.create(key: self._id.to_s + '/' + name, body: body, public: true)
-      # cache it
-      files << name
-      # return file
-      return file
-    end
 
     # Return as an array
     def items

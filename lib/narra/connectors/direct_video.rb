@@ -20,7 +20,6 @@
 #
 
 require 'uri'
-require 'narra/spi'
 
 module Narra
   module Connectors
@@ -50,6 +49,10 @@ module Narra
 
       def metadata
         []
+      end
+
+      def thumbnail_url
+        nil
       end
 
       def download_url

@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   spec.test_files = Dir["spec/**/*"]
 
-  spec.add_dependency "rails", "~> 4.2.0"
+  spec.add_dependency "rails", "~> 4.2.2"
   spec.add_dependency "mongoid"
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
@@ -49,6 +49,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "logger-better"
   spec.add_dependency "edl"
   spec.add_dependency "timecode"
+  spec.add_dependency "carrierwave-mongoid"
+  spec.add_dependency "carrierwave-video"
+  spec.add_dependency "mini_magick"
 
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rspec-mocks"

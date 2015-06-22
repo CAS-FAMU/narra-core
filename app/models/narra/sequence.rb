@@ -25,6 +25,7 @@ module Narra
     include Mongoid::Timestamps
     include Wisper::Publisher
     include Narra::Extensions::MetaSequence
+    include Narra::Extensions::Public
 
     # Fields
     field :name, type: String
@@ -59,6 +60,7 @@ module Narra
     end
 
     def broadcast_events_created
+      # broadcast all events
       broadcast(:narra_sequence_created, { project: self.project.name, sequence: self._id.to_s })
     end
   end

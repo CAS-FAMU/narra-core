@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,18 +16,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
+module Narra
+  module Extensions
+    module Public
+      extend ActiveSupport::Concern
+      include Narra::Extensions::Meta
 
-describe Narra::Storage do
-  it 'should have items storage available' do
-    expect(Narra::Storage.items).to be_a_kind_of(Fog::Model)
-  end
+      included do
+        after_create :narra_public_initialize
+      end
 
-  it 'should list files' do
-    # expect to list them
-    expect(Narra::Storage.items.files.count).to match(1)
+      def public
+        # get public meta
+        meta = get_meta(name: 'public')
+        # resolve
+        meta.nil? ? false : meta.value == 'true'
+      end
+
+      def public=(public)
+        self.update_meta(name: 'public', value: public)
+      end
+
+      protected
+
+      def narra_public_initialize
+        self.add_meta(name: 'public', value: false)
+      end
+    end
   end
 end

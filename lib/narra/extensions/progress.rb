@@ -23,20 +23,26 @@ module Narra
   module Extensions
     module Progress
 
-      def event
-        # This has to be overridden to return event
+      def event=(event)
+        @event = event
       end
 
-      def set_progress(progress)
+      def event
+        @event
+      end
+
+      def set_progress(progress, message = nil)
         # cache progress locally
         @progress ||= 0.0
-        # if changed more than 5% push it
-        if (progress - @progress) >= 0.05
+        # if changed more than 2% push it
+        if (progress - @progress) >= 0.02
           # update event
           event.set_progress(progress)
           # update cache
           @progress = progress
         end
+        # set up message if entered
+        @event.update_attribute(:message, message) if message
       end
     end
   end

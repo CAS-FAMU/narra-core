@@ -35,12 +35,15 @@ module Narra
     has_many :projects, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Project'
     has_and_belongs_to_many :projects_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
-    # Collection Relations
+    # Library Relations
     has_many :libraries, autosave: true, inverse_of: :author, class_name: 'Narra::Library'
     has_and_belongs_to_many :libraries_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Sequence Relations
     has_many :sequences, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Sequence'
+
+    # Meta Relations
+    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Meta'
 
     # Identity Relations
     has_many :identities, dependent: :destroy, class_name: 'Narra::Identity'

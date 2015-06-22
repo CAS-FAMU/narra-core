@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,22 +16,26 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
-#
+# Authors: Michal Mocnak <michal@marigan.net>
 
 module Narra
-  class Meta
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  class TempUploader < CarrierWave::Uploader::Base
+    storage :file
 
-    # Fields
-    field :name, type: String
-    field :value, type: String
+    # define some uploader specific configurations in the initializer
+    # to override the global configuration
+    def initialize(*)
+      super
 
-    # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
+      # redefine root of this uploader
+      self.root = Narra::Tools::Settings.storage_temp
 
-    # Validations
-    validates_presence_of :name, :value
+      # secure random hash
+      @instance = SecureRandom.hex
+    end
+
+    def store_dir
+      @instance
+    end
   end
 end

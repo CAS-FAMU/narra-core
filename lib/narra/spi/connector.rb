@@ -19,6 +19,9 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'narra/extensions'
+require 'narra/tools'
+
 module Narra
   module SPI
     # Generic template for generators
@@ -38,8 +41,9 @@ module Narra
       @description = 'Generic Connector'
 
       # Generic constructor to store an item to be processed
-      def initialize(url)
+      def initialize(url, options = {})
         @url = url
+        @options = options
         # connector specific initialization
         initialization
       end
@@ -69,6 +73,11 @@ module Narra
       end
 
       def metadata
+        # Nothing to do
+        # This has to be overridden in descendants
+      end
+
+      def thumbnail_url
         # Nothing to do
         # This has to be overridden in descendants
       end

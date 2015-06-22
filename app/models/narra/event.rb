@@ -20,6 +20,7 @@
 #
 
 require 'aasm'
+require 'sidekiq/api'
 
 module Narra
   class Event

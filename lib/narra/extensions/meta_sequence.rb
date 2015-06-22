@@ -22,6 +22,7 @@
 module Narra
   module Extensions
     module MetaSequence
+      include Narra::Extensions::Meta
 
       def sequence
         # This has to be overridden to return project
@@ -34,6 +35,17 @@ module Narra
         sequence.meta << Narra::MetaSequence.new(options)
         # save item
         sequence.save
+      end
+
+      def update_meta(options)
+        # input check
+        return if options[:name].nil? || options[:value].nil?
+        # retrieve meta
+        meta = get_meta(name: options[:name])
+        # if not null update
+        meta.update_attributes(value: options[:value])
+        # return meta
+        meta
       end
 
       def get_meta(options)

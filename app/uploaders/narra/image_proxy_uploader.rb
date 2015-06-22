@@ -17,25 +17,12 @@
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Michal Mocnak <michal@marigan.net>
-#
 
 module Narra
-  module Core
-    module Transcoders
+  class ImageProxyUploader < CarrierWave::Uploader::Base
 
-      # Return all active transcoders
-      def Core.transcoders
-        # Get all descendants of the Generic generator
-        @transcoders ||= Narra::SPI::Transcoder.descendants
-      end
-
-      private
-
-      # Return all active transcoders
-      def self.transcoders_identifiers
-        # Get array of synthesizers identifiers
-        @transcoders_identifiers ||= Core.transcoders.collect { |transcoder| transcoder.identifier }
-      end
+    def store_dir
+      Narra::Storage::INSTANCE + "/items/#{model._id.to_s}"
     end
   end
 end

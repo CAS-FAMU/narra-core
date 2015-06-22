@@ -22,6 +22,7 @@
 require 'narra/extensions/class'
 require 'narra/extensions/junction'
 require 'narra/extensions/edl'
+require 'narra/extensions/meta'
 require 'narra/extensions/meta_item'
 require 'narra/extensions/meta_library'
 require 'narra/extensions/meta_sequence'

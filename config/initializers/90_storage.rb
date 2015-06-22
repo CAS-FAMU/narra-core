@@ -19,6 +19,44 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'fog'
+require 'fog/aws'
+require 'carrierwave'
+
+# Setup instance name
+module Narra
+  module Storage
+    INSTANCE = 'narra-' + (ENV['NARRA_INSTANCE_NAME'] ||= 'testing') + '-storage'
+    TYPE = (ENV['NARRA_STORAGE_TYPE'] ||= 'local').to_sym
+  end
+end
+
 # Recreating temp
 FileUtils.rm_rf(Narra::Tools::Settings.storage_temp)
 FileUtils.mkdir_p(Narra::Tools::Settings.storage_temp)
+
+# Storage initialization
+# Set up storage type
+case Narra::Storage::TYPE
+  when :local
+    CarrierWave.configure do |config|
+      config.storage = :file
+      config.root = Narra::Tools::Settings.storage_local_path
+      config.asset_host = Narra::Tools::Settings.storage_local_endpoint
+      config.permissions = 0666
+      config.directory_permissions = 0777
+      config.cache_dir = Narra::Tools::Settings.storage_temp
+    end
+  when :aws
+    CarrierWave.configure do |config|
+      config.storage = :fog
+      config.fog_credentials = {
+          provider: 'AWS',
+          aws_access_key_id: ENV['NARRA_AWS_ACCESS_KEY'],
+          aws_secret_access_key: ENV['NARRA_AWS_SECRET'],
+          region: ENV['NARRA_AWS_REGION'],
+      }
+      config.fog_directory = ENV['NARRA_AWS_BUCKET']
+      config.cache_dir = Narra::Tools::Settings.storage_temp
+    end
+end

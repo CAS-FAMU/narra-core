@@ -23,6 +23,7 @@ module Narra
   module Listeners
     class Transcoder
       include Narra::Tools::Logger
+      include Narra::Extensions::Progress
 
       def narra_transcoder_done(options)
         # get item
@@ -30,7 +31,12 @@ module Narra
         # run generators
         item.generate
         # log
-        log_info('listener#transcoder') { 'Item ' + item.name + '#' + item._id.to_s + 'transcoded successfully.'}
+        log_info('listener#transcoder') { 'Item ' + item.name + '#' + item._id.to_s + ' transcoded successfully.'}
+      end
+
+      def narra_transcoder_progress_changed(options)
+        # log
+        set_progress(options[:progress], "Transcoding #{options[:type]} version")
       end
     end
   end

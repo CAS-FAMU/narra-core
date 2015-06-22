@@ -20,7 +20,6 @@
 #
 
 require 'narra/spi/connector'
-require 'narra/spi/transcoder'
 require 'narra/spi/generator'
 require 'narra/spi/synthesizer'
 

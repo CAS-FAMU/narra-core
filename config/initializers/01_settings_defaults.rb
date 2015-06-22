@@ -22,13 +22,12 @@
 Narra::Tools::Settings.defaults[:storage_temp] = '/tmp/narra'
 Narra::Tools::Settings.defaults[:storage_local_path] = '/opt/narra/storage'
 Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://narra-storage'
-Narra::Tools::Settings.defaults[:storage_s3_items] = 'narra-items'
 
 Narra::Tools::Settings.defaults[:thumbnail_extension] = 'png'
 Narra::Tools::Settings.defaults[:thumbnail_resolution] = '350x250'
-Narra::Tools::Settings.defaults[:thumbnail_count] = '5'
+Narra::Tools::Settings.defaults[:thumbnail_count] = '20'
 
-Narra::Tools::Settings.defaults[:video_proxy_extension] = 'webm'
+Narra::Tools::Settings.defaults[:video_proxy_extension] = 'mp4'
 Narra::Tools::Settings.defaults[:video_proxy_lq_resolution] = '320x180'
 Narra::Tools::Settings.defaults[:video_proxy_lq_bitrate] = '300'
 Narra::Tools::Settings.defaults[:video_proxy_hq_resolution] = '1280x720'
@@ -38,7 +37,7 @@ Narra::Tools::Settings.defaults[:image_proxy_extension] = 'png'
 Narra::Tools::Settings.defaults[:image_proxy_lq_resolution] = '320x180'
 Narra::Tools::Settings.defaults[:image_proxy_hq_resolution] = '1280x720'
 
-Narra::Tools::Settings.defaults[:audio_proxy_extension] = 'ogg'
+Narra::Tools::Settings.defaults[:audio_proxy_extension] = 'mp3'
 Narra::Tools::Settings.defaults[:audio_proxy_bitrate] = '112'
 
 Narra::Tools::Settings.defaults[:items_probe_interval] = 1.minute.to_s

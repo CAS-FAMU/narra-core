@@ -26,6 +26,7 @@ module Narra
     include Wisper::Publisher
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::MetaProject
+    include Narra::Extensions::Public
 
     # Fields
     field :name, type: String
@@ -40,8 +41,11 @@ module Narra
     belongs_to :author, autosave: true, inverse_of: :projects, class_name: 'Narra::User'
     has_and_belongs_to_many :contributors, autosave: true, inverse_of: :projects_contributions, class_name: 'Narra::User'
 
-    # Collection Relations
+    # Library Relations
     has_and_belongs_to_many :libraries, autosave: true, inverse_of: :projects, class_name: 'Narra::Library'
+
+    # Visualization Relations
+    has_and_belongs_to_many :visualizations, autosave: true, inverse_of: :projects, class_name: 'Narra::Visualization'
 
     # Junction Relations
     has_many :junctions, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Junction'
@@ -51,18 +55,13 @@ module Narra
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Event'
 
     # Scopes
-    scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }
+    scope :user, ->(user) { any_of({contributor_ids: user._id}, {author_id: user._id}) }
 
     # Validations
     validates_uniqueness_of :name
     validates_presence_of :name, :title, :author_id
 
     # Hooks
-    # Create default public mark
-    after_create do |project|
-      project.add_meta(name: :public, value: false)
-    end
-
     after_update :broadcast_events
 
     # Return all project items
@@ -90,7 +89,7 @@ module Narra
     protected
 
     def broadcast_events
-      broadcast(:narra_project_synthesizers_updated, { project: self.name, changes: self.changed_attributes['synthesizers'] }) if self.synthesizers_changed?
+      broadcast(:narra_project_synthesizers_updated, {project: self.name, changes: self.changed_attributes['synthesizers']}) if self.synthesizers_changed?
     end
   end
 end

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,22 +16,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-module Narra
-  class Meta
-    include Mongoid::Document
-    include Mongoid::Timestamps
+module CarrierWave
+  module Uploader
+    module Versions
+      def full_filename(for_file)
+        parent_name = super(for_file)
+        ext         = File.extname(parent_name)
+        base_name   = parent_name.chomp(ext)
+        [base_name, version_name].compact.join('_') + ext
+      end
 
-    # Fields
-    field :name, type: String
-    field :value, type: String
-
-    # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
-
-    # Validations
-    validates_presence_of :name, :value
+      def full_original_filename
+        parent_name = super
+        ext         = File.extname(parent_name)
+        base_name   = parent_name.chomp(ext)
+        [base_name, version_name].compact.join('_') + ext
+      end
+    end
   end
 end

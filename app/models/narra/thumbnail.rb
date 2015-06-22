@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,22 +16,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'carrierwave/mongoid'
+
 module Narra
-  class Meta
+  class Thumbnail
     include Mongoid::Document
-    include Mongoid::Timestamps
 
-    # Fields
-    field :name, type: String
-    field :value, type: String
+    embedded_in :video, polymorphic: true
+    embedded_in :image, polymorphic: true
 
-    # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
-
-    # Validations
-    validates_presence_of :name, :value
+    mount_uploader :file, Narra::ThumbnailUploader
   end
 end

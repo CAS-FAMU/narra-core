@@ -19,36 +19,20 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'carrierwave/mongoid'
+
 module Narra
   class Video < Item
 
-    # Helper methods
-    def video_proxy_lq
-      @video_proxy_lq ||= get_file('video_proxy_lq.' + Narra::Tools::Settings.video_proxy_extension)
-    end
+    # define video proxy object / transcoding process
+    mount_uploader :video, Narra::VideoProxyUploader
 
-    def video_proxy_hq
-      @video_proxy_hq ||= get_file('video_proxy_hq.' + Narra::Tools::Settings.video_proxy_extension)
-    end
+    # define thumbnails / transcoding process
+    embeds_many :thumbnails, class_name: 'Narra::Thumbnail', cascade_callbacks: true
 
-    def audio_proxy
-      @audio_proxy ||= get_file('audio_proxy.' + Narra::Tools::Settings.audio_proxy_extension)
-    end
-
-    def url_video_proxy_lq
-      @url_video_proxy_lq ||= meta.where(generator: :transcoder, name: 'video_proxy_lq').collect { |meta| meta.value }.first
-    end
-
-    def url_video_proxy_hq
-      @url_video_proxy_hq ||= meta.where(generator: :transcoder, name: 'video_proxy_hq').collect { |meta| meta.value }.first
-    end
-
-    def url_audio_proxy
-      @url_audio_proxy ||= meta.where(generator: :transcoder, name: 'audio_proxy').collect { |meta| meta.value }.first
-    end
-
+    # overriding to check whether the video is prepared
     def prepared?
-      !url_video_proxy_lq.nil? && !url_video_proxy_hq.nil? && !url_audio_proxy.nil?
+      !video.url.nil? && !video.lq.url.nil? && !video.audio.nil?
     end
   end
 end

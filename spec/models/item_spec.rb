@@ -30,17 +30,6 @@ describe Narra::Item do
     expect(FactoryGirl.create(:item)).to be_persisted
   end
 
-  it 'should have storage available' do
-    # Temporary item
-    item = FactoryGirl.create(:item)
-    # Create a file
-    item.create_file('test')
-    # Check storage
-    expect(item.get_file('test')).to be_a_kind_of(Fog::Model)
-    expect(item.files.count).to match(1)
-    expect(Narra::Storage.items.files.count).to match(1)
-  end
-
   it 'should process item to generate new metadata' do
     # create library
     @library = FactoryGirl.create(:library, author: @author_user, generators: ['testing'], projects: [])

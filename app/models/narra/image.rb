@@ -22,25 +22,14 @@
 module Narra
   class Image < Item
 
-    # Helper methods
-    def image_proxy_lq
-      @image_proxy_lq ||= get_file('image_proxy_lq.' + Narra::Tools::Settings.image_proxy_extension)
-    end
+    # define image proxy object / transcoding process
+    mount_uploader :image, Narra::ImageProxyUploader
 
-    def image_proxy_hq
-      @image_proxy_hq ||= get_file('image_proxy_hq.' + Narra::Tools::Settings.image_proxy_extension)
-    end
-
-    def url_image_proxy_lq
-      @url_image_proxy_lq ||= meta.where(generator: :transcoder, name: 'image_proxy_lq').collect { |meta| meta.value }.first
-    end
-
-    def url_image_proxy_hq
-      @url_image_proxy_hq ||= meta.where(generator: :transcoder, name: 'image_proxy_hq').collect { |meta| meta.value }.first
-    end
+    # define thumbnail
+    embeds_one :thumbnail, class_name: 'Narra::Thumbnail', cascade_callbacks: true
 
     def prepared?
-      !url_image_proxy_lq.nil? && !url_image_proxy_hq.nil?
+      !image_proxy_hq.url.nil? && !image_proxy_lq.url.nil?
     end
   end
 end

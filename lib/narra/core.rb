@@ -22,7 +22,10 @@
 require 'narra/extensions'
 require 'narra/tools'
 require 'narra/spi'
+require 'narra/synthesizers'
 require 'narra/workers'
+require 'narra/transcoders'
+require 'narra/connectors'
 
 require 'narra/core/engine'
 require 'narra/core/version'
@@ -30,7 +33,6 @@ require 'narra/core/version'
 require 'narra/core/connectors'
 require 'narra/core/generators'
 require 'narra/core/synthesizers'
-require 'narra/core/transcoders'
 require 'narra/core/items'
 require 'narra/core/sequences'
 
@@ -39,7 +41,6 @@ module Narra
     include Narra::Core::Connectors
     include Narra::Core::Generators
     include Narra::Core::Synthesizers
-    include Narra::Core::Transcoders
     include Narra::Core::Items
     include Narra::Core::Sequences
 

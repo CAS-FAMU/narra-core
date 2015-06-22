@@ -20,8 +20,7 @@
 #
 
 require 'sidekiq'
-require 'streamio-ffmpeg'
-require 'open-uri'
+require 'wisper'
 
 module Narra
   module Workers
@@ -45,62 +44,36 @@ module Narra
           # fire event
           @event.run!
 
-          # temp path
-          @temporary = Narra::Tools::Settings.storage_temp + '/' + item._id.to_s + '_raw'
+          # create listener
+          listener = Narra::Listeners::Transcoder.new
+          # push event
+          listener.event = @event
 
-          # download
-          File.open(@temporary, 'wb') do |file|
-            file.write open(options['identifier']).read
+          # Temporary subscribe listener
+          Wisper.subscribe(listener) do
+            # process transcoder
+            item.send("remote_#{item.type}_proxy_url=".to_sym, options['identifier'])
           end
 
-          # get ffmpeg object
-          raw = FFMPEG::Movie.new(@temporary)
+          # save item
+          item.save
 
-          # process results if valid
-          if raw.valid?
-            # transcoders to run over
-            transcoders = []
-
-            # parse url for proper connector
-            Narra::Core.transcoders.each do |transcoder|
-              if transcoder.valid?(item)
-                transcoders << transcoder.new(item, @event, raw)
-              end
-            end
-
-            # calculate progress
-            progress = 0.0
-
-            # start transcoding process
-            transcoders.each do |transcoder|
-              transcoder.transcode(progress, progress += 1.0 / transcoders.count)
-            end
-
-            # finish progress
-            set_progress(1.0)
-          end
+          # finish progress
+          set_progress(1.0)
         rescue => e
           # reset event
           @event.reset!
-          # clean
-          clean
           # log
           logger.error('transcoder#' + options['identifier']) { e.to_s }
           # throw
           raise e
         else
-          # clean
-          clean
+
           # log
           logger.info('transcoder#' + options['identifier']) { 'Item ' + item.name + '#' + options['item'] + ' successfully transcoded.' }
           # event done
           @event.done!
         end
-      end
-
-      def clean
-        # clean temp file provided by connector
-        FileUtils.rm_f(@temporary)
       end
 
       def event

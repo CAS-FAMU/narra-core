@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,22 +16,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
 module Narra
-  class Meta
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  module Extensions
+    module Shared
+      extend ActiveSupport::Concern
+      include Narra::Extensions::Meta
 
-    # Fields
-    field :name, type: String
-    field :value, type: String
+      included do
+        after_create :narra_shared_initialize
+      end
 
-    # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
+      def shared
+        # get public meta
+        meta = get_meta(name: 'shared')
+        # resolve
+        meta.nil? ? false : meta.value == 'true'
+      end
 
-    # Validations
-    validates_presence_of :name, :value
+      def shared=(shared)
+        self.update_meta(name: 'shared', value: shared)
+      end
+
+      protected
+
+      def narra_shared_initialize
+        self.add_meta(name: 'shared', value: false)
+      end
+    end
   end
 end

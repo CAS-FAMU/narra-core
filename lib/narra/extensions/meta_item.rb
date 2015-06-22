@@ -22,9 +22,14 @@
 module Narra
   module Extensions
     module MetaItem
-
+      include Narra::Extensions::Meta
+      
       def item
         # This has to be overridden to return item
+      end
+
+      def autosave
+        true
       end
 
       def add_meta(options)
@@ -49,7 +54,7 @@ module Narra
         # push meta into an item
         item.meta << meta
         # save item
-        item.save
+        item.save if autosave
         # return new meta
         meta
       end

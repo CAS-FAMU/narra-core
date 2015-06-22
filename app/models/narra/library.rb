@@ -26,6 +26,7 @@ module Narra
     include Wisper::Publisher
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::MetaLibrary
+    include Narra::Extensions::Shared
 
     # Fields
     field :name, type: String

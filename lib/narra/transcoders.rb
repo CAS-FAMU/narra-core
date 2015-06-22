@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,25 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'fog'
+require 'narra/transcoders/media'
 
-RSpec.configure do |config|
-  # Database Cleaner
-  config.before(:suite) do
-    # Fog
-    Fog.mock!
-    # Setup mock storage
-    ENV['NARRA_INSTANCE_NAME'] = 'test'
-    ENV['NARRA_AWS_ACCESS_KEY'] = 'test'
-    ENV['NARRA_AWS_SECRET'] = 'test'
-    ENV['NARRA_AWS_REGION'] = 'test'
-  end
+module Narra
+  module Transcoders
 
-  config.after(:suite) do
-    Fog.unmock!
-    Fog::Mock.reset
   end
 end

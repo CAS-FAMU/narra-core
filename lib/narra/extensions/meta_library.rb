@@ -22,6 +22,7 @@
 module Narra
   module Extensions
     module MetaLibrary
+      include Narra::Extensions::Meta
 
       def library
         # This has to be overridden to return project

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2014 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,22 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'narra/connectors/direct_audio'
+require 'narra/connectors/direct_image'
+require 'narra/connectors/direct_video'
+
 module Narra
-  class Meta
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  module Connectors
 
-    # Fields
-    field :name, type: String
-    field :value, type: String
-
-    # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
-
-    # Validations
-    validates_presence_of :name, :value
   end
 end

@@ -19,20 +19,16 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'carrierwave/mongoid'
+
 module Narra
   class Audio < Item
 
-    # Helper methods
-    def audio_proxy
-      @audio_proxy ||= get_file('audio_proxy.' + Narra::Tools::Settings.audio_proxy_extension)
-    end
-
-    def url_audio_proxy
-      @url_audio_proxy ||= meta.where(generator: :transcoder, name: 'audio_proxy').collect { |meta| meta.value }.first
-    end
+    # define audio proxy object / transcoding process
+    mount_uploader :audio, Narra::AudioProxyUploader
 
     def prepared?
-      !url_audio_proxy.nil?
+      !audio.url.nil?
     end
   end
 end

@@ -65,7 +65,7 @@ module Narra
         # This has to be overridden in descendants
       end
 
-      def generate
+      def generate(options = {})
         # Nothing to do
         # This has to be overridden in descendants
       end

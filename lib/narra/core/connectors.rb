@@ -29,6 +29,11 @@ module Narra
         @connectors ||= Narra::SPI::Connector.descendants
       end
 
+      # Return specified connector
+      def Core.connector(identifier)
+        connectors.select { |connector| connector.identifier.equal?(identifier.to_sym)}.first
+      end
+
       private
 
       # Return all active synthesizers
