@@ -25,9 +25,6 @@ module Narra
     # define image proxy object / transcoding process
     mount_uploader :image, Narra::ImageProxyUploader
 
-    # define thumbnail
-    embeds_one :thumbnail, class_name: 'Narra::Thumbnail', cascade_callbacks: true
-
     def prepared?
       !image_proxy_hq.url.nil? && !image_proxy_lq.url.nil?
     end

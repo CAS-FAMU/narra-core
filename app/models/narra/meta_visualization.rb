@@ -1,4 +1,3 @@
-#
 # Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
@@ -19,16 +18,12 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'carrierwave/mongoid'
-
 module Narra
-  class Thumbnail
-    include Mongoid::Document
+  class MetaVisualization < Meta
+    # Relations
+    belongs_to :visualization, autosave: true, inverse_of: :meta, class_name: 'Narra::Visualization'
 
-    field :random, type: Float, default: Proc.new { Random.rand }
-
-    belongs_to :item, autosave: true, inverse_of: :thumbnails, class_name: 'Narra::Item'
-
-    mount_uploader :file, Narra::ThumbnailUploader
+    # Validations
+    validates_uniqueness_of :name, :scope => [:visualization_id]
   end
 end

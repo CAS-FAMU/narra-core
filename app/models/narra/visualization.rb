@@ -25,17 +25,31 @@ module Narra
   class Visualization
     include Mongoid::Document
     include Mongoid::Timestamps
+    include Narra::Extensions::Meta
+    include Narra::Extensions::Public
 
     field :name, type: String
+    field :description, type: String
     field :type, type: Symbol
 
     mount_uploader :script, Narra::VisualizationUploader
 
+    # User Relations
+    belongs_to :author, autosave: true, inverse_of: :sequences, class_name: 'Narra::User'
+
     # Project Relations
     has_and_belongs_to_many :projects, autosave: true, inverse_of: :visualizations, class_name: 'Narra::Project'
+
+    # Meta Relations
+    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :visualization, class_name: 'Narra::MetaVisualization'
 
     # Validations
     validates_uniqueness_of :name
     validates_presence_of :name
+
+    # Return this sequence for Meta extension
+    def model
+      self
+    end
   end
 end

@@ -27,7 +27,7 @@ module Narra
     # Generic template for generators
     class Generator
       include Narra::Extensions::Class
-      include Narra::Extensions::MetaItem
+      include Narra::Extensions::Meta
       include Narra::Extensions::Progress
       include Narra::Tools::Logger
 
@@ -48,7 +48,7 @@ module Narra
         @event = event
       end
 
-      def item
+      def model
         @item
       end
 

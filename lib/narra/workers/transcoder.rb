@@ -52,7 +52,7 @@ module Narra
           # Temporary subscribe listener
           Wisper.subscribe(listener) do
             # process transcoder
-            item.send("remote_#{item.type}_proxy_url=".to_sym, options['identifier'])
+            item.send("remote_#{item.type}_url=".to_sym, options['identifier'])
           end
 
           # save item

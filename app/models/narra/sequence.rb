@@ -24,7 +24,7 @@ module Narra
     include Mongoid::Document
     include Mongoid::Timestamps
     include Wisper::Publisher
-    include Narra::Extensions::MetaSequence
+    include Narra::Extensions::Meta
     include Narra::Extensions::Public
 
     # Fields
@@ -48,8 +48,8 @@ module Narra
     after_destroy :broadcast_events_destroyed
     after_create :broadcast_events_created
 
-    # Return this sequence for MetaSequence extension
-    def sequence
+    # Return this sequence for Meta extension
+    def model
       self
     end
 

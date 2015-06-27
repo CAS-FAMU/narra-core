@@ -25,7 +25,7 @@ module Narra
     include Mongoid::Timestamps
     include Wisper::Publisher
     include Narra::Extensions::Thumbnail
-    include Narra::Extensions::MetaProject
+    include Narra::Extensions::Meta
     include Narra::Extensions::Public
 
     # Fields
@@ -69,8 +69,8 @@ module Narra
       Narra::Item.any_in(library_id: self.library_ids)
     end
 
-    # Return this project for MetaProject extension
-    def project
+    # Return this project for Meta extension
+    def model
       self
     end
 

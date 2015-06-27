@@ -22,7 +22,7 @@
 module Narra
   module Transcoders
     module MediaInfo
-      include Narra::Extensions::MetaItem
+      include Narra::Extensions::Meta
 
       def info_video(movie)
         # process movie and save meta

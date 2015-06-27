@@ -24,7 +24,7 @@ module Narra
     include Mongoid::Document
     include Mongoid::Timestamps
     include Narra::Extensions::Thumbnail
-    include Narra::Extensions::MetaItem
+    include Narra::Extensions::Meta
 
     # Fields
     field :name, type: String
@@ -42,6 +42,9 @@ module Narra
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Event'
 
+    # Thumbnail Relations
+    has_many :thumbnails, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Thumbnail'
+
     # Validations
     validates_uniqueness_of :name, scope: :library_id
     validates_presence_of :name, :url
@@ -54,7 +57,7 @@ module Narra
       [self]
     end
 
-    def item
+    def model
       self
     end
 

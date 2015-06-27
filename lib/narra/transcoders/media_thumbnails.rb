@@ -22,7 +22,6 @@
 module Narra
   module Transcoders
     module MediaThumbnails
-      include Narra::Extensions::MetaItem
 
       def thumbnails(movie)
         # calculate seek ratio

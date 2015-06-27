@@ -27,9 +27,6 @@ module Narra
     # define video proxy object / transcoding process
     mount_uploader :video, Narra::VideoProxyUploader
 
-    # define thumbnails / transcoding process
-    embeds_many :thumbnails, class_name: 'Narra::Thumbnail', cascade_callbacks: true
-
     # overriding to check whether the video is prepared
     def prepared?
       !video.url.nil? && !video.lq.url.nil? && !video.audio.nil?

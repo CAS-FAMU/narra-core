@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'carrierwave/mongoid'
+
 module CarrierWave
   module Uploader
     module Versions

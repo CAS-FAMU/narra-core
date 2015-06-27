@@ -52,6 +52,10 @@ module Narra
       # Should be overridden and implemented
       #
 
+      def source_url
+        @url
+      end
+
       def self.valid?(url)
         # Nothing to do
         # This has to be overridden in descendants

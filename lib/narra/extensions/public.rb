@@ -29,7 +29,7 @@ module Narra
         after_create :narra_public_initialize
       end
 
-      def public
+      def is_public?
         # get public meta
         meta = get_meta(name: 'public')
         # resolve

@@ -28,12 +28,12 @@ module Narra
       end
 
       def url_thumbnail
-        url_thumbnails.sample
+        url_thumbnails.first
       end
 
       def url_thumbnails
         # get thumbnail if not resolved yet
-        @url_thumbnails ||= Narra::MetaItem.any_in(item_id: self.items.collect { |item| item._id }).where(generator: :thumbnail).sample(Narra::Tools::Settings.thumbnail_count.to_i).collect { |meta| meta.value }
+        @url_thumbnails ||= Narra::Thumbnail.any_in(item_id: self.items.collect {|item| item._id}).order_by(:random => 'asc').limit(Narra::Tools::Settings.thumbnail_count.to_i).collect { |thumbnail| thumbnail.file.url }
       end
     end
   end

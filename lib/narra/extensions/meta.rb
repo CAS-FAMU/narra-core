@@ -23,16 +23,68 @@ module Narra
   module Extensions
     module Meta
 
+      def autosave
+        true
+      end
+
       def add_meta(options)
-        # This has to be overridden
+        # input check
+        return if options[:name].nil? || options[:value].nil?
+        # check generator
+        if options[:generator].nil? && model.kind_of?(Narra::Item)
+          if self.kind_of?(Narra::SPI::Generator)
+            options[:generator] = self.class.identifier
+          else
+            return
+          end
+        end
+        # get meta class
+        base = model.class.superclass.to_s == 'Object' ? model.class : model.class.superclass
+        # push new meta entry
+        meta = "Narra::Meta#{base.to_s.split('::').last}".constantize.new(options)
+        # process marks
+        if options[:marks]
+          # get marks
+          marks = options[:marks].nil? ? [] : options.delete(:marks)
+          # push marks
+          marks.each do |mark|
+            meta.marks << Narra::MarkMeta.new(mark)
+          end
+        end
+        # push meta into an item
+        model.meta << meta
+        # save item
+        model.save if autosave
+        # return new meta
+        meta
       end
 
       def update_meta(options)
-        # This has to be overridden
+        # input check
+        return if options[:name].nil? || options[:value].nil?
+        # retrieve meta
+        meta = get_meta(name: options[:name], generator: options[:generator])
+        # update value
+        meta.update_attributes(value: options[:value])
+        # update marks
+        if options[:marks]
+          marks = []
+          # prepare marks
+          options[:marks].each do |mark|
+            marks << Narra::MarkMeta.new(mark)
+          end
+          # update
+          meta.update_attributes(marks: marks)
+        end
+        # return meta
+        meta
       end
 
       def get_meta(options)
-        # This has to be overridden
+        # do a query
+        result = model.meta.where(options)
+        # check and return
+        result.empty? ? nil : (result.count > 1 ? result : result.first)
       end
     end
   end

@@ -25,7 +25,7 @@ module Narra
     include Mongoid::Timestamps
     include Wisper::Publisher
     include Narra::Extensions::Thumbnail
-    include Narra::Extensions::MetaLibrary
+    include Narra::Extensions::Meta
     include Narra::Extensions::Shared
 
     # Fields
@@ -56,8 +56,8 @@ module Narra
     # Callbacks
     after_update :broadcast_events
 
-    # Return this library for MetaLibrary extension
-    def library
+    # Return this library for Meta extension
+    def model
       self
     end
 

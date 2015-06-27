@@ -19,6 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'streamio-ffmpeg'
 require 'carrierwave/video'
 require 'narra/transcoders/media_info'
 require 'narra/transcoders/media_thumbnails'
@@ -32,15 +33,6 @@ module Narra
       include Narra::Tools::Logger
       include Narra::Transcoders::MediaInfo
       include Narra::Transcoders::MediaThumbnails
-
-      included do
-        begin
-          require 'streamio-ffmpeg'
-        rescue LoadError => e
-          e.message << ' (You may need to install the streamio-ffmpeg gem)'
-          raise e
-        end
-      end
 
       module ClassMethods
         def transcode_video(target_format, options={})
@@ -59,7 +51,7 @@ module Narra
         manipulate! do |movie, temporary|
           if options[:videoinfo]
             # save videoinfo if requested
-            videoinfo_video(movie)
+            info_video(movie)
           end
 
           if options[:thumbnails]
@@ -82,7 +74,7 @@ module Narra
         manipulate! do |movie, temporary|
           if options[:videoinfo]
             # save videoinfo if requested
-            videoinfo_audio(movie)
+            info_audio(movie)
           end
 
           # transcode movie
@@ -113,10 +105,6 @@ module Narra
         rescue => e
           log_error('transcoder#media') { e.to_s }
         end
-      end
-
-      def item
-        model
       end
 
       def autosave

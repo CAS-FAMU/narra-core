@@ -32,7 +32,7 @@ module Narra
     field :roles, type: Array, default: []
 
     # Project Relations
-    has_many :projects, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Project'
+    has_many :projects, autosave: true, inverse_of: :author, class_name: 'Narra::Project'
     has_and_belongs_to_many :projects_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Library Relations
@@ -40,10 +40,13 @@ module Narra
     has_and_belongs_to_many :libraries_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Sequence Relations
-    has_many :sequences, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Sequence'
+    has_many :sequences, autosave: true, inverse_of: :author, class_name: 'Narra::Sequence'
+
+    # Visualization Relations
+    has_many :visualizations, autosave: true, inverse_of: :author, class_name: 'Narra::Visualization'
 
     # Meta Relations
-    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :author, class_name: 'Narra::Meta'
+    has_many :meta, autosave: true, inverse_of: :author, class_name: 'Narra::Meta'
 
     # Identity Relations
     has_many :identities, dependent: :destroy, class_name: 'Narra::Identity'

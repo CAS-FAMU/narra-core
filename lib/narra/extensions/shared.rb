@@ -29,7 +29,7 @@ module Narra
         after_create :narra_shared_initialize
       end
 
-      def shared
+      def is_shared?
         # get public meta
         meta = get_meta(name: 'shared')
         # resolve

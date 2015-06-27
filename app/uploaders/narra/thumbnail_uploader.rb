@@ -30,7 +30,7 @@ module Narra
     end
 
     def store_dir
-      Narra::Storage::INSTANCE + "/items/#{model._parent._id.to_s}"
+      Narra::Storage::INSTANCE + "/items/#{model.item_id}"
     end
   end
 end

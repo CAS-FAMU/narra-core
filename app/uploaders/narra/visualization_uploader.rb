@@ -21,6 +21,10 @@
 module Narra
   class VisualizationUploader < CarrierWave::Uploader::Base
 
+    def filename
+      "#{model.type}_script.#{file.extension}" if original_filename.present?
+    end
+
     def store_dir
       Narra::Storage::INSTANCE + "/visualizations/#{model._id.to_s}"
     end

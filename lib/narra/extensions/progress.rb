@@ -35,7 +35,7 @@ module Narra
         # cache progress locally
         @progress ||= 0.0
         # if changed more than 2% push it
-        if (progress - @progress) >= 0.02
+        if (progress - @progress) >= 0.02 || (progress - @progress) < 0
           # update event
           event.set_progress(progress)
           # update cache

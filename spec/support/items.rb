@@ -27,5 +27,10 @@ RSpec.configure do |config|
         return true
       end
     end
+
+    module Narra
+      class MetaItemPrepared < Narra::MetaItem
+      end
+    end
   end
 end
