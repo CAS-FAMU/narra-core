@@ -32,6 +32,7 @@ gemspec
 # your gem to rubygems.org.
 
 gem 'streamio-ffmpeg', git: 'https://github.com/marigan/streamio-ffmpeg.git'
+gem 'database_cleaner', git: 'https://github.com/DatabaseCleaner/database_cleaner.git'
 
 # To use debugger
 # gem 'debugger'

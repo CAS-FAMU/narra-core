@@ -1,4 +1,10 @@
 GIT
+  remote: https://github.com/DatabaseCleaner/database_cleaner.git
+  revision: b87f00320f8aa0f7e499d183128f05ce29cedc33
+  specs:
+    database_cleaner (1.5.1)
+
+GIT
   remote: https://github.com/marigan/streamio-ffmpeg.git
   revision: 90470da0eaecb71df0ca6ae90f3d27f76cdb3ca2
   specs:
@@ -123,7 +129,6 @@ GEM
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
     connection_pool (2.2.0)
-    database_cleaner (1.5.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
     dotenv (2.0.2)
@@ -372,7 +377,7 @@ PLATFORMS
 
 DEPENDENCIES
   codeclimate-test-reporter
-  database_cleaner
+  database_cleaner!
   factory_girl_rails
   mongoid-rspec
   mongoid-tree
