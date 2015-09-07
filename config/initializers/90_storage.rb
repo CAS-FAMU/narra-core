@@ -27,7 +27,7 @@ require 'carrierwave'
 module Narra
   module Storage
     INSTANCE = 'narra-' + (ENV['NARRA_INSTANCE_NAME'] ||= 'testing') + '-storage'
-    TYPE = (ENV['NARRA_STORAGE_TYPE'] ||= 'local').to_sym
+    TYPE = (ENV['NARRA_STORAGE_TYPE'] ||= 'local').downcase
   end
 end
 
