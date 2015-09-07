@@ -38,7 +38,7 @@ FileUtils.mkdir_p(Narra::Tools::Settings.storage_temp)
 # Storage initialization
 # Set up storage type
 case Narra::Storage::TYPE
-  when :local
+  when 'local'
     CarrierWave.configure do |config|
       config.storage = 'file'
       config.root = Narra::Tools::Settings.storage_local_path
@@ -47,7 +47,7 @@ case Narra::Storage::TYPE
       config.directory_permissions = 0777
       config.cache_dir = Narra::Tools::Settings.storage_temp
     end
-  when :aws
+  when 'aws'
     CarrierWave.configure do |config|
       config.storage = 'fog'
       config.fog_credentials = {
@@ -59,7 +59,7 @@ case Narra::Storage::TYPE
       config.fog_directory = ENV['AWS_BUCKET']
       config.cache_dir = Narra::Tools::Settings.storage_temp
     end
-  when :google
+  when 'google'
     CarrierWave.configure do |config|
       config.fog_provider = 'fog-google'
       config.fog_credentials = {
