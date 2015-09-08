@@ -34,13 +34,26 @@ module Narra
         url.start_with?('http://') and (url.end_with?('.webm') or url.end_with?('.mp4') or url.end_with?('.mov'))
       end
 
-      def initialization
-        @uri = URI.parse(@url)
-        @name = File.basename(@uri.path).split('.').first
+      def self.resolve(url)
+        uri = URI.parse(url)
+        name = File.basename(uri.path).split('.').first
+
+        # return proxies
+        [{
+            url: url,
+            name: name,
+            thumbnail: nil,
+            type: :video,
+            connector: @identifier,
+            @identifier => {
+                type: :video,
+                name: name
+            }
+        }]
       end
 
       def name
-        @name
+        @options[:name]
       end
 
       def type
@@ -49,10 +62,6 @@ module Narra
 
       def metadata
         []
-      end
-
-      def thumbnail_url
-        nil
       end
 
       def download_url

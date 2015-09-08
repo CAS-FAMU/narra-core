@@ -61,6 +61,11 @@ module Narra
         # This has to be overridden in descendants
       end
 
+      def self.resolve(url)
+        # Nothing to do
+        # This has to be overridden in descendants
+      end
+
       def initialization
         # Nothing to do
         # This has to be overridden in descendants
@@ -77,11 +82,6 @@ module Narra
       end
 
       def metadata
-        # Nothing to do
-        # This has to be overridden in descendants
-      end
-
-      def thumbnail_url
         # Nothing to do
         # This has to be overridden in descendants
       end

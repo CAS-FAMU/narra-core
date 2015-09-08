@@ -34,13 +34,26 @@ module Narra
         url.start_with?('http://') and (url.end_with?('.jpg') or url.end_with?('.png') or url.end_with?('.gif'))
       end
 
-      def initialization
-        @uri = URI.parse(@url)
-        @name = File.basename(@uri.path).split('.').first
+      def self.resolve(url)
+        uri = URI.parse(url)
+        name = File.basename(uri.path).split('.').first
+
+        # return proxies
+        [{
+             url: url,
+             name: name,
+             thumbnail: nil,
+             type: :image,
+             connector: @identifier,
+             @identifier => {
+                 type: :image,
+                 name: name
+             }
+         }]
       end
 
       def name
-        @name
+        @options[:name]
       end
 
       def type

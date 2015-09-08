@@ -43,7 +43,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
   spec.add_dependency "fog"
-  spec.add_dependency "fog-google"
   spec.add_dependency "wisper"
   spec.add_dependency "sinatra"
   spec.add_dependency "streamio-ffmpeg"

@@ -28,20 +28,20 @@ module Narra
         # input check
         return nil if url.nil?
 
-        # connector container
-        connector = nil
+        # connector proxies container
+        proxies = []
 
         # parse url for proper connector
         connectors.each do |conn|
           if conn.valid?(url)
-            connector = conn.new(url)
+            proxies = conn.resolve(url)
             # break the loop
             break
           end
         end
 
         # return
-        return connector
+        return proxies
       end
 
       # Add item into the NARRA
@@ -79,10 +79,14 @@ module Narra
         item.meta << Narra::MetaItem.new(name: 'url', value: url, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'library', value: library.name, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'author', value: author, generator: :source)
+        item.meta << Narra::MetaItem.new(name: 'connector', value: connector_identifier.to_s, generator: :source)
+
 
         # parse metadata from connector if exists
         connector.metadata.each do |meta|
-          item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: :source)
+          if !meta[:name].nil? and !meta[:value].nil?
+            item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: connector_identifier)
+          end
         end
 
         # parse metadata form the user input if exists

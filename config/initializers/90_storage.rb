@@ -40,7 +40,7 @@ FileUtils.mkdir_p(Narra::Tools::Settings.storage_temp)
 case Narra::Storage::TYPE
   when 'local'
     CarrierWave.configure do |config|
-      config.storage = 'file'
+      config.storage = :file
       config.root = Narra::Tools::Settings.storage_local_path
       config.asset_host = Narra::Tools::Settings.storage_local_endpoint
       config.permissions = 0666
@@ -49,7 +49,7 @@ case Narra::Storage::TYPE
     end
   when 'aws'
     CarrierWave.configure do |config|
-      config.storage = 'fog'
+      config.storage = :fog
       config.fog_credentials = {
           provider: 'AWS',
           aws_access_key_id: ENV['AWS_ACCESS_KEY'],
@@ -61,13 +61,13 @@ case Narra::Storage::TYPE
     end
   when 'google'
     CarrierWave.configure do |config|
-      config.fog_provider = 'fog-google'
+      config.storage = :fog
       config.fog_credentials = {
           provider: 'Google',
-          google_storage_access_key_id: ENV['GOOGLE_CLIENT_ID'],
-          google_storage_secret_access_key: ENV['GOOGLE_CLIENT_SECRET']
+          google_storage_access_key_id: ENV['GOOGLE_STORAGE_ID'],
+          google_storage_secret_access_key: ENV['GOOGLE_STORAGE_SECRET']
       }
-      config.fog_directory = ENV['GOOGLE_BUCKET']
+      config.fog_directory = ENV['GOOGLE_STORAGE_BUCKET']
       config.cache_dir = Narra::Tools::Settings.storage_temp
     end
 end
