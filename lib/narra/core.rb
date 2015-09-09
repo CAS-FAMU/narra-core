@@ -35,6 +35,7 @@ require 'narra/core/generators'
 require 'narra/core/synthesizers'
 require 'narra/core/items'
 require 'narra/core/sequences'
+require 'narra/core/purge'
 
 module Narra
   module Core
@@ -43,6 +44,7 @@ module Narra
     include Narra::Core::Synthesizers
     include Narra::Core::Items
     include Narra::Core::Sequences
+    include Narra::Core::Purge
 
     private
 
@@ -51,11 +53,13 @@ module Narra
       message = 'narra::' + options[:type].to_s + '::'
       message += options[:item] unless options[:item].nil?
       message += options[:project] unless options[:project].nil?
+      message += options[:library] unless options[:library].nil?
       message += '::' + options[:identifier].to_s unless options[:type] == :transcoder
       # create an event
       event = Narra::Event.create(message: message,
                                   item: options[:item].nil? ? nil : Narra::Item.find(options[:item]),
                                   project: options[:project].nil? ? nil : Narra::Project.find(options[:project]),
+                                  library: options[:library].nil? ? nil : Narra::Library.find(options[:library]),
                                   broadcasts: ['narra_' + options[:type].to_s + '_done'])
 
       # process
@@ -68,6 +72,8 @@ module Narra
           Narra::Workers::Synthesizer.perform_async(options.merge({event: event._id.to_s}))
         when :sequence
           Narra::Workers::Sequence.perform_async(options.merge({event: event._id.to_s}))
+        when :purge
+          Narra::Workers::Purge.perform_async(options.merge({event: event._id.to_s}))
       end
       # return event
       return event

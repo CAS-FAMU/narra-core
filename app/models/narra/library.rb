@@ -32,6 +32,7 @@ module Narra
     field :name, type: String
     field :description, type: String
     field :generators, type: Array, default: []
+    field :purged, type: Boolean, default: false
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::MetaLibrary'
@@ -45,6 +46,9 @@ module Narra
 
     # Project Relations
     has_and_belongs_to_many :projects, autosave: true, inverse_of: :libraries, class_name: 'Narra::Project'
+
+    # Event Relations
+    has_many :events, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Event'
 
     # Scopes
     scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }

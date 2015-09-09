@@ -52,7 +52,11 @@ module Narra
         # create connectors
         arch_media.each do |item|
           if arch_metadata['metadata']['mediatype'] == 'movies'
-            thumbnail = arch_server + arch_metadata['files'].select { |f| f['name'].include?(item['name'].split('.').first) and f['format'] == 'Thumbnail' }.sample['name']
+            # get thumbnails selection
+            selection = arch_metadata['files'].select { |f| f['name'].include?(item['name'].split('.').first) and f['format'] == 'Thumbnail' }.sample
+            # pick one
+            thumbnail = arch_server + selection['name'] unless selection.nil?
+            # generate proxy
             proxies << {
                 url: arch_server + item['name'],
                 name: item['name'].split('.').first,
@@ -64,7 +68,7 @@ module Narra
                     arch_item: item,
                     arch_metadata: arch_metadata['metadata'],
                     type: :video,
-                    name: item['name']
+                    name: item['name'].split('.').first
                 }
             }
           end

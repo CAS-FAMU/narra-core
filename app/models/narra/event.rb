@@ -41,8 +41,15 @@ module Narra
     # project relation
     belongs_to :project, autosave: true, inverse_of: :events, class_name: 'Narra::Project'
 
+    # project relation
+    belongs_to :library, autosave: true, inverse_of: :events, class_name: 'Narra::Library'
+
     # Scopes
-    scope :user, ->(user) { any_in(item_id: Item.user(user).pluck(:id)) }
+    scope :user, ->(user) { Event.or(
+        { :item_id.in => Item.user(user).pluck(:id) },
+        { :library_id.in => Library.user(user).pluck(:id) },
+        { :project_name.in => Project.user(user).pluck(:name) }
+    )}
 
     # callbacks
     before_destroy :broadcast_events
