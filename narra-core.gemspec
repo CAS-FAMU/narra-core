@@ -52,6 +52,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "carrierwave-mongoid"
   spec.add_dependency "carrierwave-video"
   spec.add_dependency "mini_magick"
+  spec.add_dependency "viddl-rb"
 
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rspec-mocks"
