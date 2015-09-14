@@ -56,7 +56,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rspec-mocks"
-  spec.add_development_dependency "database_cleaner"
   spec.add_development_dependency "mongoid-tree"
   spec.add_development_dependency "mongoid-rspec"
   spec.add_development_dependency "factory_girl_rails"

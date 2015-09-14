@@ -27,13 +27,14 @@ PATH
       sinatra
       streamio-ffmpeg
       timecode
+      viddl-rb
       wisper
 
 GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (2.3.1)
-    aasm (4.2.0)
+    aasm (4.3.0)
     actionmailer (4.2.4)
       actionpack (= 4.2.4)
       actionview (= 4.2.4)
@@ -77,9 +78,9 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
-    carrierwave-mongoid (0.7.1)
+    carrierwave-mongoid (0.8.0)
       carrierwave (>= 0.8.0, < 0.11.0)
-      mongoid (>= 3.0, < 5.0)
+      mongoid (>= 3.0, <= 6.0)
       mongoid-grid_fs (>= 1.3, < 3.0)
     carrierwave-video (0.5.6)
       carrierwave
@@ -130,6 +131,8 @@ GEM
     connection_pool (2.2.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    domain_name (0.5.24)
+      unf (>= 0.0.5, < 1.0.0)
     dotenv (2.0.2)
     edl (0.1.5)
       timecode
@@ -217,7 +220,7 @@ GEM
       fog-core
       fog-json
       fog-xml
-    fog-sakuracloud (1.1.0)
+    fog-sakuracloud (1.1.1)
       fog-core
       fog-json
     fog-serverlove (0.1.2)
@@ -244,7 +247,9 @@ GEM
     formatador (0.2.5)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    hitimes (1.2.2)
+    hitimes (1.2.3)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     inflecto (0.0.2)
     ipaddress (0.8.0)
@@ -254,8 +259,8 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    mime-types (2.6.1)
-    mini_magick (4.3.2)
+    mime-types (2.6.2)
+    mini_magick (4.3.3)
     mini_portile (0.6.2)
     minitest (5.8.0)
     mongoid (4.0.2)
@@ -263,9 +268,9 @@ GEM
       moped (~> 2.0.0)
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
-    mongoid-grid_fs (2.1.0)
+    mongoid-grid_fs (2.2.0)
       mime-types (>= 1.0, < 3.0)
-      mongoid (>= 3.0, < 5.0)
+      mongoid (>= 3.0, <= 6.0)
     mongoid-rspec (2.2.0)
       mongoid (~> 4.0.0)
       rake
@@ -276,15 +281,17 @@ GEM
       bson (~> 3.0)
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
-    multi_json (1.11.2)
+    multi_json (1.10.1)
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
+    netrc (0.10.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     optionable (0.2.0)
     origin (2.1.1)
+    progressbar (0.21.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -318,6 +325,10 @@ GEM
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
@@ -369,6 +380,14 @@ GEM
       hitimes
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
+    viddl-rb (1.1.1)
+      multi_json (~> 1.10.0)
+      nokogiri (~> 1.6.0)
+      progressbar (~> 0.21)
+      rest-client
     wisper (1.6.1)
 
 PLATFORMS
@@ -384,6 +403,3 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails
   streamio-ffmpeg!
-
-BUNDLED WITH
-   1.10.6
