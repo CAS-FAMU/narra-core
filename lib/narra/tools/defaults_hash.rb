@@ -19,9 +19,11 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'active_support/all'
+
 module Narra
   module Tools
-    class DefaultsHash < ActiveSupport::HashWithIndifferentAccess
+    class DefaultsHash < ::ActiveSupport::HashWithIndifferentAccess
       def []=(key, val)
         # persist if there is no already
         if Narra::Tools::Settings.get(convert_key(key)).nil?
