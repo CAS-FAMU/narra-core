@@ -30,17 +30,15 @@ module Narra
       include Narra::Extensions::Meta
       include Narra::Extensions::Progress
       include Narra::Tools::Logger
+      include Narra::Tools::InheritableAttributes
 
-      # Attributes for human readable format
-      # These have to be imlemented in descendants
-      class << self
-        attr_accessor :identifier, :title, :description
-      end
+      inheritable_attributes :identifier, :title, :description, :priority
 
       # Default values
       @identifier = :generic
       @title = 'Generic'
       @description = 'Generic Generator'
+      @priority = 42
 
       # Generic constructor to store an item to be processed
       def initialize(item, event)

@@ -26,7 +26,7 @@ module Narra
       # Return all active generators
       def Core.generators
         # Get all descendants of the Generic generator
-        @generators ||= Narra::SPI::Generator.descendants
+        @generators ||= Narra::SPI::Generator.descendants.sort {|x,y| x.priority.to_i <=> y.priority.to_i }
       end
 
       # Return specified generator

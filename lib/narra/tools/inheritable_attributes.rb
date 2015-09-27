@@ -20,26 +20,30 @@
 #
 
 module Narra
-  module Core
-    module Connectors
-
-      # Return all active connectors
-      def Core.connectors
-        # Get all descendants of the Generic generator
-        @connectors ||= Narra::SPI::Connector.descendants.sort {|x,y| x.priority.to_i <=> y.priority.to_i }
+  module Tools
+    module InheritableAttributes
+      def self.included(base)
+        base.extend(ClassMethods)
       end
 
-      # Return specified connector
-      def Core.connector(identifier)
-        connectors.select { |connector| connector.identifier.equal?(identifier.to_sym)}.first
-      end
+      module ClassMethods
+        def inheritable_attributes(*args)
+          @inheritable_attributes ||= [:inheritable_attributes]
+          @inheritable_attributes += args
+          args.each do |arg|
+            class_eval %(
+              class << self; attr_accessor :#{arg} end
+             )
+          end
+          @inheritable_attributes
+        end
 
-      private
-
-      # Return all active connectors
-      def self.connectors_identifiers
-        # Get array of synthesizers identifiers
-        @connectors_identifiers ||= connectors.collect { |connector| connector.identifier }
+        def inherited(subclass)
+          @inheritable_attributes.each do |inheritable_attribute|
+            instance_var = "@#{inheritable_attribute}"
+            subclass.instance_variable_set(instance_var, instance_variable_get(instance_var))
+          end
+        end
       end
     end
   end

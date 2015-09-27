@@ -29,6 +29,7 @@ module Narra
       @identifier = :direct_video
       @title = 'Direct Video Connector'
       @description = 'Direct Video Connector uses direct http links to files'
+      @priority = 0
 
       def self.valid?(url)
         url.start_with?('http://') and (url.end_with?('.webm') or url.end_with?('.mp4') or url.end_with?('.mov'))

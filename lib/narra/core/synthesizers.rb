@@ -26,7 +26,7 @@ module Narra
       # Return all active synthesizers
       def Core.synthesizers
         # Get all descendants of the Generic synthesizer
-        @synthesizers ||= Narra::SPI::Synthesizer.descendants
+        @synthesizers ||= Narra::SPI::Synthesizer.descendants.sort {|x,y| x.priority.to_i <=> y.priority.to_i }
       end
 
       # Return specified synthesizer

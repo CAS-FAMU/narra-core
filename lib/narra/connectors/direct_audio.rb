@@ -29,6 +29,7 @@ module Narra
       @identifier = :direct_audio
       @title = 'Direct Audio Connector'
       @description = 'Direct Audio Connector uses direct http links to files'
+      @priority = 0
 
       def self.valid?(url)
         url.start_with?('http://') and (url.end_with?('.wav') or url.end_with?('.mp3') or url.end_with?('.ogg') or url.end_with?('.flac') or url.end_with?('.m4a') or url.end_with?('.aiff'))

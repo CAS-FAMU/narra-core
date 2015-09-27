@@ -29,6 +29,7 @@ module Narra
       @identifier = :direct_image
       @title = 'Direct Image Connector'
       @description = 'Direct Image Connector uses direct http links to files'
+      @priority = 0
 
       def self.valid?(url)
         url.start_with?('http://') and (url.end_with?('.jpg') or url.end_with?('.png') or url.end_with?('.gif'))

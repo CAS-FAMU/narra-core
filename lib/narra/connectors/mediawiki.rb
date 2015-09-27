@@ -30,9 +30,25 @@ module Narra
       @identifier = :mediawiki
       @title = 'Mediawiki Connector'
       @description = 'Mediawiki Connector uses Mediawiki API'
+      @priority = 999
 
       def self.valid?(url)
-        url.start_with?('http') and File.readlines(open(url)).grep(/mediawiki/).size > 0
+        # check for protocol
+        return false if url.start_with?('http')
+        # parse url
+        begin
+          uri = URI.parse(url)
+          # create client
+          client = MediawikiApi::Client.new("#{uri.scheme}://#{uri.host}/w/api.php")
+          # api request
+          client.meta :siteinfo
+        rescue
+          # it is not a mediawiki link
+          return false
+        else
+          # it is a mediawiki link
+          return true
+        end
       end
 
       def self.resolve(url)

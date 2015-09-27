@@ -19,6 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'narra/tools/inheritable_attributes'
 require 'narra/tools/defaults_hash'
 require 'narra/tools/probeable'
 require 'narra/tools/settings'

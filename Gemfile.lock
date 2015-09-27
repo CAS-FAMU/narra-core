@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    narra-core (0.0.3)
+    narra-core (0.0.4)
       aasm
       carrierwave-mongoid
       carrierwave-video
@@ -410,6 +410,3 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails
   streamio-ffmpeg!
-
-BUNDLED WITH
-   1.10.6
