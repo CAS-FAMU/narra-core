@@ -99,13 +99,14 @@ module Narra
           end
         end
 
-        # check for author
-        if item.meta.where(name: 'author').empty?
-          item.meta << Narra::MetaItem.new(name: 'author', value: user.name, generator: :user, author: user)
-        end
-
         # save item
         item.save!
+
+        # check for author and if not exists add current one
+        if item.meta.where(name: 'author').empty?
+          item.meta << Narra::MetaItem.new(name: 'author', value: user.name, generator: :user, author: user)
+          item.save!
+        end
 
         # start transcode process
         unless item.type == :text

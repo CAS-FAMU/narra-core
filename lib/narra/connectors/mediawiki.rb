@@ -116,7 +116,7 @@ module Narra
         end
 
         # parse author
-        if @metadata.select { |m| m.has_key?('author') }.empty?
+        if @metadata.select { |m| m[:name] == 'author' }.empty?
           # get contributors
           contributors = client.action :query, titles: @options[:name], prop: "contributors", token_type: false
           # parse
