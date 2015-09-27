@@ -41,9 +41,11 @@ module Narra
 
     # Sequence Relations
     has_many :sequences, autosave: true, inverse_of: :author, class_name: 'Narra::Sequence'
+    has_and_belongs_to_many :sequences_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Sequence'
 
     # Visualization Relations
     has_many :visualizations, autosave: true, inverse_of: :author, class_name: 'Narra::Visualization'
+    has_and_belongs_to_many :visualizations_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Visualization'
 
     # Meta Relations
     has_many :meta, autosave: true, inverse_of: :author, class_name: 'Narra::Meta'

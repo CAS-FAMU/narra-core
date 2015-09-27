@@ -45,9 +45,9 @@ module Narra
       end
 
       # Add item into the NARRA
-      def Core.add_item(url, author, user, library, connector_identifier, options = {})
+      def Core.add_item(url, user, library, connector_identifier, options = {})
         # input check
-        return nil if author.nil? || user.nil? || library.nil? || connector_identifier.nil? || connector(connector_identifier).nil?
+        return nil if user.nil? || library.nil? || connector_identifier.nil? || connector(connector_identifier).nil?
 
         # connector container
         connector = connector(connector_identifier).new(url, options)
@@ -72,15 +72,18 @@ module Narra
             item = Narra::Audio.new(name: connector.name.downcase, url: url, library: library)
             # push specific metadata
             item.meta << Narra::MetaItem.new(name: 'type', value: :audio, generator: :source)
+          when :text
+            # create specific item
+            item = Narra::Text.new(name: connector.name.downcase, url: url, library: library)
+            # push specific metadata
+            item.meta << Narra::MetaItem.new(name: 'type', value: :text, generator: :source)
         end
 
         # create source metadata from essential fields
         item.meta << Narra::MetaItem.new(name: 'name', value: connector.name.downcase, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'url', value: url, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'library', value: library.name, generator: :source)
-        item.meta << Narra::MetaItem.new(name: 'author', value: author, generator: :source)
         item.meta << Narra::MetaItem.new(name: 'connector', value: connector_identifier.to_s, generator: :source)
-
 
         # parse metadata from connector if exists
         connector.metadata.each do |meta|
@@ -92,15 +95,22 @@ module Narra
         # parse metadata form the user input if exists
         if options[:metadata]
           options[:metadata].each do |meta|
-            item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: user.username.to_sym)
+            item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: :user, author: user)
           end
+        end
+
+        # check for author
+        if item.meta.where(name: 'author').empty?
+          item.meta << Narra::MetaItem.new(name: 'author', value: user.name, generator: :user, author: user)
         end
 
         # save item
         item.save!
 
         # start transcode process
-        process(type: :transcoder, item: item._id.to_s, identifier: connector.download_url)
+        unless item.type == :text
+          process(type: :transcoder, item: item._id.to_s, identifier: connector.download_url)
+        end
 
         # return item
         return item

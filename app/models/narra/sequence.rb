@@ -35,6 +35,8 @@ module Narra
 
     # User Relations
     belongs_to :author, autosave: true, inverse_of: :sequences, class_name: 'Narra::User'
+    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :visualizations_contributions, class_name: 'Narra::User'
+
 
     # Relations
     belongs_to :project, autosave: true, inverse_of: :sequences, class_name: 'Narra::Project'

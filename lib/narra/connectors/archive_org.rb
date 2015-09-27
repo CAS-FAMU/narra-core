@@ -63,6 +63,7 @@ module Narra
                 thumbnail: thumbnail,
                 type: :video,
                 connector: @identifier,
+                author: true,
                 @identifier => {
                     arch_server: arch_server,
                     arch_item: item,
@@ -98,6 +99,13 @@ module Narra
         @metadata << {name: 'subject', value: @options[:arch_metadata]['subject']}
         @metadata << {name: 'identifier', value: @options[:arch_metadata]['identifier']}
         @metadata << {name: 'uploader', value: @options[:arch_metadata]['uploader']}
+
+        # author parse
+        if @options[:arch_metadata]['creator']
+          @metadata << {name: 'author', value: @options[:arch_metadata]['creator']}
+        else
+          @metadata << {name: 'author', value: @options[:arch_metadata]['uploader']}
+        end
       end
 
       def name

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,30 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-development:
-  clients:
-    default:
-      database: narra_dev
-      hosts:
-        - localhost:27017
-  options:
-    preload_models: true
-    raise_not_found_error: false
-
-test:
-  clients:
-    default:
-      database: narra_test
-      hosts:
-        - localhost:27017
-      options:
-        # In the test environment we lower the retries and retry interval to
-        # low amounts for fast failures.
-        max_retries: 1
-        retry_interval: 0
-  options:
-      preload_models: true
-      raise_not_found_error: false
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE

@@ -38,5 +38,4 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   # Mongoid logging setup
   Mongoid.logger.level = Logger::INFO
-  Moped.logger.level = Logger::INFO
 end

@@ -19,6 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'uri'
 require 'narra/extensions'
 require 'narra/tools'
 

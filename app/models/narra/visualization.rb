@@ -35,7 +35,8 @@ module Narra
     mount_uploader :script, Narra::VisualizationUploader
 
     # User Relations
-    belongs_to :author, autosave: true, inverse_of: :sequences, class_name: 'Narra::User'
+    belongs_to :author, autosave: true, inverse_of: :visualizations, class_name: 'Narra::User'
+    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :visualizations_contributions, class_name: 'Narra::User'
 
     # Project Relations
     has_and_belongs_to_many :projects, autosave: true, inverse_of: :visualizations, class_name: 'Narra::Project'
