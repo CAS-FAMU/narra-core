@@ -34,7 +34,7 @@ module Narra
 
       def self.valid?(url)
         # check for protocol
-        return false if url.start_with?('http')
+        return false unless url.start_with?('http')
         # parse url
         begin
           uri = URI.parse(url)
