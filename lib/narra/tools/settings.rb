@@ -19,6 +19,9 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'active_support/core_ext/module/attribute_accessors'
+require 'active_support/cache'
+
 module Narra
   module Tools
     class Settings
