@@ -19,6 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
+require 'active_support/core_ext/hash/indifferent_access'
+
 module Narra
   module Tools
     class Settings
