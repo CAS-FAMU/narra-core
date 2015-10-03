@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'active_support/core_ext/hash/indifferent_access'
+require 'active_support/core_ext/module/attribute_accessors'
 
 module Narra
   module Tools
