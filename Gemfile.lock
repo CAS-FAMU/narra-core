@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    narra-core (0.0.5)
+    narra-core (0.0.6)
       aasm
       activesupport
       carrierwave-mongoid
