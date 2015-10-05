@@ -29,21 +29,26 @@ module Narra
       include Narra::Extensions::Class
       include Narra::Extensions::Meta
       include Narra::Extensions::Progress
+      include Narra::Extensions::Options
       include Narra::Tools::Logger
       include Narra::Tools::InheritableAttributes
 
-      inheritable_attributes :identifier, :title, :description, :priority
+      inheritable_attributes :identifier, :title, :description, :options, :dependency, :priority
 
       # Default values
       @identifier = :generic
       @title = 'Generic'
       @description = 'Generic Generator'
+      @options = {}
+      @dependency = []
       @priority = 42
 
       # Generic constructor to store an item to be processed
       def initialize(item, event)
         @item = item
         @event = event
+        # connector specific initialization
+        initialization
       end
 
       def model
@@ -59,6 +64,11 @@ module Narra
       #
 
       def self.valid?(item_to_check)
+        # Nothing to do
+        # This has to be overridden in descendants
+      end
+
+      def initialization
         # Nothing to do
         # This has to be overridden in descendants
       end

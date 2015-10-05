@@ -47,7 +47,7 @@ module Narra
           generator = Narra::Core.generators.detect { |g| g.identifier == options['identifier'].to_sym }
 
           # perform generate if generator is available
-          generator.new(item, @event).generate unless item.nil? || !item.prepared?
+          generator.new(item, @event).generate(options['options']) unless item.nil? || !item.prepared?
         rescue => e
           # reset event
           @event.reset!

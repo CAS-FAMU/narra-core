@@ -56,7 +56,7 @@ module Narra
           end
 
           # save item
-          item.save
+          item.save!
 
           # finish progress
           set_progress(1.0)
@@ -68,7 +68,6 @@ module Narra
           # throw
           raise e
         else
-
           # log
           logger.info('transcoder#' + options['identifier']) { 'Item ' + item.name + '#' + options['item'] + ' successfully transcoded.' }
           # event done

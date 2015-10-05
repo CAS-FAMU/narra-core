@@ -82,6 +82,13 @@ module Narra
 
       def get_meta(options)
         # do a query
+        Meta.get_meta(model, options)
+      end
+
+      def self.get_meta(model, options)
+        # check for model
+        return nil if model.nil?
+        # do a query
         result = model.meta.where(options)
         # check and return
         result.empty? ? nil : (result.count > 1 ? result : result.first)

@@ -28,7 +28,7 @@ module Narra
 
       module ClassMethods
         def inheritable_attributes(*args)
-          @inheritable_attributes ||= [:inheritable_attributes]
+          @inheritable_attributes ||= []
           @inheritable_attributes += args
           args.each do |arg|
             class_eval %(

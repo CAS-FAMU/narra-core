@@ -83,7 +83,7 @@ module Narra
       # run generator process for those where exact generator wasn't executed
       items.each do |item|
         item.library.generators.each do |generator|
-          Narra::Core.generate(item, [generator]) if Narra::MetaItem.where(item: item).generators([generator], false).empty?
+          Narra::Core.generate(item, [generator]) if Narra::MetaItem.where(item: item).generators([generator[:identifier]], false).empty?
         end
       end
     end

@@ -29,7 +29,7 @@ module Narra
 
     # overriding to check whether the video is prepared
     def prepared?
-      !video.url.nil? && !video.lq.url.nil? && !video.audio.nil?
+      !video.url.nil? && !video.lq.url.nil? && !video.audio.url.nil?
     end
   end
 end

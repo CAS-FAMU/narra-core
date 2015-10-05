@@ -32,7 +32,7 @@ describe Narra::Item do
 
   it 'should process item to generate new metadata' do
     # create library
-    @library = FactoryGirl.create(:library, author: @author_user, generators: ['testing'], projects: [])
+    @library = FactoryGirl.create(:library, author: @author_user, generators: [{identifier:'testing', options:{}}], projects: [])
     # create item prepared
     @item_prepared= FactoryGirl.create(:item_prepared, library: @library)
     # generate

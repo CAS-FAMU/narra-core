@@ -34,7 +34,7 @@ RSpec.configure do |config|
             return true
           end
 
-          def generate
+          def generate(options = {})
             add_meta(name: 'test', value: 'test')
           end
         end
