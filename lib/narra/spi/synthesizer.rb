@@ -29,16 +29,19 @@ module Narra
       include Narra::Extensions::Class
       include Narra::Extensions::Sequence
       include Narra::Extensions::Junction
+      include Narra::Extensions::Options
       include Narra::Extensions::Progress
       include Narra::Tools::Logger
       include Narra::Tools::InheritableAttributes
 
-      inheritable_attributes :identifier, :title, :description, :priority
+      inheritable_attributes :identifier, :title, :description, :options, :dependency, :priority
 
       # Default values
       @identifier = :generic
       @title = 'Generic'
       @description = 'Generic Synthesizer'
+      @options = {}
+      @dependency = []
       @priority = 42
 
       # Generic constructor to store an item to be processed
@@ -47,7 +50,7 @@ module Narra
         @event = event
       end
 
-      def project
+      def model
         @project
       end
 
@@ -58,6 +61,11 @@ module Narra
       #
       # Should be overridden and implemented
       #
+
+      def self.valid?(project_to_check)
+        # Nothing to do
+        # This has to be overridden in descendants
+      end
 
       def synthesize(options = {})
         # Nothing to do

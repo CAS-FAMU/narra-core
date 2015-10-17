@@ -33,6 +33,7 @@ module Narra
     field :title, type: String
     field :description, type: String
     field :synthesizers, type: Array, default: []
+    field :visualizations, type: Array, default: []
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::MetaProject'
@@ -43,9 +44,6 @@ module Narra
 
     # Library Relations
     has_and_belongs_to_many :libraries, autosave: true, inverse_of: :projects, class_name: 'Narra::Library'
-
-    # Visualization Relations
-    has_and_belongs_to_many :visualizations, autosave: true, inverse_of: :projects, class_name: 'Narra::Visualization'
 
     # Junction Relations
     has_many :junctions, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Junction'

@@ -22,11 +22,17 @@ module Narra
   class VisualizationUploader < CarrierWave::Uploader::Base
 
     def filename
-      "#{model.type}_script.#{file.extension}" if original_filename.present?
+      "#{secure_token}.#{file.extension}" if original_filename.present?
     end
 
     def store_dir
       Narra::Storage::INSTANCE + "/visualizations/#{model._id.to_s}"
+    end
+
+    protected
+    def secure_token
+      var = :"@#{mounted_as}_secure_token"
+      model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.uuid)
     end
   end
 end

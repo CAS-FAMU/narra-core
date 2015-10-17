@@ -30,6 +30,10 @@ RSpec.configure do |config|
           @title = 'Testing'
           @description = 'Testing Metadata Synthesizer'
 
+          def self.valid?(project_to_check)
+            return true
+          end
+
           def synthesize(options = {})
             add_junction([@project.items.first, @project.items.last], weight: 1.0, synthesizer: :testing, direction: {none: true}, source: 'testing')
           end

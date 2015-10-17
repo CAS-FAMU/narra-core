@@ -31,6 +31,10 @@ module Narra
         @title = 'Sequence Synthesizer'
         @description = 'Narra Synthesizer based on project sequences'
 
+        def self.valid?(project_to_check)
+          true
+        end
+
         def synthesize(options = {})
           # input check
           sequences = [Narra::Sequence.find(options['sequence'])] unless options['sequence'].nil?

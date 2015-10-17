@@ -23,10 +23,6 @@ module Narra
   module Extensions
     module Junction
 
-      def project
-        # This has to be overridden to return item
-      end
-
       def add_junction(items = [], options)
         # input check
         return if items.empty? || options[:synthesizer].nil? || options[:source].nil? ||
@@ -38,7 +34,7 @@ module Narra
         # update already existing or create a new one
         if cached.nil?
           # push new junction entry
-          Narra::Junction.create(project: project, items: items, direction: options[:direction], weight: options[:weight], synthesizer: options[:synthesizer], sources: [options[:source]])
+          Narra::Junction.create(project: model, items: items, direction: options[:direction], weight: options[:weight], synthesizer: options[:synthesizer], sources: [options[:source]])
         else
           # update junction
           cached.weight = options[:weight]
@@ -49,7 +45,7 @@ module Narra
 
       def get_junction(items = [], synthesizer, direction)
         # get junction
-        Narra::Junction.any_in(item_ids: items.collect {|item| item._id.to_s}).find_by(project: project, synthesizer: synthesizer, direction: direction)
+        Narra::Junction.any_in(item_ids: items.collect {|item| item._id.to_s}).find_by(project: model, synthesizer: synthesizer, direction: direction)
       end
     end
   end

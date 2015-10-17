@@ -30,16 +30,14 @@ module Narra
 
     field :name, type: String
     field :description, type: String
-    field :type, type: Symbol
+    field :identifier, type: Symbol
+    field :options, type: Hash
 
     mount_uploader :script, Narra::VisualizationUploader
 
     # User Relations
     belongs_to :author, autosave: true, inverse_of: :visualizations, class_name: 'Narra::User'
     has_and_belongs_to_many :contributors, autosave: true, inverse_of: :visualizations_contributions, class_name: 'Narra::User'
-
-    # Project Relations
-    has_and_belongs_to_many :projects, autosave: true, inverse_of: :visualizations, class_name: 'Narra::Project'
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :visualization, class_name: 'Narra::MetaVisualization'

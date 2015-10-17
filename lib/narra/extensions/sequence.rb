@@ -25,10 +25,6 @@ module Narra
   module Extensions
     module Sequence
 
-      def project
-        # This has to be overridden to return item
-      end
-
       def add_sequence(options)
         # input check
         return if options[:name].nil? || options[:marks].nil?
@@ -52,7 +48,7 @@ module Narra
           end
         end
         # push new sequence entry
-        project.sequences << Narra::Sequence.new(name: options[:name], author: author, marks: marks)
+        model.sequences << Narra::Sequence.new(name: options[:name], author: author, marks: marks)
       end
     end
   end

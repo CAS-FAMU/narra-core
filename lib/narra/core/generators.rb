@@ -35,20 +35,22 @@ module Narra
       end
 
       # Generate process invoker
-      def Core.generate(item, selected_generators = nil)
+      def Core.generate(item, selected_generators = nil, options = {})
         # check generators for nil and assign only possible generators
-        selected_generators ||= item.library.generators
+        selected_generators ||= item.library.generators.map { |g| g[:identifier].to_s }
         # select them
         selected_generators.select! { |g|
-          item.library.generators.map { |h| h[:identifier].to_s }.include?(g[:identifier].to_s) &&
-              Generators.generators_identifiers.include?(g[:identifier].to_sym)
+          item.library.generators.map { |h| h[:identifier].to_s }.include?(g.to_s) &&
+              Generators.generators_identifiers.include?(g.to_sym)
         }
+        # collect
+        selected_generators.collect! { |g| item.library.generators.detect { |h| h[:identifier].to_s == g.to_s} }
         # process item
         selected_generators.each do |generator|
           # get generator class
           check = generators.detect { |g| g.identifier == generator[:identifier].to_sym }
           # process if it is valid for this item
-          process(type: :generator, item: item._id.to_s, identifier: generator[:identifier], options: generator[:options]) if check.valid?(item)
+          process(type: :generator, item: item._id.to_s, identifier: generator[:identifier], options: generator[:options].merge(options)) if check.valid?(item)
         end
       end
 

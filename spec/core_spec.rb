@@ -43,23 +43,26 @@ describe Narra::Core do
 
   it 'should process item to generate new metadata' do
     # generate through main process with non prepared item
-    Narra::Core.generate(@item, [{identifier: 'testing', options: {}}])
+    Narra::Core.generate(@item, [:testing])
     # generate through main process with prepared item
-    Narra::Core.generate(@item_prepared, [{identifier: 'testing', options: {}}])
+    Narra::Core.generate(@item_prepared, [:testing])
     # validation
     expect(@item.meta.count).to match(0)
     expect(@item_prepared.meta.count).to match(0)
     # assign testing generator to library
     @library.generators << {identifier: 'testing', options: {}}
     # regenerate
-    Narra::Core.generate(@item, [{identifier: 'testing', options: {}}])
-    Narra::Core.generate(@item_prepared, [{identifier: 'testing', options: {}}])
+    Narra::Core.generate(@item, [:testing])
+    Narra::Core.generate(@item_prepared, [:testing])
     # validation
     expect(@item.meta.count).to match(0)
     expect(@item_prepared.meta.count).to match(1)
   end
 
   it 'should process item to generate new junction' do
+    # add synthesizer to the project
+    @project.update_attributes(synthesizers: [{identifier: 'testing', options: {}}])
+    # synthesize
     Narra::Core.synthesize(@project, [:testing])
     # validation
     expect(@project.junctions.count).to match(1)

@@ -47,7 +47,7 @@ module Narra
           synthesizer = Narra::Core.synthesizers.detect { |s| s.identifier == options['identifier'].to_sym }
 
           # perform generate if generator is available
-          synthesizer.new(project, @event).synthesize(options) unless project.nil?
+          synthesizer.new(project, @event).synthesize(options['options']) unless project.nil?
         rescue => e
           # reset event
           @event.reset!

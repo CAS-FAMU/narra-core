@@ -37,12 +37,20 @@ module Narra
       # Synthesize process invoker
       def Core.synthesize(project, selected_synthesizers = nil, options = {})
         # check synthesizers for nil
-        selected_synthesizers ||= synthesizers_identifiers
+        selected_synthesizers ||= project.synthesizers.map { |s| s[:identifier].to_s }
         # select them
-        selected_synthesizers.select! { |s| Synthesizers.synthesizers_identifiers.include?(s.to_sym) }
+        selected_synthesizers.select! { |s|
+          project.synthesizers.map { |h| h[:identifier].to_s }.include?(s.to_s) &&
+              Synthesizers.synthesizers_identifiers.include?(s.to_sym)
+        }
+        # collect
+        selected_synthesizers.collect! { |s| project.synthesizers.detect { |h| h[:identifier].to_s == s.to_s} }
         # process item
         selected_synthesizers.each do |synthesizer|
-          process({type: :synthesizer, project: project._id.to_s, identifier: synthesizer}.merge(options))
+          # get generator class
+          check = synthesizers.detect { |s| s.identifier == synthesizer[:identifier].to_sym }
+          # process if it is valid for this item
+          process(type: :synthesizer,  project: project._id.to_s, identifier: synthesizer[:identifier], options: synthesizer[:options].merge(options)) if check.valid?(project)
         end
       end
 
