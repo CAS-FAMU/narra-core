@@ -27,6 +27,7 @@ module Narra
     include Mongoid::Timestamps
     include Narra::Extensions::Meta
     include Narra::Extensions::Public
+    include Narra::Extensions::Thumbnail
 
     field :name, type: String
     field :description, type: String
@@ -41,6 +42,9 @@ module Narra
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :visualization, class_name: 'Narra::MetaVisualization'
+
+    # Thumbnail Relations
+    has_many :thumbnails, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Thumbnail'
 
     # Validations
     validates_uniqueness_of :name
