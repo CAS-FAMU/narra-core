@@ -53,7 +53,7 @@ module Narra
     scope :user, ->(user) { any_in(library_id: Library.user(user).pluck(:id)) }
 
     # Return as an array
-    def items
+    def models
       [self]
     end
 

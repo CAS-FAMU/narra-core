@@ -50,6 +50,11 @@ module Narra
     validates_uniqueness_of :name
     validates_presence_of :name
 
+    # Return as an array
+    def models
+      [self]
+    end
+
     # Return this sequence for Meta extension
     def model
       self

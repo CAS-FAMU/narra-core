@@ -67,6 +67,11 @@ module Narra
       Narra::Item.any_in(library_id: self.library_ids)
     end
 
+    # Return as an array
+    def models
+      items
+    end
+
     # Return this project for Meta extension
     def model
       self

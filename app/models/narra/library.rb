@@ -60,6 +60,11 @@ module Narra
     # Callbacks
     after_update :broadcast_events
 
+    # Return as an array
+    def models
+      items
+    end
+
     # Return this library for Meta extension
     def model
       self

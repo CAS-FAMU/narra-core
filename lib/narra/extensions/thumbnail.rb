@@ -23,17 +23,13 @@ module Narra
   module Extensions
     module Thumbnail
 
-      def items
-        # This has to be overridden to return item
-      end
-
       def url_thumbnail
         url_thumbnails.first
       end
 
       def url_thumbnails
         # get thumbnail if not resolved yet
-        @url_thumbnails ||= Narra::Thumbnail.any_in(item_id: self.items.collect {|item| item._id}).order_by(:random => 'asc').limit(Narra::Tools::Settings.thumbnail_count.to_i).collect { |thumbnail| thumbnail.file.url }
+        @url_thumbnails ||= Narra::Thumbnail.any_in(item_id: self.models.collect {|model| model._id}).order_by(:random => 'asc').limit(Narra::Tools::Settings.thumbnail_count.to_i).collect { |thumbnail| thumbnail.file.url }
       end
     end
   end
