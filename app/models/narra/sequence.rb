@@ -20,50 +20,32 @@
 #
 
 module Narra
-  class Sequence
-    include Mongoid::Document
-    include Mongoid::Timestamps
-    include Wisper::Publisher
+  class Sequence < Flow
     include Narra::Extensions::Meta
     include Narra::Extensions::Public
 
     # Fields
-    field :name, type: String
+    field :description, type: String
+    field :fps, type: Float
+    field :prepared, type: Boolean, default: false
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::MetaSequence'
 
     # User Relations
-    belongs_to :author, autosave: true, inverse_of: :sequences, class_name: 'Narra::User'
-    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :visualizations_contributions, class_name: 'Narra::User'
+    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :sequences_contributions, class_name: 'Narra::User'
 
-
-    # Relations
-    belongs_to :project, autosave: true, inverse_of: :sequences, class_name: 'Narra::Project'
-    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::MarkSequence'
-
-    # Validations
-    validates_uniqueness_of :project, scope: [:name]
-    validates_presence_of :name, :author, :project, :marks
-
-    # Callbacks
-    after_destroy :broadcast_events_destroyed
-    after_create :broadcast_events_created
+    # Item Relations
+    has_one :master, inverse_of: :sequence, class_name: 'Narra::Item'
 
     # Return this sequence for Meta extension
     def model
       self
     end
 
-    protected
-
-    def broadcast_events_destroyed
-      broadcast(:narra_sequence_destroyed, { project: self.project.name, sequence: self._id.to_s })
-    end
-
-    def broadcast_events_created
-      # broadcast all events
-      broadcast(:narra_sequence_created, { project: self.project.name, sequence: self._id.to_s })
+    def prepared?
+      # This has to be overridden in descendants
+      prepared
     end
   end
 end

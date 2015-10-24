@@ -25,7 +25,6 @@ module Narra
   module Workers
     class Sequence
       include Sidekiq::Worker
-      include Narra::Extensions::Sequence
       include Narra::Extensions::EDL
       include Narra::Extensions::Progress
 
@@ -33,14 +32,14 @@ module Narra
 
       def perform(options)
         # input check
-        return if options['project'].nil?
+        return if options['sequence'].nil?
         # perform
         begin
           # get event
           @event = Narra::Event.find(options['event'])
 
-          # get project
-          @project = Narra::Project.find_by(name: options['project'])
+          # get sequence
+          @sequence = Narra::Sequence.find(options['sequence'])
 
           # get type
           type = options['identifier'].to_sym
@@ -52,9 +51,7 @@ module Narra
           case type
             when :edl
               # process edl
-              sequence = process_edl(options['params'])
-              # add new sequence
-              add_sequence(sequence)
+              process_edl(options['params'])
           end
         rescue => e
           # reset event
@@ -66,6 +63,8 @@ module Narra
         else
           # finish progress
           set_progress(1.0)
+          # set sequence prepared
+          @sequence.update_attributes(prepared: true)
           # log
           logger.info('sequence#' + options['identifier']) { 'Sequence successfully created.' }
           # event done
@@ -73,8 +72,8 @@ module Narra
         end
       end
 
-      def project
-        @project
+      def model
+        @sequence
       end
 
       def event

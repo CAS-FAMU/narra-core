@@ -24,7 +24,7 @@ require 'narra/extensions/junction'
 require 'narra/extensions/edl'
 require 'narra/extensions/meta'
 require 'narra/extensions/progress'
-require 'narra/extensions/sequence'
+require 'narra/extensions/mark'
 require 'narra/extensions/thumbnail'
 require 'narra/extensions/options'
 

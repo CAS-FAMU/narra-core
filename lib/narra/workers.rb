@@ -22,6 +22,8 @@
 require 'narra/workers/generator'
 require 'narra/workers/synthesizer'
 require 'narra/workers/transcoder'
+require 'narra/workers/purge'
+require 'narra/workers/sequence'
 
 module Narra
   module Workers

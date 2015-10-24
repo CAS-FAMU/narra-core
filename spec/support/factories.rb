@@ -80,7 +80,7 @@ FactoryGirl.define do
     sequence(:in) { |n| n.to_f }
     sequence(:out) { |n| (n+1).to_f }
   end
-  factory :mark_sequence, class: Narra::MarkSequence do
+  factory :mark_flow, class: Narra::MarkFlow do
     sequence(:in) { |n| n.to_f }
     sequence(:out) { |n| (n+1).to_f }
     sequence(:row) { |n| (n+1) }

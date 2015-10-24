@@ -19,15 +19,16 @@
 #
 
 module Narra
-  class MarkSequence < Mark
+  class MarkFlow < Mark
     # Fields
     field :row, type: Integer
+    field :clip, type: String
 
     # Relations
-    belongs_to :clip, autosave: true, class_name: 'Narra::Item'
-    belongs_to :sequence, autosave: true, inverse_of: :marks, class_name: 'Narra::Sequence'
+    belongs_to :flow, autosave: true, inverse_of: :marks, class_name: 'Narra::Flow'
 
     # Validations
-    validates_presence_of :row, :clip, :sequence, :in, :out
+    validates_uniqueness_of :row, scope: [:flow_id]
+    validates_presence_of :row, :flow
   end
 end

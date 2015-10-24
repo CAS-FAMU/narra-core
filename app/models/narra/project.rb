@@ -47,7 +47,7 @@ module Narra
 
     # Junction Relations
     has_many :junctions, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Junction'
-    has_many :sequences, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Sequence'
+    has_many :flows, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Flow'
 
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Event'
@@ -65,6 +65,16 @@ module Narra
     # Return all project items
     def items
       Narra::Item.any_in(library_id: self.library_ids)
+    end
+
+    # Return all author's sequences
+    def sequences
+      flows.where(_type: 'Narra::Sequence')
+    end
+
+    # Return all users paths
+    def paths
+      flows.where(_type: 'Narra::Path')
     end
 
     # Return as an array

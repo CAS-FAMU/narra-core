@@ -33,6 +33,9 @@ module Narra
     # Library Relations
     belongs_to :library, autosave: true, inverse_of: :items, class_name: 'Narra::Library'
 
+    # Sequence Relations
+    belongs_to :sequence, autosave: true, inverse_of: :master, class_name: 'Narra::Sequence'
+
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::MetaItem'
 
@@ -63,6 +66,11 @@ module Narra
 
     def type
       _type.split('::').last.downcase.to_sym
+    end
+
+    # Item is hidden for any process when it is assigned as master of the sequence
+    def hidden?
+      !sequence.nil?
     end
 
     def prepared?

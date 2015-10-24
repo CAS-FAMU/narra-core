@@ -43,7 +43,7 @@ module Narra
       protected
 
       def narra_public_initialize
-        self.add_meta(name: 'public', value: false)
+        self.add_meta(name: 'public', value: false, public: false)
       end
     end
   end

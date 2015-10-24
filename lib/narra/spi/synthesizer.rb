@@ -27,7 +27,6 @@ module Narra
     # Generic template for synthesizers
     class Synthesizer
       include Narra::Extensions::Class
-      include Narra::Extensions::Sequence
       include Narra::Extensions::Junction
       include Narra::Extensions::Options
       include Narra::Extensions::Progress

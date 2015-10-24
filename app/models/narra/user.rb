@@ -40,7 +40,7 @@ module Narra
     has_and_belongs_to_many :libraries_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Sequence Relations
-    has_many :sequences, autosave: true, inverse_of: :author, class_name: 'Narra::Sequence'
+    has_many :flows, autosave: true, inverse_of: :author, class_name: 'Narra::Flow'
     has_and_belongs_to_many :sequences_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Sequence'
 
     # Visualization Relations
@@ -59,6 +59,11 @@ module Narra
     # Check if the user has certain role
     def is?(roles_check = [])
       !(roles & roles_check).empty?
+    end
+
+    # Return all user's paths
+    def paths
+      flows.where(_type: 'Narra::Path')
     end
 
     # Get all roles registered in the system

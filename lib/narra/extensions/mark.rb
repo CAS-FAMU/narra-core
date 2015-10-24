@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,31 +19,22 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'timecode'
+
 module Narra
   module Extensions
-    module Shared
-      extend ActiveSupport::Concern
-      include Narra::Extensions::Meta
+    module Mark
 
-      included do
-        after_create :narra_shared_initialize
-      end
-
-      def is_shared?
-        # get public meta
-        meta = get_meta(name: 'shared')
-        # resolve
-        meta.nil? ? false : meta.value == 'true'
-      end
-
-      def shared=(shared)
-        self.update_meta(name: 'shared', value: shared)
-      end
-
-      protected
-
-      def narra_shared_initialize
-        self.add_meta(name: 'shared', value: false, public: false)
+      def process_mark(mark)
+        # get item
+        item = @sequence.project.items.find_by(name: mark[:clip])
+        # start_tc
+        start_tc = Timecode.parse(item.nil? ? '00:00:00:00' : item.get_meta(name: 'timecode', generator: :source).value, @sequence.fps)
+        # calculate timecodes
+        src_in = ((mark[:in] - start_tc).to_f / @sequence.fps).to_f
+        src_out = ((mark[:out] - start_tc).to_f / @sequence.fps).to_f
+        # return mark
+        Narra::MarkFlow.new(clip: mark[:clip], row: mark[:row], in: src_in, out: src_out)
       end
     end
   end

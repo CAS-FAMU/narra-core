@@ -22,19 +22,34 @@
 module Narra
   module Core
     module Sequences
-      include Narra::Extensions::Sequence
 
       # Add sequence into the NARRA
-      def Core.add_sequence(project, author, params = {})
+      def Core.add_sequence(project, user, options = {})
         # input check
-        return if params[:sequence_name].nil? || params[:sequence_type].nil? || params[:sequence_content].nil?
-        # get type of the sequence
-        case params[:sequence_type]
-          when :edl
-            # input check
-            return if params[:edl_fps].nil?
-            # process edl
-            process(type: :sequence, project: project.name, identifier: :edl, params: params.merge({author: author._id.to_s}))
+        return if options[:sequence_name].nil? || options[:sequence_type].nil? || options[:sequence_fps].nil?
+
+        # check for author
+        author = options[:author].nil? ? user : Narra::User.find_by(username: options[:author])
+        # create specific item
+        sequence = Narra::Sequence.new(name: options[:sequence_name], author: author, project: project, fps: options[:sequence_fps])
+        # push specific metadata
+        sequence.meta << Narra::MetaSequence.new(name: 'type', value: options[:sequence_type])
+
+        # parse metadata form the user input if exists
+        if options[:metadata]
+          options[:metadata].each do |meta|
+            sequence.meta << Narra::MetaSequence.new(name: meta[:name], value: meta[:value], generator: :user, author: user)
+          end
+        end
+
+        # save sequence
+        sequence.save!
+
+        # parse if it is not narra sequence
+        if options[:sequence_type].to_sym != :narra
+          process(type: :sequence, sequence: sequence._id.to_s, identifier: options[:sequence_type], params: options)
+        else
+          sequence.update_attributes(prepared: true)
         end
       end
     end

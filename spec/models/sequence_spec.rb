@@ -30,7 +30,7 @@ describe Narra::Sequence do
     # create item
     @item0 = FactoryGirl.create(:item, library: @library)
     # create item prepared
-    @mark = FactoryGirl.build(:mark_sequence, clip: @item0)
+    @mark = FactoryGirl.build(:mark_flow, clip: @item0)
   end
 
   it "can be instantiated" do

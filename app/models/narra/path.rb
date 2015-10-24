@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -20,31 +20,11 @@
 #
 
 module Narra
-  module Extensions
-    module Shared
-      extend ActiveSupport::Concern
-      include Narra::Extensions::Meta
+  class Path < Flow
 
-      included do
-        after_create :narra_shared_initialize
-      end
-
-      def is_shared?
-        # get public meta
-        meta = get_meta(name: 'shared')
-        # resolve
-        meta.nil? ? false : meta.value == 'true'
-      end
-
-      def shared=(shared)
-        self.update_meta(name: 'shared', value: shared)
-      end
-
-      protected
-
-      def narra_shared_initialize
-        self.add_meta(name: 'shared', value: false, public: false)
-      end
+    def prepared?
+      # This has to be overridden in descendants
+      return true
     end
   end
 end

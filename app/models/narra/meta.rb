@@ -27,6 +27,7 @@ module Narra
     # Fields
     field :name, type: String
     field :value, type: String
+    field :public, type: Boolean, default: true
 
     # User Relations
     belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'

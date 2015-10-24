@@ -75,6 +75,7 @@ module Narra
         when :purge
           Narra::Workers::Purge.perform_async(options.merge({event: event._id.to_s}))
       end
+
       # return event
       return event
     end
