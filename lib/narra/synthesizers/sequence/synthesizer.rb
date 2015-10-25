@@ -53,17 +53,20 @@ module Narra
                 # add junction
                 if index+1 != marks.count && (mark.row+1 == marks[index+1].row)
                   # get items
-                  from = Narra::Item.find_by(name: mark.clip.name)
-                  to = Narra::Item.find_by(name: marks[index+1].clip.name)
-                  direction = {from: from._id.to_s, to: to._id.to_s}
-                  weight = 0.0
-                  # if the connection is between same clips do not add junction
-                  unless from.eql?(to)
-                    # check if the junction already exists
-                    cached = get_junction([from, to], :sequence, direction)
-                    weight = cached.weight + 0.1 unless cached.nil?
-                    # add junction
-                    add_junction([from, to], direction: direction, weight: weight, synthesizer: :sequence, source: sequence._id.to_s)
+                  from = Narra::Item.find_by(name: mark.clip)
+                  to = Narra::Item.find_by(name: marks[index+1].clip)
+                  # check for items
+                  unless from.nil? || to.nil?
+                    direction = {from: from._id.to_s, to: to._id.to_s}
+                    weight = 0.0
+                    # if the connection is between same clips do not add junction
+                    unless from.eql?(to)
+                      # check if the junction already exists
+                      cached = get_junction([from, to], :sequence, direction)
+                      weight = cached.weight + 0.1 unless cached.nil?
+                      # add junction
+                      add_junction([from, to], direction: direction, weight: weight, synthesizer: :sequence, source: sequence._id.to_s)
+                    end
                   end
                 end
               end
