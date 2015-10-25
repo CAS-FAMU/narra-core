@@ -39,7 +39,7 @@ module Narra
           end
         end
         # get meta class
-        base = model.respond_to?('_type') ? model._type : model.class.superclass.to_s == 'Object' ? model.class : model.class.superclass
+        base = model.respond_to?('_type') && model._type == 'Narra::Sequence' ? model._type : model.class.superclass.to_s == 'Object' ? model.class : model.class.superclass
         # push new meta entry
         meta = "Narra::Meta#{base.to_s.split('::').last}".constantize.new(options)
         # process marks

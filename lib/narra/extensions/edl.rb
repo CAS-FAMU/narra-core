@@ -34,23 +34,25 @@ module Narra
         # parse
         parsed = ::EDL::Parser.new(fps=options['sequence_fps'].to_f).parse(options['sequence_content'])
 
-        # deafult sequence start
-        sequence_start = Timecode.parse('00:00:00:00')
+        # deafult marks container
+        marks = {}
 
         # iterate through and resolve
         parsed.each do |clip|
-          # if clip is the first store timecode start of the sequence
-          if clip.num.to_i == 1
-            sequence_start = Timecode.parse(clip.rec_start_tc.to_s, @sequence.fps)
+          # prepare clip name
+          clip_name = clip.clip_name.nil? ? 'black' : clip.clip_name.split('.')[0].downcase
+          # check for missing values
+          if marks[clip.num].nil? || marks[clip.num][:clip] == 'black'
+            marks[clip.num] = { clip: clip_name, row: clip.num.to_i, in: Timecode.parse(clip.src_start_tc.to_s, @sequence.fps), out: Timecode.parse(clip.src_end_tc.to_s, @sequence.fps)}
           end
-
-          # parse and check clip names
-          clip_name = clip.clip_name.split('.')[0].downcase
-          # prepare marks to create sequence
-          @sequence.marks << process_mark(clip: clip_name, row: clip.num.to_i, in: Timecode.parse(clip.src_start_tc.to_s, @sequence.fps), out: Timecode.parse(clip.src_end_tc.to_s, @sequence.fps))
         end
-
-        # chek sequence end timecode
+        # prepare marks to create sequence
+        marks.each_value do |mark|
+          @sequence.marks << process_mark(mark)
+        end
+        # check sequence start timecode
+        sequence_start = Timecode.parse(parsed.first.rec_end_tc.to_s, @sequence.fps)
+        # check sequence end timecode
         sequence_end = Timecode.parse(parsed.last.rec_end_tc.to_s, @sequence.fps)
         # sequence duration
         duration = ((sequence_end - sequence_start).to_f / @sequence.fps).to_f
