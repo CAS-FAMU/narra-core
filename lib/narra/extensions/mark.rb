@@ -29,7 +29,7 @@ module Narra
         # get item
         item = @sequence.project.items.find_by(name: mark[:clip])
         # get timecode
-        timecode = item.get_meta(name: 'timecode', generator: :source)
+        timecode = item.nil? ? nil : item.get_meta(name: 'timecode', generator: :source)
         # start_tc
         start_tc = Timecode.parse((item.nil? || timecode.nil?) ? '00:00:00:00' : timecode.value, @sequence.fps)
         # calculate timecodes
