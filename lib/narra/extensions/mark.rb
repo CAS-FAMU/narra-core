@@ -28,8 +28,10 @@ module Narra
       def process_mark(mark)
         # get item
         item = @sequence.project.items.find_by(name: mark[:clip])
+        # get timecode
+        timecode = item.get_meta(name: 'timecode', generator: :source)
         # start_tc
-        start_tc = Timecode.parse(item.nil? ? '00:00:00:00' : item.get_meta(name: 'timecode', generator: :source).value, @sequence.fps)
+        start_tc = Timecode.parse((item.nil? || timecode.nil?) ? '00:00:00:00' : timecode.value, @sequence.fps)
         # calculate timecodes
         src_in = ((mark[:in] - start_tc).to_f / @sequence.fps).to_f
         src_out = ((mark[:out] - start_tc).to_f / @sequence.fps).to_f

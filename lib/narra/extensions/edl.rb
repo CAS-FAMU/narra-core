@@ -32,7 +32,7 @@ module Narra
 
       def process_edl(options)
         # parse
-        parsed = ::EDL::Parser.new(fps=options['sequence_fps'].to_f).parse(options['sequence_content'])
+        parsed = ::EDL::Parser.new(fps=@sequence.fps).parse(options['sequence_content'])
 
         # deafult marks container
         marks = {}

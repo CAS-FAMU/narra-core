@@ -397,6 +397,3 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails
   streamio-ffmpeg!
-
-BUNDLED WITH
-   1.10.6
