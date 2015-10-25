@@ -23,7 +23,6 @@ module Narra
   class Flow
     include Mongoid::Document
     include Mongoid::Timestamps
-    include Wisper::Publisher
     include Narra::Extensions::Thumbnail
 
     # Fields
@@ -42,10 +41,6 @@ module Narra
     validates_uniqueness_of :project, scope: [:name]
     validates_presence_of :name, :author, :project
 
-    # Callbacks
-    after_destroy :broadcast_events_destroyed
-    after_create :broadcast_events_created
-
     # Return type of the flow
     def type
       _type.split('::').last.downcase.to_sym
@@ -58,17 +53,6 @@ module Narra
 
     def models
       project.items.any_in(name: marks.collect { |mark| mark.clip })
-    end
-
-    protected
-
-    def broadcast_events_destroyed
-      broadcast("narra_#{type}_destroyed".to_sym, {project: self.project.name, flow: self._id.to_s})
-    end
-
-    def broadcast_events_created
-      # broadcast all events
-      broadcast("narra_#{type}_created".to_sym, {project: self.project.name, flow: self._id.to_s})
     end
   end
 end

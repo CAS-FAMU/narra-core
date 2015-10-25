@@ -21,6 +21,7 @@
 
 module Narra
   class Sequence < Flow
+    include Wisper::Publisher
     include Narra::Extensions::Meta
     include Narra::Extensions::Public
 
@@ -38,6 +39,10 @@ module Narra
     # Item Relations
     has_one :master, inverse_of: :sequence, class_name: 'Narra::Item'
 
+    # Callbacks
+    after_destroy :broadcast_events_destroyed
+    after_create :broadcast_events_created
+
     # Return this sequence for Meta extension
     def model
       self
@@ -46,6 +51,17 @@ module Narra
     def prepared?
       # This has to be overridden in descendants
       prepared
+    end
+    
+    protected
+
+    def broadcast_events_destroyed
+      broadcast(:narra_sequence_destroyed, {project: self.project.name, sequence: self._id.to_s})
+    end
+
+    def broadcast_events_created
+      # broadcast all events
+      broadcast(:narra_sequence_created, {project: self.project.name, sequence: self._id.to_s})
     end
   end
 end

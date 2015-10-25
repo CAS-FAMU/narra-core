@@ -26,11 +26,11 @@ module Narra
 
         def narra_sequence_destroyed(options)
           # input check
-          return if options[:project].nil? || options[:flow].nil?
+          return if options[:project].nil? || options[:sequence].nil?
           # get project
           project = Narra::Project.find_by(name: options[:project])
           # get affected junctions
-          junctions = Narra::Junction.any_in(sources: [options[:flow]]).where(project: project, synthesizer: :sequence)
+          junctions = Narra::Junction.any_in(sources: [options[:sequence]]).where(project: project, synthesizer: :sequence)
           # process
           junctions.each do |junction|
             # get sources
@@ -43,8 +43,8 @@ module Narra
               junction.destroy
             else
               # if there are more sources just remove the one and decrease the weight
-              junction.sources.delete(options[:flow])
-              junction.weight = junction.weight - (0.1 * counts[options[:flow]])
+              junction.sources.delete(options[:sequence])
+              junction.weight = junction.weight - (0.1 * counts[options[:sequence]])
               junction.save
             end
           end
@@ -52,11 +52,11 @@ module Narra
 
         def narra_sequence_created(options)
           # input check
-          return if options[:project].nil? || options[:flow].nil?
+          return if options[:project].nil? || options[:sequence].nil?
           # get project
           project = Narra::Project.find_by(name: options[:project])
           # submit synthesize process
-          Narra::Project.synthesize(project, :sequence, {sequence: options[:flow]})
+          Narra::Project.synthesize(project, :sequence, {sequence: options[:sequence]})
         end
       end
     end
