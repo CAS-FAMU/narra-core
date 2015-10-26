@@ -64,17 +64,23 @@ module Narra
         return if options[:name].nil? || options[:value].nil?
         # retrieve meta
         meta = get_meta(name: options[:name], generator: options[:generator])
-        # update value
-        meta.update_attributes(value: options[:value])
-        # update marks
-        if options[:marks]
-          marks = []
-          # prepare marks
-          options[:marks].each do |mark|
-            marks << Narra::MarkMeta.new(mark)
+        # update value when the meta is founded
+        unless meta.nil?
+          meta.update_attributes(value: options[:value])
+          # check for new generator field
+          meta.update_attributes(generator: options[:new_generator]) unless options[:new_generator].nil?
+          # check for author field
+          meta.update_attributes(author: options[:author]) unless options[:author].nil?
+          # update marks
+          if options[:marks]
+            marks = []
+            # prepare marks
+            options[:marks].each do |mark|
+              marks << Narra::MarkMeta.new(mark)
+            end
+            # update
+            meta.update_attributes(marks: marks)
           end
-          # update
-          meta.update_attributes(marks: marks)
         end
         # return meta
         meta
