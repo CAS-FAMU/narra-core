@@ -41,7 +41,7 @@ module Narra
 
           # run synthesize process for appropriate synthesizer
           created.each do |synthesizer|
-            Narra::Project.synthesize(project, synthesizer)
+            Narra::Project.synthesize(project, synthesizer[:identifier])
           end
 
           # log

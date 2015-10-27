@@ -69,7 +69,7 @@ module Narra
     end
 
     # Item is hidden for any process when it is assigned as master of the sequence
-    def hidden?
+    def master?
       !sequence.nil?
     end
 

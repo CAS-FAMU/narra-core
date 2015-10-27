@@ -59,7 +59,7 @@ module Narra
           # finish progress
           set_progress(1.0)
           # log
-          logger.info('synthesizer#' + options['identifier']) { 'Project ' + project.name + '#' + options['project'] + ' successfully generated.' }
+          logger.info('synthesizer#' + options['identifier']) { 'Project ' + project.name + '#' + options['project'] + ' successfully synthesized.' }
           # event done
           @event.done!
         end

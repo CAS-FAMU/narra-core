@@ -40,32 +40,37 @@ module Narra
           sequences = [Narra::Sequence.find(options['sequence'])] unless options['sequence'].nil?
           # check generators for nil and assign only possible generators
           sequences ||= @project.sequences
-          # iterate through and resolve
-          sequences.each do |sequence|
-            # check if the sequence is unprocessed
-            junctions = Narra::Junction.where(project: @project, synthesizer: :sequence).any_in(sources: [sequence._id.to_s])
-            # process sequence if not processed
-            if junctions.empty?
-              # order marks
-              marks = sequence.marks.order_by(:row => 'asc')
-              # iterate
-              marks.each_with_index do |mark, index|
-                # add junction
-                if index+1 != marks.count && (mark.row+1 == marks[index+1].row)
-                  # get items
-                  from = Narra::Item.find_by(name: mark.clip)
-                  to = Narra::Item.find_by(name: marks[index+1].clip)
-                  # check for items
-                  unless from.nil? || to.nil?
-                    direction = {from: from._id.to_s, to: to._id.to_s}
-                    weight = 0.0
-                    # if the connection is between same clips do not add junction
-                    unless from.eql?(to)
-                      # check if the junction already exists
-                      cached = get_junction([from, to], :sequence, direction)
-                      weight = cached.weight + 0.1 unless cached.nil?
-                      # add junction
-                      add_junction([from, to], direction: direction, weight: weight, synthesizer: :sequence, source: sequence._id.to_s)
+          # check for unprepared sequences and resubmit job
+          if !sequences.select {|sequence| !sequence.prepared?}.empty?
+            Narra::Project.synthesize(@project, :sequence)
+          else
+            # iterate through and resolve
+            sequences.each do |sequence|
+              # check if the sequence is unprocessed
+              junctions = Narra::Junction.where(project: @project, synthesizer: :sequence).any_in(sources: [sequence._id.to_s])
+              # process sequence if not processed
+              if junctions.empty?
+                # order marks
+                marks = sequence.marks.order_by(:row => 'asc')
+                # iterate
+                marks.each_with_index do |mark, index|
+                  # add junction
+                  if index+1 != marks.count && (mark.row+1 == marks[index+1].row)
+                    # get items
+                    from = Narra::Item.find_by(name: mark.clip)
+                    to = Narra::Item.find_by(name: marks[index+1].clip)
+                    # check for items
+                    unless from.nil? || to.nil?
+                      direction = {from: from._id.to_s, to: to._id.to_s}
+                      weight = 0.0
+                      # if the connection is between same clips do not add junction
+                      unless from.eql?(to)
+                        # check if the junction already exists
+                        cached = get_junction([from, to], :sequence, direction)
+                        weight = cached.weight + 0.1 unless cached.nil?
+                        # add junction
+                        add_junction([from, to], direction: direction, weight: weight, synthesizer: :sequence, source: sequence._id.to_s)
+                      end
                     end
                   end
                 end
