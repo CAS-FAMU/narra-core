@@ -25,8 +25,8 @@ Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://narra-storage
 
 Narra::Tools::Settings.defaults[:thumbnail_extension] = 'png'
 Narra::Tools::Settings.defaults[:thumbnail_resolution] = '350x250'
-Narra::Tools::Settings.defaults[:thumbnail_count] = '10'
-Narra::Tools::Settings.defaults[:thumbnail_count_preview] = '5'
+Narra::Tools::Settings.defaults[:thumbnail_count] = '5'
+Narra::Tools::Settings.defaults[:thumbnail_count_preview] = '1'
 
 Narra::Tools::Settings.defaults[:video_proxy_extension] = 'mp4'
 Narra::Tools::Settings.defaults[:video_proxy_lq_resolution] = '320x180'

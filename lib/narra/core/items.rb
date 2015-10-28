@@ -93,8 +93,8 @@ module Narra
         end
 
         # parse metadata form the user input if exists
-        if options[:metadata]
-          options[:metadata].each do |meta|
+        if options[:user_metadata]
+          options[:user_metadata].each do |meta|
             item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: :user, author: user)
           end
         end

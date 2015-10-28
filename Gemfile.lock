@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    narra-core (0.0.11)
+    narra-core (0.0.12)
       aasm
       activesupport
       carrierwave-mongoid
@@ -216,7 +216,7 @@ GEM
     fog-serverlove (0.1.2)
       fog-core
       fog-json
-    fog-softlayer (1.0.0)
+    fog-softlayer (1.0.1)
       fog-core
       fog-json
     fog-storm_on_demand (0.1.1)
@@ -343,7 +343,7 @@ GEM
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
-    sidekiq (3.5.1)
+    sidekiq (3.5.2)
       celluloid (~> 0.17.2)
       connection_pool (~> 2.2, >= 2.2.0)
       json (~> 1.0)

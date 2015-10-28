@@ -34,6 +34,7 @@ module Narra
     field :description, type: String
     field :synthesizers, type: Array, default: []
     field :visualizations, type: Array, default: []
+    field :layouts, type: Array, default: []
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::MetaProject'
