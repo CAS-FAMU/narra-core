@@ -25,8 +25,8 @@ module Narra
 
       def add_junction(items = [], options)
         # input check
-        return if items.empty? || options[:synthesizer].nil? || options[:source].nil? ||
-            options[:weight].nil? || !options[:weight].instance_of?(Float) || options[:direction].nil?
+        return if items.empty? || options[:synthesizer].nil? || options[:weight].nil? ||
+            !options[:weight].instance_of?(Float)
 
         # get junction
         cached = get_junction(items, options[:synthesizer], options[:direction])
