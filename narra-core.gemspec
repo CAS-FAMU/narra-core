@@ -38,12 +38,14 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   spec.test_files = Dir["spec/**/*"]
 
-  spec.add_dependency "rails", "~> 4.2.2"
+  spec.add_dependency "rails", "~> 5.1.1"
   spec.add_dependency "mongoid"
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
   spec.add_dependency "activesupport"
-  spec.add_dependency "fog"
+  spec.add_dependency "fog-aws"
+  spec.add_dependency "fog-google"
+  spec.add_dependency "fog-local"
   spec.add_dependency "wisper"
   spec.add_dependency "sinatra"
   spec.add_dependency "streamio-ffmpeg"
