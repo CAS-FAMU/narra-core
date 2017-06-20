@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Narra::Event do
   it "can be instantiated" do

@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 #
 # Copyright (C) 2017 CAS / FAMU
 #
@@ -21,13 +19,25 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-ENGINE_ROOT = File.expand_path('../..', __FILE__)
-ENGINE_PATH = File.expand_path('../../lib/narra/core/engine', __FILE__)
-APP_PATH = File.expand_path('../../test/dummy/config/application', __FILE__)
+FactoryGirl.define do
+  factory :meta_item, class: Narra::MetaItem do
+    sequence(:name) {|n| "test_meta_#{n}"}
+    sequence(:value) {|n| "Test Meta Value #{n}"}
 
-# Set up gems listed in the Gemfile.
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
-require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
+    trait :source do
+      sequence(:generator) {:source}
+    end
 
-require 'rails/all'
-require 'rails/engine/commands'
+    trait :generated do
+      sequence(:generator) {:generated}
+    end
+  end
+  factory :meta_library, class: Narra::MetaLibrary do
+    sequence(:name) {|n| "test_meta_#{n}"}
+    sequence(:value) {|n| "Test Meta Value #{n}"}
+  end
+  factory :meta_project, class: Narra::MetaProject do
+    sequence(:name) {|n| "test_meta_#{n}"}
+    sequence(:value) {|n| "Test Meta Value #{n}"}
+  end
+end

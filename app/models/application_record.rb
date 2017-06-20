@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,24 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
-
-describe Narra::Project do
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:project)).to be_an_instance_of(Narra::Project)
-  end
-
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:project, author: @author_user)).to be_persisted
-  end
-
-  it "has public tag set to false" do
-    # create project
-    project = FactoryGirl.create(:project, author: @author_user)
-    # check for meta public tag
-    expect(project.get_meta(name: 'public').value).to match('false')
-  end
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
 end

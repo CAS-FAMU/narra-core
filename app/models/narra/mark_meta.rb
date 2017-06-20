@@ -24,6 +24,6 @@ module Narra
     belongs_to :meta, autosave: true, inverse_of: :marks, class_name: 'Narra::MetaItem'
 
     # Validations
-    validates_presence_of :in
+    validates_presence_of :input
   end
 end

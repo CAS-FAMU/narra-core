@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,18 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'database_cleaner'
-
-RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
-    # clean database
-    DatabaseCleaner.clean
+FactoryGirl.define do
+  factory :project, class: Narra::Project do
+    sequence(:name) {|n| "test_project_#{n}"}
+    sequence(:title) {|n| "Test Project #{n}"}
+    sequence(:description) {|n| "Description for the Test Project #{n}"}
   end
 end

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2013 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,25 +19,19 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
-describe Narra::Sequence do
-  before(:each) do
-    # create project
-    @project = FactoryGirl.create(:project, author: @author_user)
-    # create library
-    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
-    # create item
-    @item0 = FactoryGirl.create(:item, library: @library)
-    # create item prepared
-    @mark = FactoryGirl.build(:mark_flow, clip: @item0)
-  end
-
+describe Narra::Identity do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:sequence)).to be_an_instance_of(Narra::Sequence)
+    expect(FactoryGirl.build(:identity)).to be_an_instance_of(Narra::Identity)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:sequence, marks: [@mark], author: @author_user, project: @project)).to be_persisted
+    expect(FactoryGirl.create(:identity, user: FactoryGirl.create(:user))).to be_persisted
+  end
+
+  it "creates from hash" do
+    # expect identity
+    expect(Narra::Identity.all.count).to match(3)
   end
 end

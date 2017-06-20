@@ -19,35 +19,25 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'narra/core'
-require 'rails'
+require 'rails_helper'
 
-module Narra
-  module Core
-    class Engine < ::Rails::Engine
-      config.autoload_paths += Dir["#{config.root}/lib/**/"]
+describe Narra::Sequence do
+  before(:each) do
+    # create project
+    @project = FactoryGirl.create(:project, author: @author_user)
+    # create library
+    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
+    # create item
+    @item0 = FactoryGirl.create(:item, library: @library)
+    # create item prepared
+    @mark = FactoryGirl.build(:mark_flow, clip: @item0)
+  end
 
-      config.generators do |g|
-        g.test_framework :rspec
-        g.fixture_replacement :factory_girl, :dir => 'spec/factories'
-      end
+  it "can be instantiated" do
+    expect(FactoryGirl.build(:sequence)).to be_an_instance_of(Narra::Sequence)
+  end
 
-      # Load all modules
-      Dir["#{config.root}/lib/narra/generators/**/*.rb"].each do |file|
-        require file
-      end
-
-      Dir["#{config.root}/lib/narra/synthesizers/**/*.rb"].each do |file|
-        require file
-      end
-
-      Dir["#{config.root}/lib/narra/connectors/**/*.rb"].each do |file|
-        require file
-      end
-
-      Dir["#{config.root}/lib/narra/transcoders/**/*.rb"].each do |file|
-        require file
-      end
-    end
+  it "can be saved successfully" do
+    expect(FactoryGirl.create(:sequence, marks: [@mark], author: @author_user, project: @project)).to be_persisted
   end
 end

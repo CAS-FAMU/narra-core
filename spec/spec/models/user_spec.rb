@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2013 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,14 +19,19 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
-describe Narra::MarkMeta do
+describe Narra::User do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:mark_meta)).to be_an_instance_of(Narra::MarkMeta)
+    expect(FactoryGirl.build(:user)).to be_an_instance_of(Narra::User)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:mark_meta)).to be_persisted
+    expect(FactoryGirl.create(:user)).to be_persisted
+  end
+
+  it "creates from hash" do
+    # expect user
+    expect(Narra::User.all.count).to match(3)
   end
 end

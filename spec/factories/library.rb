@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,22 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
-
-describe Narra::Identity do
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:identity)).to be_an_instance_of(Narra::Identity)
-  end
-
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:identity, user: FactoryGirl.create(:user))).to be_persisted
-  end
-
-  it "creates from hash" do
-    # expect identity
-    expect(Narra::Identity.all.count).to match(3)
+FactoryGirl.define do
+  factory :library, class: Narra::Library do
+    sequence(:name) {|n| "test_library_#{n}"}
+    sequence(:description) {|n| "Description for the Test Library #{n}"}
   end
 end

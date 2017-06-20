@@ -19,25 +19,21 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
-describe Narra::Item do
-  it 'can be instantiated' do
-    expect(FactoryGirl.build(:item)).to be_an_instance_of(Narra::Item)
+describe Narra::Project do
+  it "can be instantiated" do
+    expect(FactoryGirl.build(:project)).to be_an_instance_of(Narra::Project)
   end
 
-  it 'can be saved successfully' do
-    expect(FactoryGirl.create(:item)).to be_persisted
+  it "can be saved successfully" do
+    expect(FactoryGirl.create(:project, author: @author_user)).to be_persisted
   end
 
-  it 'should process item to generate new metadata' do
-    # create library
-    @library = FactoryGirl.create(:library, author: @author_user, generators: [{identifier:'testing', options:{}}], projects: [])
-    # create item prepared
-    @item_prepared= FactoryGirl.create(:item_prepared, library: @library)
-    # generate
-    @item_prepared.generate
-    # validation
-    expect(@item_prepared.meta.count).to match(1)
+  it "has public tag set to false" do
+    # create project
+    project = FactoryGirl.create(:project, author: @author_user)
+    # check for meta public tag
+    expect(project.get_meta(name: 'public').value).to match('false')
   end
 end

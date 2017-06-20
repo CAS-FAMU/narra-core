@@ -19,10 +19,10 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Narra::Core do
-  before(:each) do
+  before do
     # create project
     @project = FactoryGirl.create(:project, author: @author_user)
     # create library

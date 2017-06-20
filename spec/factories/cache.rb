@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 #
 # Copyright (C) 2017 CAS / FAMU
 #
@@ -21,13 +19,8 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-ENGINE_ROOT = File.expand_path('../..', __FILE__)
-ENGINE_PATH = File.expand_path('../../lib/narra/core/engine', __FILE__)
-APP_PATH = File.expand_path('../../test/dummy/config/application', __FILE__)
-
-# Set up gems listed in the Gemfile.
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
-require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
-
-require 'rails/all'
-require 'rails/engine/commands'
+FactoryGirl.define do
+  factory :cache, class: Narra::Cache do
+    name "test"
+  end
+end

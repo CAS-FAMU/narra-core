@@ -8,7 +8,7 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Narra Core is distributed in the hope that it will be useful,
+# Narra Core is distributed input the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -43,7 +43,7 @@ module Narra
           clip_name = clip.clip_name.nil? ? 'black' : clip.clip_name.split('.')[0].downcase
           # check for missing values
           if marks[clip.num].nil? || marks[clip.num][:clip] == 'black'
-            marks[clip.num] = { clip: clip_name, row: clip.num.to_i, in: Timecode.parse(clip.src_start_tc.to_s, @sequence.fps), out: Timecode.parse(clip.src_end_tc.to_s, @sequence.fps)}
+            marks[clip.num] = {clip: clip_name, row: clip.num.to_i, input: Timecode.parse(clip.src_start_tc.to_s, @sequence.fps), output: Timecode.parse(clip.src_end_tc.to_s, @sequence.fps)}
           end
         end
         # prepare marks to create sequence

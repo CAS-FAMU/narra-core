@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 #
 # Copyright (C) 2017 CAS / FAMU
 #
@@ -18,16 +16,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>
+# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-ENGINE_ROOT = File.expand_path('../..', __FILE__)
-ENGINE_PATH = File.expand_path('../../lib/narra/core/engine', __FILE__)
-APP_PATH = File.expand_path('../../test/dummy/config/application', __FILE__)
+require 'database_cleaner'
 
-# Set up gems listed in the Gemfile.
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
-require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
+RSpec.configure do |config|
 
-require 'rails/all'
-require 'rails/engine/commands'
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+end

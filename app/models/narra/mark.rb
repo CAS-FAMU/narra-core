@@ -25,7 +25,7 @@ module Narra
     include Mongoid::Timestamps
 
     # Fields
-    field :in, type: Float
-    field :out, type: Float
+    field :input, type: Float
+    field :output, type: Float
   end
 end

@@ -24,6 +24,6 @@ ActiveSupport::Inflector.inflections do |inflect|
   # cache singularity
   inflect.irregular('cache', 'cache')
   inflect.irregular('meta', 'meta')
-  inflect.irregular('in', 'in')
-  inflect.irregular('out', 'out')
+  inflect.irregular('input', 'input')
+  inflect.irregular('output', 'output')
 end

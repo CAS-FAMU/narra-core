@@ -45,7 +45,7 @@ module Narra
     has_many :items, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Item'
 
     # Project Relations
-    has_and_belongs_to_many :projects, autosave: true, inverse_of: :libraries, class_name: 'Narra::Project'
+    has_and_belongs_to_many :projects, autosave: true,inverse_of: :libraries, class_name: 'Narra::Project'
 
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Event'

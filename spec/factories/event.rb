@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,17 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
-
-describe Narra::Library do
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:library)).to be_an_instance_of(Narra::Library)
-  end
-
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:library, author: @author_user)).to be_persisted
+FactoryGirl.define do
+  factory :event, class: Narra::Event do
+    sequence(:message) {|n| "test_event_#{n}"}
   end
 end

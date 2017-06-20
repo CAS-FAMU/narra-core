@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,17 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'spec_helper'
-
-describe Narra::MetaItem do
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:meta_item)).to be_an_instance_of(Narra::MetaItem)
+FactoryGirl.define do
+  factory :mark_meta, class: Narra::MarkMeta do
+    sequence(:input) {|n| n.to_f}
+    sequence(:output) {|n| (n+1).to_f}
   end
-
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:meta_item, generator: :source)).to be_persisted
+  factory :mark_flow, class: Narra::MarkFlow do
+    sequence(:input) {|n| n.to_f}
+    sequence(:output) {|n| (n+1).to_f}
+    sequence(:row) {|n| (n+1)}
   end
 end

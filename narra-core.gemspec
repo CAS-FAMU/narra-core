@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
 $:.push File.expand_path("../lib", __FILE__)
@@ -43,6 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
   spec.add_dependency "activesupport"
+  spec.add_dependency "fog"
   spec.add_dependency "fog-aws"
   spec.add_dependency "fog-google"
   spec.add_dependency "fog-local"
@@ -63,5 +64,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "mongoid-tree"
   spec.add_development_dependency "mongoid-rspec"
   spec.add_development_dependency "factory_girl_rails"
-  spec.add_development_dependency "codeclimate-test-reporter"
+  spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "codeclimate-test-reporter", "~> 1.0.0"
 end

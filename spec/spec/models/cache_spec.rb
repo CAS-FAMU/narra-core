@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 #
-# Copyright (C) 2017 CAS / FAMU
+# Copyright (C) 2013 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -18,16 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>
+# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-ENGINE_ROOT = File.expand_path('../..', __FILE__)
-ENGINE_PATH = File.expand_path('../../lib/narra/core/engine', __FILE__)
-APP_PATH = File.expand_path('../../test/dummy/config/application', __FILE__)
+require 'rails_helper'
 
-# Set up gems listed in the Gemfile.
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
-require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
+describe Narra::Cache do
+  it "can be instantiated" do
+    expect(FactoryGirl.build(:cache)).to be_an_instance_of(Narra::Cache)
+  end
 
-require 'rails/all'
-require 'rails/engine/commands'
+  it "can be saved successfully" do
+    expect(FactoryGirl.create(:cache)).to be_persisted
+  end
+end

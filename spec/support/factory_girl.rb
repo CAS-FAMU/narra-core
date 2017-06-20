@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,25 +19,9 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'spec_helper'
+require 'factory_girl_rails'
 
-describe Narra::Junction do
-  before(:each) do
-    # create project
-    @project = FactoryGirl.create(:project, author: @author_user)
-    # create library
-    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
-    # create item
-    @item0 = FactoryGirl.create(:item, library: @library)
-    # create item prepared
-    @item1 = FactoryGirl.create(:item, library: @library)
-  end
-
-  it "can be instantiated" do
-    expect(FactoryGirl.build(:junction)).to be_an_instance_of(Narra::Junction)
-  end
-
-  it "can be saved successfully" do
-    expect(FactoryGirl.create(:junction, synthesizer: :generic, project: @project, items: [@item0, @item1])).to be_persisted
-  end
+# Set up FactoryGirl
+RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
 end

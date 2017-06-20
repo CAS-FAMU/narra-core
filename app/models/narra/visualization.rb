@@ -32,7 +32,7 @@ module Narra
     field :name, type: String
     field :description, type: String
     field :type, type: Symbol
-    field :options, type: Hash, default: {}
+    field :parameters, type: Hash, default: {}
 
     mount_uploader :script, Narra::VisualizationUploader
 
