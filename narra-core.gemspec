@@ -58,6 +58,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mini_magick"
   spec.add_dependency "viddl-rb"
   spec.add_dependency "mediawiki_api"
+  spec.add_dependency "nokogiri", "~> 1.7.2"
 
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rspec-mocks"
