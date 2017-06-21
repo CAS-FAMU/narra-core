@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    narra-core (0.0.15)
+    narra-core (0.0.16)
       aasm
       activesupport
       carrierwave-mongoid
@@ -27,7 +27,7 @@ PATH
       mediawiki_api
       mini_magick
       mongoid
-      nokogiri (~> 1.7.2)
+      nokogiri (~> 1.8.0)
       rails (~> 5.1.1)
       sidekiq
       sinatra
@@ -282,7 +282,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     mini_magick (4.7.2)
-    mini_portile2 (2.1.0)
+    mini_portile2 (2.2.0)
     minitest (5.10.2)
     mongo (2.4.2)
       bson (>= 4.2.1, < 5.0.0)
@@ -302,8 +302,8 @@ GEM
     multipart-post (2.0.0)
     mustermann (1.0.0)
     nio4r (2.1.0)
-    nokogiri (1.7.2)
-      mini_portile2 (~> 2.1.0)
+    nokogiri (1.8.0)
+      mini_portile2 (~> 2.2.0)
     progressbar (1.8.2)
     rack (2.0.3)
     rack-protection (2.0.0)

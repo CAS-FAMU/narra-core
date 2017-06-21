@@ -32,6 +32,6 @@ describe Narra::Identity do
 
   it "creates from hash" do
     # expect identity
-    expect(Narra::Identity.all.count).to match(3)
+    expect(Narra::Identity.all.count).to match(4)
   end
 end

@@ -32,6 +32,6 @@ describe Narra::User do
 
   it "creates from hash" do
     # expect user
-    expect(Narra::User.all.count).to match(3)
+    expect(Narra::User.all.count).to match(4)
   end
 end
