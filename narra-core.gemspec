@@ -43,10 +43,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
   spec.add_dependency "activesupport"
-  spec.add_dependency "fog"
   spec.add_dependency "fog-aws"
   spec.add_dependency "fog-google"
-  spec.add_dependency "fog-local"
+  spec.add_dependency "google-api-client", "~> 0.8.6"
+  spec.add_dependency "mime-types"
   spec.add_dependency "wisper"
   spec.add_dependency "sinatra"
   spec.add_dependency "streamio-ffmpeg"
@@ -56,7 +56,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "carrierwave-mongoid"
   spec.add_dependency "carrierwave-video"
   spec.add_dependency "mini_magick"
-  spec.add_dependency "viddl-rb"
   spec.add_dependency "mediawiki_api"
   spec.add_dependency "nokogiri", "~> 1.8.0"
 
@@ -65,6 +64,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "mongoid-tree"
   spec.add_development_dependency "mongoid-rspec"
   spec.add_development_dependency "factory_girl_rails"
+  spec.add_development_dependency "database_cleaner"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 1.0.0"
 end

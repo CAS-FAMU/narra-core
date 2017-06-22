@@ -28,7 +28,7 @@ module Narra
         # process movie and save meta
         add_meta(generator: :source, name: 'size', value: movie.size)
         add_meta(generator: :source, name: 'duration', value: movie.duration)
-        add_meta(generator: :source, name: 'timecode', value: movie.timecode) unless movie.timecode.nil?
+        add_meta(generator: :source, name: 'timecode', value: movie.metadata[:timecode]) unless movie.metadata.key?(:timecode)
         add_meta(generator: :source, name: 'bitrate', value: movie.bitrate)
         add_meta(generator: :source, name: 'video_codec', value: movie.video_codec)
         add_meta(generator: :source, name: 'colorspace', value: movie.colorspace)
@@ -45,7 +45,7 @@ module Narra
         # process movie and save meta
         add_meta(generator: :source, name: 'size', value: movie.size)
         add_meta(generator: :source, name: 'duration', value: movie.duration)
-        add_meta(generator: :source, name: 'timecode', value: movie.timecode) unless movie.timecode.nil?
+        add_meta(generator: :source, name: 'timecode', value: movie.metadata[:timecode]) unless movie.metadata.key?(:timecode)
         add_meta(generator: :source, name: 'bitrate', value: movie.bitrate)
         add_meta(generator: :source, name: 'audio_codec', value: movie.audio_codec)
         add_meta(generator: :source, name: 'audio_sample_rate', value: movie.audio_sample_rate)

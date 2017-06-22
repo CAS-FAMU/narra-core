@@ -19,26 +19,19 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'carrierwave'
-
-# Setup instance name
-module Narra
-  module Storage
-    INSTANCE = 'narra-' + (ENV['NARRA_INSTANCE_NAME'] ||= 'testing') + '-storage'
-    SELECTED = Narra::Storages::Local
+RSpec.configure do |config|
+  config.before(:each) do
+    # testing generator
+    module Narra
+      module Storages
+        class Testing < Narra::SPI::Storage
+          # Set title and description fields
+          @identifier = :testing
+          @title = 'Testing'
+          @description = 'Testing Storage'
+          @requirements = ['TEST_REQUIREMENT_01', 'TEST_REQUIREMENT_02']
+        end
+      end
+    end
   end
 end
-
-# Recreating temp
-FileUtils.rm_rf(Narra::Tools::Settings.storage_temp)
-FileUtils.mkdir_p(Narra::Tools::Settings.storage_temp)
-
-# Search for a storage type
-Narra::SPI::Storage.descendants.each do |storage|
-  if storage.identifier != :local && storage.valid?
-    Narra::Storage::SELECTED = storage
-  end
-end
-
-# Storage initialization
-Narra::Storage::SELECTED.new

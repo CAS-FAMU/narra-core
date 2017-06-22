@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,29 +16,26 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'carrierwave'
-
-# Setup instance name
 module Narra
-  module Storage
-    INSTANCE = 'narra-' + (ENV['NARRA_INSTANCE_NAME'] ||= 'testing') + '-storage'
-    SELECTED = Narra::Storages::Local
+  module Storages
+    class Local < Narra::SPI::Storage
+
+      # Default values
+      @identifier = :local
+      @title = 'Local Storage'
+      @description = 'Central storage with disk accessor'
+
+      def initialization(config)
+        config.storage = :file
+        config.root = Narra::Tools::Settings.storage_local_path
+        config.asset_host = Narra::Tools::Settings.storage_local_endpoint
+        config.permissions = 0666
+        config.directory_permissions = 0777
+        config.cache_dir = Narra::Tools::Settings.storage_temp
+      end
+    end
   end
 end
-
-# Recreating temp
-FileUtils.rm_rf(Narra::Tools::Settings.storage_temp)
-FileUtils.mkdir_p(Narra::Tools::Settings.storage_temp)
-
-# Search for a storage type
-Narra::SPI::Storage.descendants.each do |storage|
-  if storage.identifier != :local && storage.valid?
-    Narra::Storage::SELECTED = storage
-  end
-end
-
-# Storage initialization
-Narra::Storage::SELECTED.new
