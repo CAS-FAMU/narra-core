@@ -20,8 +20,8 @@
 #
 
 Narra::Tools::Settings.defaults[:storage_temp] = '/tmp/narra'
-Narra::Tools::Settings.defaults[:storage_local_path] = '/opt/narra/storage'
-Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://narra-storage'
+Narra::Tools::Settings.defaults[:storage_local_path] = '/home/app/storage'
+Narra::Tools::Settings.defaults[:storage_local_endpoint] = 'http://localhost:8081'
 
 Narra::Tools::Settings.defaults[:thumbnail_extension] = 'png'
 Narra::Tools::Settings.defaults[:thumbnail_resolution] = '350x250'

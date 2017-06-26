@@ -42,6 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mongoid"
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
+  spec.add_dependency "redis-namespace"
   spec.add_dependency "activesupport"
   spec.add_dependency "fog-aws"
   spec.add_dependency "fog-google"

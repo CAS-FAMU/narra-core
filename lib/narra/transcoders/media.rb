@@ -103,7 +103,7 @@ module Narra
             file.move_to(move_to, permissions, directory_permissions)
           end
         rescue => e
-          log_error('transcoder#media') { e.to_s }
+          log_error('transcoder#media') { e.backtrace }
         end
       end
 
