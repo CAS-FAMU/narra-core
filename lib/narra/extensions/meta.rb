@@ -62,7 +62,7 @@ module Narra
           return meta
         end
         # return nil
-        return nil
+        return
       end
 
       def update_meta(options)
