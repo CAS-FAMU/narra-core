@@ -20,7 +20,7 @@
 #
 
 require 'streamio-ffmpeg'
-require 'carrierwave/video'
+require 'narra/tools'
 require 'narra/transcoders/media_info'
 require 'narra/transcoders/media_thumbnails'
 
@@ -46,9 +46,9 @@ module Narra
 
       def transcode_video(format, options={})
         @format = format
-        @options = CarrierWave::Video::FfmpegOptions.new(format, options)
+        @options = Narra::Tools::FfmpegOptions.new(format, options)
 
-        manipulate! do |movie, temporary|
+        manipulate! do |movie, temporary, success|
           if options[:videoinfo]
             # save videoinfo if requested
             info_video(movie)
@@ -62,25 +62,33 @@ module Narra
           # transcode movie
           movie.transcode(temporary, @options.format_params, @options.encoder_options) do |progress|
             # broadcast progress value
-            broadcast(:narra_transcoder_progress_changed, {progress: progress, type: options[:type] })
+            broadcast(:narra_transcoder_progress_changed, {progress: progress, type: options[:type]})
           end
+
+          # set flag
+          success = true
         end
       end
 
       def transcode_audio(format, options={})
         @format = format
-        @options = CarrierWave::Video::FfmpegOptions.new(format, options)
+        @options = Narra::Tools::FfmpegOptions.new(format, options)
 
-        manipulate! do |movie, temporary|
-          if options[:videoinfo]
-            # save videoinfo if requested
-            info_audio(movie)
-          end
+        manipulate! do |movie, temporary, success|
+          unless movie.audio_stream.nil?
+            if options[:videoinfo]
+              # save videoinfo if requested
+              info_audio(movie)
+            end
 
-          # transcode movie
-          movie.transcode(temporary, @options.format_params, @options.encoder_options) do |progress|
-            # broadcast progress value
-            broadcast(:narra_transcoder_progress_changed, {progress: progress, type: options[:type] })
+            # transcode movie
+            movie.transcode(temporary, @options.format_params, @options.encoder_options) do |progress|
+              # broadcast progress value
+              broadcast(:narra_transcoder_progress_changed, {progress: progress, type: options[:type]})
+            end
+
+            # set flag
+            success = true
           end
         end
       end
@@ -91,19 +99,23 @@ module Narra
         temporary = File.join(File.dirname(current_path), "temporary.#{@format}")
 
         begin
-          yield(movie, temporary)
+          yield(movie, temporary, success=false)
 
-          # rename encoded file
-          File.rename temporary, current_path
+          # check the output and rename the file
+          if success
+            # rename encoded file
+            File.rename temporary, current_path
 
-          # if there is a different format rename file
-          if @format
-            # renaming file
-            move_to = current_path.chomp(File.extname(current_path)) + ".#{@format}"
-            file.move_to(move_to, permissions, directory_permissions)
+            # if there is a different format rename file
+            if @format
+              # renaming file
+              move_to = current_path.chomp(File.extname(current_path)) + ".#{@format}"
+              file.move_to(move_to, permissions, directory_permissions)
+            end
           end
         rescue => e
-          log_error('transcoder#media') { e.backtrace }
+          log_error('transcoder#media') {e.message}
+          log_error('transcoder#media') {e.backtrace.join("\n")}
         end
       end
 

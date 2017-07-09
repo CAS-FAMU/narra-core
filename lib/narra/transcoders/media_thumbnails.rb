@@ -37,7 +37,7 @@ module Narra
             # generate
             movie.screenshot(thumbnail, {seek_time: seek.to_i}, validate: false)
             # save thumbnail
-            model.thumbnails << Narra::Thumbnail.new(file: File.open(thumbnail))
+            model.thumbnails << Narra::ThumbnailItem.new(file: File.open(thumbnail))
           ensure
             # delete temp file
             FileUtils.rm_f(thumbnail)

@@ -64,7 +64,8 @@ module Narra
           # reset event
           @event.reset!
           # log
-          logger.error('transcoder#' + options['identifier']) { e.to_s }
+          logger.error('transcoder#' + options['identifier']) {e.message}
+          logger.error('transcoder#' + options['identifier']) {e.backtrace.join("\n")}
           # throw
           raise e
         else

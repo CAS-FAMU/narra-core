@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,15 +19,12 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'narra/tools/inheritable_attributes'
-require 'narra/tools/defaults_hash'
-require 'narra/tools/probeable'
-require 'narra/tools/settings'
-require 'narra/tools/logger'
-require 'narra/tools/ffmpeg_options'
+require 'streamio-ffmpeg'
 
-module Narra
-  module Tools
+if Narra::Tools::Settings.ffmpeg_binary.is_a?(String) && File.executable?(Narra::Tools::Settings.ffmpeg_binary)
+  FFMPEG.ffmpeg_binary = Narra::Tools::Settings.ffmpeg_binary
+end
 
-  end
+if Narra::Tools::Settings.ffprobe_binary.is_a?(String) && File.executable?(Narra::Tools::Settings.ffprobe_binary)
+  FFMPEG.ffprobe_binary = Narra::Tools::Settings.ffprobe_binary
 end

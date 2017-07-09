@@ -37,7 +37,7 @@ module Narra
     belongs_to :sequence, autosave: true, inverse_of: :master, class_name: 'Narra::Sequence'
 
     # Meta Relations
-    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::MetaItem'
+    has_many :meta,dependent: :destroy, inverse_of: :item, class_name: 'Narra::MetaItem'
 
     # Junction Relations
     has_and_belongs_to_many :junctions, autosave: true, dependent: :destroy, inverse_of: :items, class_name: 'Narra::Junction'
@@ -46,7 +46,7 @@ module Narra
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Event'
 
     # Thumbnail Relations
-    has_many :thumbnails, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Thumbnail'
+    has_many :thumbnails, dependent: :destroy, inverse_of: :item, class_name: 'Narra::ThumbnailItem'
 
     # Validations
     validates_uniqueness_of :name, scope: :library_id

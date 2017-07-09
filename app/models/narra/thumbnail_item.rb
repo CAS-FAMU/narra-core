@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2015 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -19,15 +19,9 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-require 'narra/tools/inheritable_attributes'
-require 'narra/tools/defaults_hash'
-require 'narra/tools/probeable'
-require 'narra/tools/settings'
-require 'narra/tools/logger'
-require 'narra/tools/ffmpeg_options'
-
 module Narra
-  module Tools
-
+  class ThumbnailItem < Thumbnail
+    # Item Relations
+    belongs_to :item, inverse_of: :thumbnails, class_name: 'Narra::Item'
   end
 end

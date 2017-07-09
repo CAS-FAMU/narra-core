@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    narra-core (0.0.18)
+    narra-core (0.0.19)
       aasm
       activesupport
       carrierwave-mongoid

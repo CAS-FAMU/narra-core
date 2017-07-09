@@ -51,12 +51,18 @@ module Narra
             meta.marks << Narra::MarkMeta.new(mark)
           end
         end
-        # push meta into an item
-        model.meta << meta
-        # save item
-        model.save if autosave
-        # return new meta
-        meta
+        # check for existence
+        check = get_meta(name: options[:name], generator: options[:generator])
+        # push meta into an item if check nil
+        if check.nil?
+          model.meta << meta
+          # save item
+          model.save if autosave
+          # return new meta
+          return meta
+        end
+        # return nil
+        return nil
       end
 
       def update_meta(options)

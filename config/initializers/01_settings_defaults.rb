@@ -42,3 +42,6 @@ Narra::Tools::Settings.defaults[:audio_proxy_extension] = 'mp3'
 Narra::Tools::Settings.defaults[:audio_proxy_bitrate] = '112'
 
 Narra::Tools::Settings.defaults[:items_probe_interval] = 1.minute.to_s
+
+Narra::Tools::Settings.defaults[:ffmpeg_binary] = '/opt/ffmpeg-static/bin/ffmpeg'
+Narra::Tools::Settings.defaults[:ffprobe_binary] = '/opt/ffmpeg-static/bin/ffprobe'

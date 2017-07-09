@@ -36,13 +36,16 @@ module Narra
         add_meta(generator: :source, name: 'width', value: movie.width)
         add_meta(generator: :source, name: 'height', value: movie.height)
         add_meta(generator: :source, name: 'frame_rate', value: movie.frame_rate)
-        add_meta(generator: :source, name: 'audio_codec', value: movie.audio_codec)
-        add_meta(generator: :source, name: 'audio_sample_rate', value: movie.audio_sample_rate)
-        add_meta(generator: :source, name: 'audio_channels', value: movie.audio_channels)
+        # if there is audio stream add meta too
+        unless movie.audio_stream.nil?
+          add_meta(generator: :source, name: 'audio_codec', value: movie.audio_codec)
+          add_meta(generator: :source, name: 'audio_sample_rate', value: movie.audio_sample_rate)
+          add_meta(generator: :source, name: 'audio_channels', value: movie.audio_channels)
+        end
       end
 
       def info_audio(movie)
-        # process movie and save meta
+        # process audio and save meta
         add_meta(generator: :source, name: 'size', value: movie.size)
         add_meta(generator: :source, name: 'duration', value: movie.duration)
         add_meta(generator: :source, name: 'timecode', value: movie.metadata[:timecode]) unless movie.metadata.key?(:timecode)
@@ -50,6 +53,10 @@ module Narra
         add_meta(generator: :source, name: 'audio_codec', value: movie.audio_codec)
         add_meta(generator: :source, name: 'audio_sample_rate', value: movie.audio_sample_rate)
         add_meta(generator: :source, name: 'audio_channels', value: movie.audio_channels)
+      end
+
+      def autosave
+        false
       end
     end
   end

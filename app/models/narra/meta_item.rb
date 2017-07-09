@@ -24,8 +24,8 @@ module Narra
     field :generator, type: Symbol
 
     # Relations
-    belongs_to :item, autosave: true, inverse_of: :meta, class_name: 'Narra::Item'
-    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :meta, class_name: 'Narra::MarkMeta'
+    belongs_to :item, inverse_of: :meta, class_name: 'Narra::Item'
+    has_many :marks, dependent: :destroy, inverse_of: :meta, class_name: 'Narra::MarkMeta'
 
     # Validations
     validates_uniqueness_of :name, :scope => [:generator, :item_id]

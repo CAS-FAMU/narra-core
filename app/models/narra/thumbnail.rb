@@ -24,14 +24,9 @@ require 'carrierwave/mongoid'
 module Narra
   class Thumbnail
     include Mongoid::Document
+    include Mongoid::Timestamps
 
     field :random, type: Float, default: Proc.new { Random.rand }
-
-    # Item Relations
-    belongs_to :item, autosave: true, inverse_of: :thumbnails, class_name: 'Narra::Item'
-
-    # Visualization Relations
-    belongs_to :visualization, autosave: true, inverse_of: :thumbnails, class_name: 'Narra::Visualization'
 
     mount_uploader :file, Narra::ThumbnailUploader
   end

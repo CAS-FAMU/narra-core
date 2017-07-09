@@ -44,7 +44,7 @@ module Narra
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :visualization, class_name: 'Narra::MetaVisualization'
 
     # Thumbnail Relations
-    has_many :thumbnails, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Thumbnail'
+    has_many :thumbnails, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::ThumbnailVisualization'
 
     # Validations
     validates_uniqueness_of :name
