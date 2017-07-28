@@ -23,10 +23,13 @@ require 'rails_helper'
 
 describe Narra::Core do
   before do
+    # create scenarios
+    @scenario_project = FactoryGirl.create(:scenario_project, author: @author_user)
+    @scenario_library = FactoryGirl.create(:scenario_library, author: @author_user)
     # create project
-    @project = FactoryGirl.create(:project, author: @author_user)
+    @project = FactoryGirl.create(:project, author: @author_user, scenario: @scenario_project)
     # create library
-    @library = FactoryGirl.create(:library, author: @author_user, projects: [@project])
+    @library = FactoryGirl.create(:library, author: @author_user, scenario: @scenario_library, projects: [@project])
     # create item
     @item = FactoryGirl.create(:item, library: @library)
     # create item prepared
@@ -50,7 +53,7 @@ describe Narra::Core do
     expect(@item.meta.count).to match(0)
     expect(@item_prepared.meta.count).to match(0)
     # assign testing generator to library
-    @library.generators << {identifier: 'testing', options: {}}
+    @library.scenario.generators << {identifier: 'testing', options: {}}
     # regenerate
     Narra::Core.generate(@item, [:testing])
     Narra::Core.generate(@item_prepared, [:testing])
@@ -61,7 +64,7 @@ describe Narra::Core do
 
   it 'should process item to generate new junction' do
     # add synthesizer to the project
-    @project.update_attributes(synthesizers: [{identifier: 'testing', options: {}}])
+    @project.scenario.synthesizers << {identifier: 'testing', options: {}}
     # synthesize
     Narra::Core.synthesize(@project, [:testing])
     # validation

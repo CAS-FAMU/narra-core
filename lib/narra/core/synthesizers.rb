@@ -40,11 +40,11 @@ module Narra
         selected_synthesizers ||= project.synthesizers.map { |s| s[:identifier].to_s }
         # select them
         selected_synthesizers.select! { |s|
-          project.synthesizers.map { |h| h[:identifier].to_s }.include?(s.to_s) &&
+          project.scenario.synthesizers.map { |h| h[:identifier].to_s }.include?(s.to_s) &&
               Synthesizers.synthesizers_identifiers.include?(s.to_sym)
         }
         # collect
-        selected_synthesizers.collect! { |s| project.synthesizers.detect { |h| h[:identifier].to_s == s.to_s} }
+        selected_synthesizers.collect! { |s| project.scenario.synthesizers.detect { |h| h[:identifier].to_s == s.to_s} }
         # process item
         selected_synthesizers.each do |synthesizer|
           # get generator class

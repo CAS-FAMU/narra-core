@@ -26,38 +26,36 @@ require 'narra/tools'
 module Narra
   module SPI
     # Generic template for storage
-    class Storage
+    class Default
       include Narra::Extensions::Class
       include Narra::Tools::Logger
       include Narra::Tools::InheritableAttributes
 
-      inheritable_attributes :identifier, :title, :description, :requirements
+      inheritable_attributes :identifier
 
       # Default values
       @identifier = :generic
-      @title = 'Generic'
-      @description = 'Generic Storage'
-      @requirements = []
-
-      # Generic constructor to store an item to be processed
-      def initialize()
-        # storage specific initialization
-        CarrierWave.configure do |config|
-          initialization(config)
-        end
-      end
-
-      def self.valid?
-        @requirements.reject{|requirement| ENV.has_key?(requirement)}.empty?
-      end
 
       #
       # Should be overridden and implemented
       #
 
-      def initialization(config)
+      def self.settings
         # Nothing to do
         # This has to be overridden in descendants
+        # It should return Hash of default settings
+        {}
+      end
+
+      def self.listeners
+        # Nothing to do
+        # This can be overridden in descendants
+        # It should return array of listener hashes
+        # {
+        #   instance: Narra::Defaults::Generic::Listener.new,
+        #   event: :narra_generic_event
+        # }
+        []
       end
     end
   end

@@ -40,11 +40,11 @@ module Narra
         selected_generators ||= item.library.generators.map { |g| g[:identifier].to_s }
         # select them
         selected_generators.select! { |g|
-          item.library.generators.map { |h| h[:identifier].to_s }.include?(g.to_s) &&
+          item.library.scenario.generators.map { |h| h[:identifier].to_s }.include?(g.to_s) &&
               Generators.generators_identifiers.include?(g.to_sym)
         }
         # collect
-        selected_generators.collect! { |g| item.library.generators.detect { |h| h[:identifier].to_s == g.to_s} }
+        selected_generators.collect! { |g| item.library.scenario.generators.detect { |h| h[:identifier].to_s == g.to_s} }
         # process item
         selected_generators.each do |generator|
           # get generator class

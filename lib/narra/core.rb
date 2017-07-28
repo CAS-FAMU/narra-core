@@ -22,6 +22,8 @@
 require 'narra/extensions'
 require 'narra/tools'
 require 'narra/spi'
+require 'narra/defaults'
+require 'narra/storages'
 require 'narra/synthesizers'
 require 'narra/workers'
 require 'narra/transcoders'

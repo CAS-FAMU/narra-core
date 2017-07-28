@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,24 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
 module Narra
-  class Meta
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  class ScenarioLibrary < Scenario
 
     # Fields
-    field :name, type: String
-    field :value, type: String
-    field :hidden, type: Boolean, default: false
-    field :public, type: Boolean, default: true
+    field :generators, type: Array, default: []
 
-    # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
+    # Relations
+    has_many :libraries, autosave: true, inverse_of: :scenario, class_name: 'Narra::Library'
 
     # Validations
-    validates_presence_of :name, :value
+    validates_uniqueness_of :name
+
+    protected
+
+    def broadcast_events
+      broadcast(:narra_scenario_library_updated, {libraries: libraries.collect {|library| library._id}}) if self.generators_changed?
+    end
   end
 end

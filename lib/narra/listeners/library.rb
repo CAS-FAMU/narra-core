@@ -24,13 +24,15 @@ module Narra
     class Library
       include Narra::Tools::Logger
 
-      def narra_library_generators_updated(options)
+      def narra_scenario_library_updated(options)
         # get library
-        library = Narra::Library.find(options[:library])
-        # run new generators over all items from the library
-        Narra::Item.generate(library.items)
-        # log
-        log_info('listener#library') { 'Library ' + library.name + '#' + library._id.to_s + 'generators updated.'}
+        options[:libraries].each do |library_id|
+          library = Narra::Library.find(library_id)
+          # run new generators over all items from the library
+          Narra::Item.generate(library.items)
+          # log
+          log_info('listener#library') {'Library ' + library.name + '#' + library._id.to_s + 'scenario updated.'}
+        end
       end
     end
   end

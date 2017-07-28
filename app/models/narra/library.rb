@@ -23,7 +23,6 @@ module Narra
   class Library
     include Mongoid::Document
     include Mongoid::Timestamps
-    include Wisper::Publisher
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::Meta
     include Narra::Extensions::Shared
@@ -31,7 +30,6 @@ module Narra
     # Fields
     field :name, type: String
     field :description, type: String
-    field :generators, type: Array, default: []
     field :purged, type: Boolean, default: false
 
     # Meta Relations
@@ -50,15 +48,15 @@ module Narra
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Event'
 
+    # Scenario Relations
+    belongs_to :scenario, autosave: true, inverse_of: :libraries, class_name: 'Narra::ScenarioLibrary'
+
     # Scopes
     scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }
 
     # Validations
     validates_uniqueness_of :name
-    validates_presence_of :name, :author_id
-
-    # Callbacks
-    after_update :broadcast_events
+    validates_presence_of :name, :author_id, :scenario_id
 
     # Return as an array
     def models
@@ -73,12 +71,6 @@ module Narra
     # Check items for generated metadata
     def generate
       Narra::Item.generate(items)
-    end
-
-    protected
-
-    def broadcast_events
-      broadcast(:narra_library_generators_updated, { library: self._id.to_s }) if self.generators_changed?
     end
   end
 end

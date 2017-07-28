@@ -23,7 +23,6 @@ module Narra
   class Project
     include Mongoid::Document
     include Mongoid::Timestamps
-    include Wisper::Publisher
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::Meta
     include Narra::Extensions::Public
@@ -32,9 +31,6 @@ module Narra
     field :name, type: String
     field :title, type: String
     field :description, type: String
-    field :synthesizers, type: Array, default: []
-    field :visualizations, type: Array, default: []
-    field :layouts, type: Array, default: []
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::MetaProject'
@@ -53,15 +49,15 @@ module Narra
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Event'
 
+    # Scenario Relations
+    belongs_to :scenario, autosave: true, inverse_of: :projects, class_name: 'Narra::ScenarioProject'
+
     # Scopes
     scope :user, ->(user) { any_of({contributor_ids: user._id}, {author_id: user._id}) }
 
     # Validations
     validates_uniqueness_of :name
-    validates_presence_of :name, :title, :author_id
-
-    # Hooks
-    after_update :broadcast_events
+    validates_presence_of :name, :title, :author_id, :scenario_id
 
     # Return all project items
     def items
@@ -95,15 +91,9 @@ module Narra
       return if project.nil? || synthesizer.nil?
 
       # Submit synthesize process only if the project has the synthesizer enabled
-      if project.synthesizers.collect { |synthesizer| synthesizer[:identifier].to_s }.include?(synthesizer.to_s)
+      if project.scenario.synthesizers.collect { |synthesizer| synthesizer[:identifier].to_s }.include?(synthesizer.to_s)
         Narra::Core.synthesize(project, [synthesizer], options)
       end
-    end
-
-    protected
-
-    def broadcast_events
-      broadcast(:narra_project_synthesizers_updated, {project: self.name, changes: self.changed_attributes['synthesizers']}) if self.synthesizers_changed?
     end
   end
 end

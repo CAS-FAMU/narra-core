@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2015 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -17,22 +16,26 @@
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Michal Mocnak <michal@marigan.net>
+#
 
 module Narra
-  class VisualizationUploader < CarrierWave::Uploader::Base
+  class ScenarioProject < Scenario
 
-    def filename
-      "#{secure_token}.#{file.extension}" if original_filename.present?
-    end
+    # Fields
+    field :synthesizers, type: Array, default: []
+    field :visualizations, type: Array, default: []
+    field :layouts, type: Array, default: []
 
-    def store_dir
-      Narra::Storage::INSTANCE + "/visualizations/#{model._id.to_s}"
-    end
+    # Relations
+    has_many :projects, autosave: true, inverse_of: :scenario, class_name: 'Narra::Project'
+
+    # Validations
+    validates_uniqueness_of :name
 
     protected
-    def secure_token
-      var = :"@#{mounted_as}_secure_token"
-      model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.uuid)
+
+    def broadcast_events
+      broadcast(:narra_scenario_project_updated, {projects: projects.collect {|project| project.name}, changes: self.changed_attributes['synthesizers']}) if self.synthesizers_changed?
     end
   end
 end

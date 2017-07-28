@@ -27,6 +27,9 @@ describe Narra::Library do
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:library, author: @author_user)).to be_persisted
+    # create scenario
+    @scenario_library = FactoryGirl.create(:scenario_library, author: @author_user)
+    # check
+    expect(FactoryGirl.create(:library, author: @author_user, scenario: @scenario_library)).to be_persisted
   end
 end

@@ -24,28 +24,30 @@ module Narra
     class Project
       include Narra::Tools::Logger
 
-      def narra_project_synthesizers_updated(options)
-        # get project and changes
-        project = Narra::Project.find_by(name: options[:project])
-        changes = options[:changes]
+      def narra_scenario_project_updated(options)
+        options[:projects].each do |project_name|
+          # get project and changes
+          project = Narra::Project.find_by(name: project_name)
+          changes = options[:changes]
 
-        # process changes
-        unless changes.nil?
-          removed = changes - project.synthesizers
-          created = project.synthesizers - changes
+          # process changes
+          unless changes.nil?
+            removed = changes - project.synthesizers
+            created = project.synthesizers - changes
 
-          # delete all junctions for appropriate synthesizer
-          removed.each do |synthesizer|
-            project.junctions.where(synthesizer: synthesizer).destroy_all
+            # delete all junctions for appropriate synthesizer
+            removed.each do |synthesizer|
+              project.junctions.where(synthesizer: synthesizer).destroy_all
+            end
+
+            # run synthesize process for appropriate synthesizer
+            created.each do |synthesizer|
+              Narra::Project.synthesize(project, synthesizer[:identifier])
+            end
+
+            # log
+            log_info('listener#project') {'Project ' + project.name + ' scenario updated.'}
           end
-
-          # run synthesize process for appropriate synthesizer
-          created.each do |synthesizer|
-            Narra::Project.synthesize(project, synthesizer[:identifier])
-          end
-
-          # log
-          log_info('listener#project') { 'Project ' + project.name + ' synthesizers updated.'}
         end
       end
     end

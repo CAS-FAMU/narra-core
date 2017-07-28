@@ -22,18 +22,23 @@
 require 'rails_helper'
 
 describe Narra::Project do
+  before(:each) do
+    # create scenarios
+    @scenario_project = FactoryGirl.create(:scenario_project, author: @author_user)
+    # create project
+    @project = FactoryGirl.create(:project, author: @author_user, scenario: @scenario_project)
+  end
+
   it "can be instantiated" do
     expect(FactoryGirl.build(:project)).to be_an_instance_of(Narra::Project)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:project, author: @author_user)).to be_persisted
+    expect(@project).to be_persisted
   end
 
   it "has public tag set to false" do
-    # create project
-    project = FactoryGirl.create(:project, author: @author_user)
     # check for meta public tag
-    expect(project.get_meta(name: 'public').value).to match('false')
+    expect(@project.get_meta(name: 'public').value).to match('false')
   end
 end

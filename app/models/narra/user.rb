@@ -23,6 +23,7 @@ module Narra
   class User
     include Mongoid::Document
     include Mongoid::Timestamps
+    include Wisper::Publisher
 
     # Fields
     field :username, type: String
@@ -43,18 +44,20 @@ module Narra
     has_many :flows, autosave: true, inverse_of: :author, class_name: 'Narra::Flow'
     has_and_belongs_to_many :sequences_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Sequence'
 
-    # Visualization Relations
-    has_many :visualizations, autosave: true, inverse_of: :author, class_name: 'Narra::Visualization'
-    has_and_belongs_to_many :visualizations_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Visualization'
-
     # Meta Relations
     has_many :meta, autosave: true, inverse_of: :author, class_name: 'Narra::Meta'
+
+    # Meta Relations
+    has_many :scenarios, autosave: true, inverse_of: :author, class_name: 'Narra::Scenario'
 
     # Identity Relations
     has_many :identities, dependent: :destroy, class_name: 'Narra::Identity'
 
     # Validations
     validates_uniqueness_of :username
+
+    # Hooks
+    after_create :broadcast_events
 
     # Check if the user has certain role
     def is?(roles_check = [])
@@ -81,6 +84,12 @@ module Narra
 
       # save
       return (user.save) ? user : nil
+    end
+
+    protected
+
+    def broadcast_events
+      broadcast(:narra_user_admin_created, {user: self.username}) if Narra::User.first.equal?(self)
     end
   end
 end

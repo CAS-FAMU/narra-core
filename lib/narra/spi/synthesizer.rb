@@ -74,6 +74,11 @@ module Narra
       def self.listeners
         # Nothing to do
         # This can be overridden in descendants
+        # It should return array of listener hashes
+        # {
+        #   instance: Narra::Synthesizers::Generic::Listener.new,
+        #   event: :narra_generic_event
+        # }
         []
       end
     end

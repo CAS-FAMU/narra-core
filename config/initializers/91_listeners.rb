@@ -24,9 +24,16 @@ require 'wisper'
 # Transcode listener fires generation process on the item
 Wisper.subscribe(Narra::Listeners::Transcoder.new, on: :narra_transcoder_done)
 # Library listener fires generation process on all items from the library
-Wisper.subscribe(Narra::Listeners::Library.new, on: :narra_library_generators_updated)
+Wisper.subscribe(Narra::Listeners::Library.new, on: :narra_scenario_library_updated)
 # Project listener fires synthetization process
-Wisper.subscribe(Narra::Listeners::Project.new, on: :narra_project_synthesizers_updated)
+Wisper.subscribe(Narra::Listeners::Project.new, on: :narra_scenario_project_updated)
+
+# Register all default listeners
+Narra::SPI::Default.descendants.each do |default|
+  default.listeners.each do |listener|
+    Wisper.subscribe(listener[:instance], on: listener[:event])
+  end
+end
 
 # Register all synthesizer listeners
 # Not calling Narra::Core directly due to workaround for spec testing

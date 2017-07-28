@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -16,24 +16,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
+# Authors: Michal Mocnak <michal@marigan.net>
 #
 
 module Narra
-  class Meta
-    include Mongoid::Document
-    include Mongoid::Timestamps
+  module Defaults
+    class Video < Narra::SPI::Default
 
-    # Fields
-    field :name, type: String
-    field :value, type: String
-    field :hidden, type: Boolean, default: false
-    field :public, type: Boolean, default: true
+      # Default values
+      @identifier = :video
 
-    # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
-
-    # Validations
-    validates_presence_of :name, :value
+      def self.settings
+        {
+            video_proxy_extension: 'mp4',
+            video_proxy_lq_resolution: '320x180',
+            video_proxy_lq_bitrate: '300',
+            video_proxy_hq_resolution: '1280x720',
+            video_proxy_hq_bitrate: '1000',
+        }
+      end
+    end
   end
 end

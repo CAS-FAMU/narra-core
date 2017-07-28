@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CAS / FAMU
+# Copyright (C) 2017 CAS / FAMU
 #
 # This file is part of Narra Core.
 #
@@ -20,30 +20,37 @@
 #
 
 module Narra
-  module Extensions
-    module Shared
-      extend ActiveSupport::Concern
-      include Narra::Extensions::Meta
+  module Defaults
+    class Scenario < Narra::SPI::Default
 
-      included do
-        after_create :narra_shared_initialize
+      # Default values
+      @identifier = :scenario
+
+      def self.listeners
+        [
+            {
+                instance: Narra::Defaults::Scenario.new,
+                event: :narra_user_admin_created
+            }
+        ]
       end
 
-      def is_shared?
-        # get public meta
-        meta = get_meta(name: 'shared')
-        # resolve
-        meta.nil? ? false : meta.value == 'true'
+      def narra_user_admin_created(options)
+        # create default library and project scenarios
+        # only when the first user is created as admin
+        # this user become the author of these
+        create_default_library_scenarios(options)
+        create_default_project_scenarios(options)
       end
 
-      def shared=(shared)
-        self.update_meta(name: 'shared', value: shared)
+      private
+
+      def create_default_project_scenarios(options)
+
       end
 
-      protected
+      def create_default_library_scenarios(options)
 
-      def narra_shared_initialize
-        self.add_meta(name: 'shared', value: false, hidden: true, public: false)
       end
     end
   end
