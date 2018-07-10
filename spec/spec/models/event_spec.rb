@@ -23,23 +23,23 @@ require 'rails_helper'
 
 describe Narra::Event do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:event)).to be_an_instance_of(Narra::Event)
+    expect(FactoryBot.build(:event)).to be_an_instance_of(Narra::Event)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:event)).to be_persisted
+    expect(FactoryBot.create(:event)).to be_persisted
   end
 
   it "should be in pending state" do
     # create an event
-    expect(FactoryGirl.create(:event)).to be_persisted
+    expect(FactoryBot.create(:event)).to be_persisted
     # check state
     expect(Narra::Event.first.pending?).to be_truthy
   end
 
   it "can be run successfully" do
     # create an event
-    expect(FactoryGirl.create(:event)).to be_persisted
+    expect(FactoryBot.create(:event)).to be_persisted
     # check state
     expect(Narra::Event.first.pending?).to be_truthy
     # run
@@ -50,7 +50,7 @@ describe Narra::Event do
 
   it "can be successfully finished" do
     # create an event
-    expect(FactoryGirl.create(:event)).to be_persisted
+    expect(FactoryBot.create(:event)).to be_persisted
     # check state
     expect(Narra::Event.first.pending?).to be_truthy
     # run

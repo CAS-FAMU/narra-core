@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :identity, class: Narra::Identity do
     provider "test"
     uid "tester@narra.eu"

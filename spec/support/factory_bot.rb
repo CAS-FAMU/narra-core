@@ -19,9 +19,9 @@
 # Authors: Michal Mocnak <michal@marigan.net>, Krystof Pesek <krystof.pesek@gmail.com>
 #
 
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 
-# Set up FactoryGirl
+# Set up FactoryBot
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 end

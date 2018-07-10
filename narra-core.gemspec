@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
   spec.test_files = Dir["spec/**/*"]
 
   spec.add_dependency "rails", "~> 5.1.2"
-  spec.add_dependency "mongoid"
+  spec.add_dependency "mongoid", "< 7.0.0"
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
   spec.add_dependency "redis-namespace"
@@ -64,7 +64,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-mocks"
   spec.add_development_dependency "mongoid-tree"
   spec.add_development_dependency "mongoid-rspec"
-  spec.add_development_dependency "factory_girl_rails"
+  spec.add_development_dependency "factory_bot_rails"
   spec.add_development_dependency "database_cleaner"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 1.0.0"

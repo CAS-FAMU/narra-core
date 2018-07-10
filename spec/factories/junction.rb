@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :junction, class: Narra::Junction do
     sequence(:weight) {1.00}
     sequence(:direction) {{none: true}}

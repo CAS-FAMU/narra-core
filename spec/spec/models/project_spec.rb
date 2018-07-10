@@ -24,13 +24,13 @@ require 'rails_helper'
 describe Narra::Project do
   before(:each) do
     # create scenarios
-    @scenario_project = FactoryGirl.create(:scenario_project, author: @author_user)
+    @scenario_project = FactoryBot.create(:scenario_project, author: @author_user)
     # create project
-    @project = FactoryGirl.create(:project, author: @author_user, scenario: @scenario_project)
+    @project = FactoryBot.create(:project, author: @author_user, scenario: @scenario_project)
   end
 
   it "can be instantiated" do
-    expect(FactoryGirl.build(:project)).to be_an_instance_of(Narra::Project)
+    expect(FactoryBot.build(:project)).to be_an_instance_of(Narra::Project)
   end
 
   it "can be saved successfully" do

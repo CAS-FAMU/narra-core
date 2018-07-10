@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :user, class: Narra::User do
     sequence(:name) {|n| "tester#{n}"}
     sequence(:username) {|n| "tester#{n}"}

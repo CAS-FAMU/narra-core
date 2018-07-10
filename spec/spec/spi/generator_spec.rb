@@ -24,9 +24,9 @@ require 'rails_helper'
 describe Narra::SPI::Generator do
   before(:each) do
     # create item
-    @item = FactoryGirl.create(:item)
+    @item = FactoryBot.create(:item)
     # create event
-    @event = FactoryGirl.create(:event, item: @item)
+    @event = FactoryBot.create(:event, item: @item)
   end
 
   it 'can be instantiated' do

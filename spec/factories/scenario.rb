@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :scenario_library, class: Narra::ScenarioLibrary do
     sequence(:name) {|n| "test_scenario_#{n}"}
   end

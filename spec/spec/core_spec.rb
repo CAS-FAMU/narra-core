@@ -24,16 +24,16 @@ require 'rails_helper'
 describe Narra::Core do
   before do
     # create scenarios
-    @scenario_project = FactoryGirl.create(:scenario_project, author: @author_user)
-    @scenario_library = FactoryGirl.create(:scenario_library, author: @author_user)
+    @scenario_project = FactoryBot.create(:scenario_project, author: @author_user)
+    @scenario_library = FactoryBot.create(:scenario_library, author: @author_user)
     # create project
-    @project = FactoryGirl.create(:project, author: @author_user, scenario: @scenario_project)
+    @project = FactoryBot.create(:project, author: @author_user, scenario: @scenario_project)
     # create library
-    @library = FactoryGirl.create(:library, author: @author_user, scenario: @scenario_library, projects: [@project])
+    @library = FactoryBot.create(:library, author: @author_user, scenario: @scenario_library, projects: [@project])
     # create item
-    @item = FactoryGirl.create(:item, library: @library)
+    @item = FactoryBot.create(:item, library: @library)
     # create item prepared
-    @item_prepared= FactoryGirl.create(:item_prepared, library: @library)
+    @item_prepared= FactoryBot.create(:item_prepared, library: @library)
   end
 
   it 'should return all active generators' do

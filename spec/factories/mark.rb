@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :mark_meta, class: Narra::MarkMeta do
     sequence(:input) {|n| n.to_f}
     sequence(:output) {|n| (n+1).to_f}

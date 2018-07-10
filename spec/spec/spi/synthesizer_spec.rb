@@ -24,17 +24,17 @@ require 'rails_helper'
 describe Narra::SPI::Synthesizer do
   before(:each) do
     # create scenarios
-    @scenario_project = FactoryGirl.create(:scenario_project, author: @author_user)
-    @scenario_library = FactoryGirl.create(:scenario_library, author: @author_user)
+    @scenario_project = FactoryBot.create(:scenario_project, author: @author_user)
+    @scenario_library = FactoryBot.create(:scenario_library, author: @author_user)
     # create project
-    @project = FactoryGirl.create(:project, author: @author_user, scenario: @scenario_project)
+    @project = FactoryBot.create(:project, author: @author_user, scenario: @scenario_project)
     # create library
-    @library = FactoryGirl.create(:library, author: @author_user, scenario: @scenario_library, projects: [@project])
+    @library = FactoryBot.create(:library, author: @author_user, scenario: @scenario_library, projects: [@project])
     # create items
-    @item0 = FactoryGirl.create(:item, library: @library)
-    @item1 = FactoryGirl.create(:item, library: @library)
+    @item0 = FactoryBot.create(:item, library: @library)
+    @item1 = FactoryBot.create(:item, library: @library)
     # create event
-    @event = FactoryGirl.create(:event, project: @project)
+    @event = FactoryBot.create(:event, project: @project)
   end
 
   it 'can be instantiated' do

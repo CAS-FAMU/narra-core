@@ -23,10 +23,10 @@ require 'rails_helper'
 
 describe Narra::MarkMeta do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:mark_meta)).to be_an_instance_of(Narra::MarkMeta)
+    expect(FactoryBot.build(:mark_meta)).to be_an_instance_of(Narra::MarkMeta)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:mark_meta)).to be_persisted
+    expect(FactoryBot.create(:mark_meta)).to be_persisted
   end
 end

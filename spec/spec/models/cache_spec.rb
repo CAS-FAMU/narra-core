@@ -23,10 +23,10 @@ require 'rails_helper'
 
 describe Narra::Cache do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:cache)).to be_an_instance_of(Narra::Cache)
+    expect(FactoryBot.build(:cache)).to be_an_instance_of(Narra::Cache)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:cache)).to be_persisted
+    expect(FactoryBot.create(:cache)).to be_persisted
   end
 end

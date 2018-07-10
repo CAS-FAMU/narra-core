@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :event, class: Narra::Event do
     sequence(:message) {|n| "test_event_#{n}"}
   end

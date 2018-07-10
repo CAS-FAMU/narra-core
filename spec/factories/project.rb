@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :project, class: Narra::Project do
     sequence(:name) {|n| "test_project_#{n}"}
     sequence(:title) {|n| "Test Project #{n}"}

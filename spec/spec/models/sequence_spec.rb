@@ -24,23 +24,23 @@ require 'rails_helper'
 describe Narra::Sequence do
   before(:each) do
     # create scenarios
-    @scenario_project = FactoryGirl.create(:scenario_project, author: @author_user)
-    @scenario_library = FactoryGirl.create(:scenario_library, author: @author_user)
+    @scenario_project = FactoryBot.create(:scenario_project, author: @author_user)
+    @scenario_library = FactoryBot.create(:scenario_library, author: @author_user)
     # create project
-    @project = FactoryGirl.create(:project, author: @author_user, scenario: @scenario_project)
+    @project = FactoryBot.create(:project, author: @author_user, scenario: @scenario_project)
     # create library
-    @library = FactoryGirl.create(:library, author: @author_user, scenario: @scenario_library, projects: [@project])
+    @library = FactoryBot.create(:library, author: @author_user, scenario: @scenario_library, projects: [@project])
     # create item
-    @item0 = FactoryGirl.create(:item, library: @library)
+    @item0 = FactoryBot.create(:item, library: @library)
     # create item prepared
-    @mark = FactoryGirl.build(:mark_flow, clip: @item0)
+    @mark = FactoryBot.build(:mark_flow, clip: @item0)
   end
 
   it "can be instantiated" do
-    expect(FactoryGirl.build(:sequence)).to be_an_instance_of(Narra::Sequence)
+    expect(FactoryBot.build(:sequence)).to be_an_instance_of(Narra::Sequence)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:sequence, marks: [@mark], author: @author_user, project: @project)).to be_persisted
+    expect(FactoryBot.create(:sequence, marks: [@mark], author: @author_user, project: @project)).to be_persisted
   end
 end

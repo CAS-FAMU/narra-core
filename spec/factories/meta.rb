@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :meta_item, class: Narra::MetaItem do
     sequence(:name) {|n| "test_meta_#{n}"}
     sequence(:value) {|n| "Test Meta Value #{n}"}

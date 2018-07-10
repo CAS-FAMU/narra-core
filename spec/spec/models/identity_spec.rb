@@ -23,11 +23,11 @@ require 'rails_helper'
 
 describe Narra::Identity do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:identity)).to be_an_instance_of(Narra::Identity)
+    expect(FactoryBot.build(:identity)).to be_an_instance_of(Narra::Identity)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:identity, user: FactoryGirl.create(:user))).to be_persisted
+    expect(FactoryBot.create(:identity, user: FactoryBot.create(:user))).to be_persisted
   end
 
   it "creates from hash" do

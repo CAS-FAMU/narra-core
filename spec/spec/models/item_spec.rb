@@ -23,20 +23,20 @@ require 'rails_helper'
 
 describe Narra::Item do
   it 'can be instantiated' do
-    expect(FactoryGirl.build(:item)).to be_an_instance_of(Narra::Item)
+    expect(FactoryBot.build(:item)).to be_an_instance_of(Narra::Item)
   end
 
   it 'can be saved successfully' do
-    expect(FactoryGirl.create(:item)).to be_persisted
+    expect(FactoryBot.create(:item)).to be_persisted
   end
 
   it 'should process item to generate new metadata' do
     # create scenario
-    @scenario = FactoryGirl.create(:scenario_library, author: @author_user, generators: [{identifier:'testing', options:{}}])
+    @scenario = FactoryBot.create(:scenario_library, author: @author_user, generators: [{identifier:'testing', options:{}}])
     # create library
-    @library = FactoryGirl.create(:library, author: @author_user, scenario: @scenario, projects: [])
+    @library = FactoryBot.create(:library, author: @author_user, scenario: @scenario, projects: [])
     # create item prepared
-    @item_prepared= FactoryGirl.create(:item_prepared, library: @library)
+    @item_prepared= FactoryBot.create(:item_prepared, library: @library)
     # generate
     @item_prepared.generate
     # validation

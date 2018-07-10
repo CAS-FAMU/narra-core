@@ -23,10 +23,10 @@ require 'rails_helper'
 
 describe Narra::MetaItem do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:meta_item)).to be_an_instance_of(Narra::MetaItem)
+    expect(FactoryBot.build(:meta_item)).to be_an_instance_of(Narra::MetaItem)
   end
 
   it "can be saved successfully" do
-    expect(FactoryGirl.create(:meta_item, generator: :source)).to be_persisted
+    expect(FactoryBot.create(:meta_item, generator: :source)).to be_persisted
   end
 end

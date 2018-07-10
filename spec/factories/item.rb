@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :item, class: Narra::Item do
     sequence(:name) {|n| "test_item_#{n}"}
     sequence(:url) {|n| "url://test_item_url_#{n}"}

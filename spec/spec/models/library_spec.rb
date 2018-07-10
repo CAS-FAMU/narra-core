@@ -23,13 +23,13 @@ require 'rails_helper'
 
 describe Narra::Library do
   it "can be instantiated" do
-    expect(FactoryGirl.build(:library)).to be_an_instance_of(Narra::Library)
+    expect(FactoryBot.build(:library)).to be_an_instance_of(Narra::Library)
   end
 
   it "can be saved successfully" do
     # create scenario
-    @scenario_library = FactoryGirl.create(:scenario_library, author: @author_user)
+    @scenario_library = FactoryBot.create(:scenario_library, author: @author_user)
     # check
-    expect(FactoryGirl.create(:library, author: @author_user, scenario: @scenario_library)).to be_persisted
+    expect(FactoryBot.create(:library, author: @author_user, scenario: @scenario_library)).to be_persisted
   end
 end

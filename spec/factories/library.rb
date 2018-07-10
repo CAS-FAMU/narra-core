@@ -19,7 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :library, class: Narra::Library do
     sequence(:name) {|n| "test_library_#{n}"}
     sequence(:description) {|n| "Description for the Test Library #{n}"}
