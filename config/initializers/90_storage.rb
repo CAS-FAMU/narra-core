@@ -20,6 +20,7 @@
 #
 
 require 'carrierwave'
+require 'carrierwave/storage/fog'
 
 # Setup instance name
 module Narra

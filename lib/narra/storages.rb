@@ -19,6 +19,7 @@
 # Authors: Michal Mocnak <michal@marigan.net>
 #
 
+require 'narra/storages/digital_ocean'
 require 'narra/storages/aws'
 require 'narra/storages/google'
 require 'narra/storages/local'

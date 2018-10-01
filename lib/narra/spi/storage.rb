@@ -41,10 +41,14 @@ module Narra
 
       # Generic constructor to store an item to be processed
       def initialize()
+        # storage initialization ended
+        log_info('storage#' + self.class.identifier.to_s) {'Storage initialization started...'}
         # storage specific initialization
         CarrierWave.configure do |config|
           initialization(config)
         end
+        # storage initialization ended
+        log_info('storage#' + self.class.identifier.to_s) {'Storage initialization finished.'}
       end
 
       def self.valid?
