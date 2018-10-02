@@ -53,6 +53,9 @@ module Narra
     # Identity Relations
     has_many :identities, dependent: :destroy, class_name: 'Narra::Identity'
 
+    # Upload Relations
+    has_many :uploads, autosave: true, inverse_of: :user, class_name: 'Narra::Upload'
+
     # Validations
     validates_uniqueness_of :username
 
